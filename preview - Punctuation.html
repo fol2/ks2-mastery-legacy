@@ -1,0 +1,3061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KS2 Punctuation Mastery</title>
+<style>
+  :root{
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --ink:#1e2430;
+    --muted:#5d687a;
+    --line:#dfe5ef;
+    --accent:#2b6ee7;
+    --accent-2:#6b46c1;
+    --good:#1f8a4d;
+    --bad:#c0392b;
+    --warn:#b9770e;
+    --chip:#eef3ff;
+    --shadow:0 10px 24px rgba(15, 23, 42, 0.08);
+    --radius:16px;
+    --radius-sm:10px;
+    --font-scale:1;
+  }
+
+  * { box-sizing: border-box; }
+  html { font-size: calc(16px * var(--font-scale)); }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 200px);
+    color: var(--ink);
+  }
+
+  button, input, select, textarea {
+    font: inherit;
+  }
+
+  .app {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 18px;
+  }
+
+  .topbar {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .brand h1 {
+    margin: 0 0 6px;
+    font-size: 1.45rem;
+    line-height: 1.2;
+  }
+
+  .brand p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.96rem;
+  }
+
+  .top-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .select-wrap,
+  .inline-input {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 12px;
+  }
+
+  .select-wrap select,
+  .inline-input input {
+    border: none;
+    background: transparent;
+    min-width: 120px;
+    outline: none;
+  }
+
+  .tabs {
+    margin: 16px 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    padding: 10px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .grid.practice {
+    grid-template-columns: 290px 1fr;
+    align-items: start;
+  }
+
+  .panel, .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .section-title {
+    margin: 0 0 12px;
+    font-size: 1.02rem;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .small {
+    font-size: 0.92rem;
+  }
+
+  .tiny {
+    font-size: 0.83rem;
+  }
+
+  .stack {
+    display: grid;
+    gap: 12px;
+  }
+
+  .mode-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .mode-btn {
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px 14px;
+    text-align: left;
+    cursor: pointer;
+    display: grid;
+    gap: 4px;
+  }
+
+  .mode-btn.active {
+    border-color: var(--accent);
+    background: #f3f7ff;
+    box-shadow: 0 0 0 3px rgba(43, 110, 231, 0.08) inset;
+  }
+
+  .mode-btn strong {
+    font-size: 0.98rem;
+  }
+
+  .mode-btn span {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    border-radius: 999px;
+    padding: 6px 10px;
+    background: var(--chip);
+    color: #28407a;
+    font-size: 0.88rem;
+    border: 1px solid #dce7ff;
+  }
+
+  .chip.good {
+    background: #eaf8f0;
+    color: #17633a;
+    border-color: #cdeed9;
+  }
+
+  .chip.bad {
+    background: #fff0ef;
+    color: #9f2f24;
+    border-color: #ffd8d4;
+  }
+
+  .chip.warn {
+    background: #fff8e8;
+    color: #845b07;
+    border-color: #f9e3ad;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .stat {
+    padding: 14px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+  }
+
+  .stat .num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  .question-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .question-prompt {
+    font-size: 1.08rem;
+    line-height: 1.45;
+    margin-bottom: 12px;
+  }
+
+  .question-stem {
+    padding: 14px;
+    border: 1px dashed #cdd7e8;
+    background: #fbfcff;
+    border-radius: 14px;
+    line-height: 1.55;
+    min-height: 64px;
+    white-space: pre-wrap;
+  }
+
+  .editor {
+    margin-top: 12px;
+    border: 2px solid #d6e0ef;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    min-height: 96px;
+    line-height: 1.6;
+    outline: none;
+    white-space: pre-wrap;
+  }
+
+  .editor:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(43, 110, 231, 0.12);
+  }
+
+  .choices {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .choice {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    align-items: start;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .choice.correct {
+    border-color: #b6e2c8;
+    background: #f1fbf5;
+  }
+
+  .choice span:last-child {
+    white-space: pre-wrap;
+  }
+
+  .choice.incorrect {
+    border-color: #f2c1bc;
+    background: #fff6f5;
+  }
+
+  .controls {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  button.primary,
+  button.secondary,
+  button.ghost,
+  button.danger {
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+
+  button.primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  button.secondary {
+    background: #eef3ff;
+    color: #22408a;
+    border-color: #dce7ff;
+  }
+
+  button.ghost {
+    background: #fff;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+
+  button.danger {
+    background: #fff1f0;
+    color: #962d22;
+    border-color: #f3c7c2;
+  }
+
+  button:disabled {
+    opacity: 0.58;
+    cursor: not-allowed;
+  }
+
+  .feedback {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: #fbfdff;
+  }
+
+  .feedback.good {
+    border-color: #cfe9d8;
+    background: #f2fbf5;
+  }
+
+  .feedback.bad {
+    border-color: #f1c7c3;
+    background: #fff6f5;
+  }
+
+  .feedback h3 {
+    margin: 0 0 8px;
+    font-size: 1.05rem;
+  }
+
+  .model-answer {
+    margin-top: 10px;
+    padding: 12px;
+    background: rgba(255,255,255,0.8);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 12px;
+    white-space: pre-wrap;
+  }
+
+  .hint-box, .ai-box, .teach-box {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: #f8fafc;
+  }
+
+  .teach-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .contrast {
+    padding: 12px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid var(--line);
+  }
+
+  .bar-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  .bar-row {
+    display: grid;
+    gap: 6px;
+  }
+
+  .bar-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .bar-wrap {
+    height: 12px;
+    background: #eef2f8;
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid #dde4ef;
+  }
+
+  .bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #6aa8ff, #2b6ee7);
+  }
+
+  .mistake-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .mistake {
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .two-col {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .three-col {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .skill-map {
+    display: grid;
+    gap: 10px;
+  }
+
+  .skill-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    background: #fff;
+  }
+
+  .skill-card h4 {
+    margin: 0 0 6px;
+    font-size: 1rem;
+  }
+
+  .row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .profile-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .profile-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .profile-item.active {
+    border-color: var(--accent);
+    background: #f3f7ff;
+  }
+
+  .textarea {
+    width: 100%;
+    min-height: 160px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+    background: #fff;
+  }
+
+  .notice {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #ead49a;
+    background: #fff8e6;
+    color: #6f5608;
+  }
+
+  .subtle {
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .hr {
+    height: 1px;
+    background: var(--line);
+    margin: 10px 0;
+  }
+
+  .timer {
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: #f3f6fb;
+    border: 1px solid var(--line);
+    font-size: 0.85rem;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .footer-note {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 980px) {
+    .grid.practice,
+    .two-col,
+    .three-col,
+    .stats-grid,
+    .teach-grid {
+      grid-template-columns: 1fr;
+    }
+    .topbar {
+      grid-template-columns: 1fr;
+    }
+    .top-actions {
+      justify-content: flex-start;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="brand">
+      <h1>KS2 Punctuation Mastery</h1>
+      <p>Adaptive daily practice for England KS2 punctuation, built for durable mastery, transfer into real writing, and GPS-style confidence.</p>
+    </div>
+    <div class="top-actions">
+      <div class="select-wrap">
+        <label for="profileSelect" class="tiny muted">Learner</label>
+        <select id="profileSelect" aria-label="Choose learner profile"></select>
+      </div>
+      <button class="secondary" id="newProfileQuickBtn">New profile</button>
+      <button class="ghost" id="exportQuickBtn">Export</button>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <main id="view"></main>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const VERSION = "1.0.0";
+  const STORAGE_KEY = "ks2_punctuation_mastery_v1";
+  const AI_LOCAL_KEY = "ks2_punctuation_ai_local_v1";
+  const AI_SESSION_KEY = "ks2_punctuation_ai_session_v1";
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const MIN_MS = 60 * 1000;
+
+  const uid = (prefix = "id") => `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+  const now = () => Date.now();
+
+  const SKILLS = [
+    {
+      id: "sentence_endings",
+      name: "Capital letters and sentence endings",
+      phase: "KS1 foundation, consolidated through KS2",
+      prereq: [],
+      rule: "Start each sentence with a capital letter and end it with the right mark: full stop, question mark or exclamation mark.",
+      workedBad: "where is my reading record",
+      workedGood: "Where is my reading record?",
+      contrastBad: "We won the match?",
+      contrastGood: "We won the match!"
+    },
+    {
+      id: "list_commas",
+      name: "Commas in lists",
+      phase: "KS2 review",
+      prereq: ["sentence_endings"],
+      rule: "Use commas to separate items in a list. In standard KS2 examples, the final comma before 'and' is usually not needed.",
+      workedBad: "We packed torches maps and water.",
+      workedGood: "We packed torches, maps and water.",
+      contrastBad: "We packed, torches maps, and water.",
+      contrastGood: "We packed torches, maps and water."
+    },
+    {
+      id: "apostrophe_contractions",
+      name: "Apostrophes for contraction",
+      phase: "KS2 review",
+      prereq: ["sentence_endings"],
+      rule: "Use an apostrophe to show missing letters in contractions, such as can't, didn't and we're.",
+      workedBad: "We cant go because were late.",
+      workedGood: "We can't go because we're late.",
+      contrastBad: "We cant go because we're late.",
+      contrastGood: "We can't go because we're late."
+    },
+    {
+      id: "apostrophe_possession",
+      name: "Apostrophes for possession",
+      phase: "KS2 review and extension",
+      prereq: ["apostrophe_contractions"],
+      rule: "Use apostrophes to show belonging: the girl's coat, the girls' coats, the children's books.",
+      workedBad: "The girls coat was on the bench.",
+      workedGood: "The girl's coat was on the bench.",
+      contrastBad: "The girls coat was on the bench.",
+      contrastGood: "The girls' coats were on the bench."
+    },
+    {
+      id: "speech",
+      name: "Inverted commas and speech punctuation",
+      phase: "Year 3–4 core",
+      prereq: ["sentence_endings"],
+      rule: "Put spoken words inside inverted commas. Use the correct punctuation inside the closing inverted comma when the punctuation belongs to the spoken words.",
+      workedBad: 'Mia said "Come here".',
+      workedGood: 'Mia said, "Come here."',
+      contrastBad: '"Where are you going"? asked Zara.',
+      contrastGood: '"Where are you going?" asked Zara.'
+    },
+    {
+      id: "fronted_adverbial",
+      name: "Commas after fronted adverbials",
+      phase: "Year 4 core",
+      prereq: ["sentence_endings"],
+      rule: "Put a comma after a fronted adverbial, such as At last, Before lunch, or Without warning.",
+      workedBad: "Before lunch we finished the poster.",
+      workedGood: "Before lunch, we finished the poster.",
+      contrastBad: "Before lunch we, finished the poster.",
+      contrastGood: "Before lunch, we finished the poster."
+    },
+    {
+      id: "parenthesis",
+      name: "Parenthesis with commas, brackets or dashes",
+      phase: "Year 5 core",
+      prereq: ["fronted_adverbial"],
+      rule: "Parenthesis adds extra information. It can be marked with commas, brackets or dashes.",
+      workedBad: "Mr Patel our coach arrived early.",
+      workedGood: "Mr Patel, our coach, arrived early.",
+      contrastBad: "Mr Patel our coach, arrived early.",
+      contrastGood: "Mr Patel (our coach) arrived early."
+    },
+    {
+      id: "comma_clarity",
+      name: "Commas for clarity",
+      phase: "Year 5 core",
+      prereq: ["fronted_adverbial"],
+      rule: "A comma can make meaning clearer and avoid ambiguity.",
+      workedBad: "Let's eat Grandma.",
+      workedGood: "Let's eat, Grandma.",
+      contrastBad: "Most of the time travellers worry about delays.",
+      contrastGood: "Most of the time, travellers worry about delays."
+    },
+    {
+      id: "colon_list",
+      name: "Colon before a list",
+      phase: "Year 6 core",
+      prereq: ["list_commas"],
+      rule: "A colon can introduce a list after a complete opening clause.",
+      workedBad: "We needed three things, a torch, a map and a whistle.",
+      workedGood: "We needed three things: a torch, a map and a whistle.",
+      contrastBad: "We needed: three things a torch, a map and a whistle.",
+      contrastGood: "We needed three things: a torch, a map and a whistle."
+    },
+    {
+      id: "semicolon",
+      name: "Semi-colons between related clauses",
+      phase: "Year 6 core",
+      prereq: ["sentence_endings"],
+      rule: "A semi-colon can join two closely related main clauses.",
+      workedBad: "The rain had stopped, the pitch was still slippery.",
+      workedGood: "The rain had stopped; the pitch was still slippery.",
+      contrastBad: "The rain had stopped; and the pitch was still slippery.",
+      contrastGood: "The rain had stopped; the pitch was still slippery."
+    },
+    {
+      id: "dash_clause",
+      name: "Dashes between related clauses",
+      phase: "Year 6 core",
+      prereq: ["sentence_endings"],
+      rule: "A dash can mark a sharp boundary between two closely related main clauses.",
+      workedBad: "The path was flooded, we took the longer route.",
+      workedGood: "The path was flooded — we took the longer route.",
+      contrastBad: "The path was flooded -and we took the longer route.",
+      contrastGood: "The path was flooded — we took the longer route."
+    },
+    {
+      id: "semicolon_list",
+      name: "Semi-colons within lists",
+      phase: "Year 6 core",
+      prereq: ["colon_list", "list_commas"],
+      rule: "Use semi-colons to separate list items when each item already contains commas.",
+      workedBad: "We visited York, England, Cardiff, Wales, and Belfast, Northern Ireland.",
+      workedGood: "We visited York, England; Cardiff, Wales; and Belfast, Northern Ireland.",
+      contrastBad: "We visited York, England, Cardiff, Wales; and Belfast, Northern Ireland.",
+      contrastGood: "We visited York, England; Cardiff, Wales; and Belfast, Northern Ireland."
+    },
+    {
+      id: "bullet_points",
+      name: "Punctuation of bullet points",
+      phase: "Year 6 core",
+      prereq: ["colon_list"],
+      rule: "Use a colon after the opening stem when appropriate, and punctuate bullets consistently.",
+      workedBad: "Bring:\n• a drink.\n• a hat\n• a sketchbook.",
+      workedGood: "Bring:\n• a drink\n• a hat\n• a sketchbook",
+      contrastBad: "Bring\n• a drink\n• a hat\n• a sketchbook",
+      contrastGood: "Bring:\n• a drink\n• a hat\n• a sketchbook"
+    },
+    {
+      id: "hyphen",
+      name: "Hyphens to avoid ambiguity",
+      phase: "Year 6 core",
+      prereq: ["sentence_endings"],
+      rule: "A hyphen can stop a phrase from being misunderstood, such as man-eating shark versus man eating shark.",
+      workedBad: "We saw a man eating shark.",
+      workedGood: "We saw a man-eating shark.",
+      contrastBad: "The little used room was locked.",
+      contrastGood: "The little-used room was locked."
+    }
+  ];
+
+  const SKILL_BY_ID = Object.fromEntries(SKILLS.map(skill => [skill.id, skill]));
+
+  function prod(id, mode, skillIds, prompt, stem, answers, explanation, extra = {}) {
+    return {
+      id,
+      mode,
+      skillIds,
+      prompt,
+      stem,
+      answers: Array.isArray(answers) ? answers : [answers],
+      explanation,
+      satStyle: extra.satStyle !== false,
+      difficulty: extra.difficulty || 2,
+      hint: extra.hint || "",
+      model: extra.model || (Array.isArray(answers) ? answers[0] : answers),
+      validator: extra.validator || null,
+      tags: extra.tags || []
+    };
+  }
+
+  function choose(id, skillIds, prompt, options, correctIndex, explanation, extra = {}) {
+    return {
+      id,
+      mode: "choose",
+      skillIds,
+      prompt,
+      options,
+      correctIndex,
+      explanation,
+      satStyle: extra.satStyle !== false,
+      difficulty: extra.difficulty || 2,
+      hint: extra.hint || "",
+      model: options[correctIndex],
+      tags: extra.tags || []
+    };
+  }
+
+  const CONTENT = [
+    // Sentence endings
+    prod("se_1", "insert", ["sentence_endings"], "Type the sentence with the correct punctuation.", "where did you put the glue stick", "Where did you put the glue stick?", "This is a question, so it needs a capital letter at the start and a question mark at the end.", { difficulty: 1 }),
+    prod("se_2", "fix", ["sentence_endings"], "Correct the punctuation in this sentence.", "do not forget your reading journal?", "Do not forget your reading journal.", "This is a statement, not a question. It needs a capital letter and a full stop.", { difficulty: 1 }),
+    choose("se_3", ["sentence_endings"], "Choose the best punctuated sentence.", ["What a fantastic goal.", "What a fantastic goal!", "what a fantastic goal!", "What a fantastic goal"], 1, "An exclamation mark fits a strong exclamation, and the sentence begins with a capital letter.", { difficulty: 1 }),
+    prod("se_4", "insert", ["sentence_endings"], "Punctuate the sentence accurately.", "why was the hall still locked", "Why was the hall still locked?", "This is a direct question, so it needs a question mark.", { difficulty: 1, satStyle: true }),
+    prod("se_5", "transfer", ["sentence_endings"], "Write one question that begins with 'Why' and ends correctly.", "", "Why was the gate still open?", "A question should begin with a capital letter and end with a question mark.", {
+      satStyle: false,
+      validator: { type: "startsWithWordQuestion", word: "Why" }
+    }),
+    prod("se_6", "fix", ["sentence_endings"], "Correct the punctuation in this sentence.", "we visited london on friday.", "We visited London on Friday.", "A sentence starts with a capital letter, and proper nouns such as London and Friday also need capitals.", { difficulty: 1 }),
+
+    // List commas
+    prod("lc_1", "insert", ["list_commas"], "Add the punctuation needed.", "We packed pencils rulers erasers and scissors for art.", ["We packed pencils, rulers, erasers and scissors for art.", "We packed pencils, rulers, erasers, and scissors for art."], "Use commas to separate the items in the list.", { difficulty: 1 }),
+    prod("lc_2", "fix", ["list_commas"], "Correct the punctuation in this sentence.", "We bought apples pears, and grapes for the picnic.", ["We bought apples, pears and grapes for the picnic.", "We bought apples, pears, and grapes for the picnic."], "The commas should separate list items evenly.", { difficulty: 2 }),
+    choose("lc_3", ["list_commas"], "Choose the best punctuated sentence.", [
+      "In my tray I keep crayons, glue and scissors.",
+      "In my tray, I keep crayons glue and scissors.",
+      "In my tray I keep crayons glue, and scissors.",
+      "In my tray I keep, crayons, glue and scissors."
+    ], 0, "The first sentence uses commas to separate list items without adding unnecessary commas.", { difficulty: 2 }),
+    prod("lc_4", "combine", ["list_commas"], "Rewrite this as one sentence with a correctly punctuated list.", "Our class needs paint brushes paper and tape.", ["Our class needs paint brushes, paper and tape.", "Our class needs paint brushes, paper, and tape."], "The list items need commas between them.", { difficulty: 1 }),
+    prod("lc_5", "transfer", ["list_commas"], "Write one sentence using this exact stem and add a correctly punctuated list: For the bake sale we needed", "", "For the bake sale we needed eggs, flour, butter and sugar.", "A list should use commas between items.", {
+      satStyle: false,
+      validator: { type: "stemWithList", stem: "For the bake sale we needed" }
+    }),
+
+    // Apostrophe contractions
+    prod("ac_1", "fix", ["apostrophe_contractions"], "Correct the punctuation in this sentence.", "I cant believe were nearly there.", "I can't believe we're nearly there.", "The apostrophes show the missing letters in can't and we're.", { difficulty: 1 }),
+    choose("ac_2", ["apostrophe_contractions"], "Choose the best punctuated sentence.", [
+      "She didnt know we'd already left.",
+      "She didn't know we'd already left.",
+      "She didn't know wed already left.",
+      "She didnt know we'd already left"
+    ], 1, "Both contractions need apostrophes: didn't and we'd.", { difficulty: 1 }),
+    prod("ac_3", "insert", ["apostrophe_contractions"], "Add the punctuation needed.", "Youll see that Im ready because Ive packed already.", "You'll see that I'm ready because I've packed already.", "Each contraction needs an apostrophe to show missing letters.", { difficulty: 2 }),
+    prod("ac_4", "combine", ["apostrophe_contractions"], "Rewrite the sentence correctly.", "We arent late but theyre already waiting.", "We aren't late but they're already waiting.", "The apostrophes belong in aren't and they're.", { difficulty: 1 }),
+    prod("ac_5", "transfer", ["apostrophe_contractions"], "Write one sentence that includes both can't and we're.", "", "We can't leave yet because we're still tidying up.", "Both contractions need apostrophes.", {
+      satStyle: false,
+      validator: { type: "requiresTokens", tokens: ["can't", "we're"] }
+    }),
+
+    // Apostrophe possession
+    prod("ap_1", "insert", ["apostrophe_possession"], "Add the missing punctuation.", "The girls coat was hanging on the peg.", "The girl's coat was hanging on the peg.", "One girl owns the coat, so the apostrophe goes before the s.", { difficulty: 2 }),
+    prod("ap_2", "insert", ["apostrophe_possession"], "Add the missing punctuation.", "The girls coats were drying by the radiator.", "The girls' coats were drying by the radiator.", "More than one girl owns the coats, so the apostrophe goes after the plural s.", { difficulty: 2 }),
+    prod("ap_3", "fix", ["apostrophe_possession"], "Correct the punctuation in this sentence.", "The childrens boots were lined up by the door.", "The children's boots were lined up by the door.", "Children is an irregular plural, so the apostrophe comes before the s.", { difficulty: 2 }),
+    choose("ap_4", ["apostrophe_possession"], "Choose the best punctuated sentence.", [
+      "The teachers' room was next to the library.",
+      "The teacher's room was next to the librarys.",
+      "The teachers room was next to the library.",
+      "The teachers' room was next to the library"
+    ], 0, "Teachers' shows belonging to more than one teacher, and the sentence ends with a full stop.", { difficulty: 2 }),
+    prod("ap_5", "transfer", ["apostrophe_possession"], "Write one sentence that includes both children's and teachers'.", "", "The children's paintings were hanging beside the teachers' notices.", "Children's and teachers' both need apostrophes for possession.", {
+      satStyle: false,
+      validator: { type: "requiresTokens", tokens: ["children's", "teachers'"] }
+    }),
+
+    // Speech
+    prod("sp_1", "insert", ["speech"], "Punctuate the direct speech accurately.", 'Sam shouted come back at once.', ['Sam shouted, "Come back at once."','Sam shouted, \'Come back at once.\''], "The spoken words go inside inverted commas, and the full stop belongs inside them.", { difficulty: 2, satStyle: true }),
+    prod("sp_2", "fix", ["speech"], "Correct the punctuation in this sentence.", '"Where are we meeting"? asked Zara.', ['"Where are we meeting?" asked Zara.', '\'Where are we meeting?\' asked Zara.'], "The question mark belongs inside the closing inverted comma because it is part of the spoken words.", { difficulty: 2, satStyle: true }),
+    choose("sp_3", ["speech"], "Choose the best punctuated sentence.", [
+      'Mum said, "Put your shoes by the door."',
+      'Mum said "Put your shoes by the door".',
+      'Mum said, "Put your shoes by the door".',
+      'Mum said "Put your shoes by the door."'
+    ], 0, "The reporting clause is followed by a comma, and the full stop sits inside the inverted commas.", { difficulty: 2, satStyle: true }),
+    prod("sp_4", "insert", ["speech"], "Add the missing punctuation.", 'Ella asked can we start now', ['Ella asked, "Can we start now?"','Ella asked, \'Can we start now?\''], "This is a spoken question, so the question mark belongs inside the inverted commas.", { difficulty: 2, satStyle: true }),
+    prod("sp_5", "fix", ["speech"], "Correct the punctuation in this sentence.", 'The coach called, "Keep moving".', ['The coach called, "Keep moving."','The coach called, \'Keep moving.\''], "The full stop belongs inside the inverted commas because it ends the spoken words.", { difficulty: 2 }),
+    prod("sp_6", "transfer", ["speech"], "Write one sentence of direct speech using these exact spoken words: can we start now", "", 'Mia asked, "Can we start now?"', "Direct speech needs inverted commas, a capital letter, and a question mark inside the closing inverted comma.", {
+      satStyle: false,
+      validator: { type: "speechWithWords", words: "can we start now" }
+    }),
+
+    // Fronted adverbials
+    prod("fa_1", "insert", ["fronted_adverbial"], "Add the punctuation needed.", "Before lunch we finished the poster.", "Before lunch, we finished the poster.", "A comma should follow the fronted adverbial Before lunch.", { difficulty: 1, satStyle: true }),
+    prod("fa_2", "fix", ["fronted_adverbial"], "Correct the punctuation in this sentence.", "Without warning the lights flickered and went out.", "Without warning, the lights flickered and went out.", "The fronted adverbial Without warning needs a comma after it.", { difficulty: 1 }),
+    choose("fa_3", ["fronted_adverbial"], "Choose the best punctuated sentence.", [
+      "At last, the gate creaked open.",
+      "At last the gate, creaked open.",
+      "At last the gate creaked open.",
+      "At, last the gate creaked open."
+    ], 0, "A comma follows the fronted adverbial At last.", { difficulty: 1, satStyle: true }),
+    prod("fa_4", "combine", ["fronted_adverbial"], "Rewrite the sentence correctly.", "Later that evening the choir performed to the whole school.", "Later that evening, the choir performed to the whole school.", "The comma separates the fronted adverbial from the main part of the sentence.", { difficulty: 1 }),
+    prod("fa_5", "transfer", ["fronted_adverbial"], "Write one sentence that starts with 'After lunch' and put a comma after the fronted adverbial.", "", "After lunch, we finished our posters.", "After lunch is a fronted adverbial, so it needs a comma after it.", {
+      satStyle: false,
+      validator: { type: "startsWithPhraseComma", phrase: "After lunch" }
+    }),
+
+    // Parenthesis
+    prod("pa_1", "insert", ["parenthesis"], "Add brackets to show the parenthesis.", "The hall built in 1890 is still in use.", "The hall (built in 1890) is still in use.", "The words built in 1890 add extra information, so brackets can mark the parenthesis.", { difficulty: 2 }),
+    prod("pa_2", "fix", ["parenthesis"], "Correct the punctuation in this sentence.", "Mr Patel our coach arrived before everyone else.", "Mr Patel, our coach, arrived before everyone else.", "Our coach is extra information, so commas can mark it as parenthesis.", { difficulty: 2 }),
+    choose("pa_3", ["parenthesis"], "Choose the best punctuated sentence.", [
+      "The museum, which opens at ten, was already busy.",
+      "The museum which opens at ten, was already busy.",
+      "The museum which opens at ten was, already busy.",
+      "The museum which opens at ten was already busy."
+    ], 0, "Which opens at ten is parenthesis here, so it needs a comma on each side.", { difficulty: 2, satStyle: true }),
+    prod("pa_4", "combine", ["parenthesis"], "Rewrite this sentence using dashes to show the parenthesis.", "The winner our youngest runner crossed the line first.", ["The winner — our youngest runner — crossed the line first.", "The winner - our youngest runner - crossed the line first."], "The extra information can be marked with dashes.", { difficulty: 3 }),
+    prod("pa_5", "transfer", ["parenthesis"], "Write a sentence about London and include the extra detail 'the capital city' in brackets or dashes.", "", "London (the capital city) is full of museums.", "The phrase the capital city should be set off as parenthesis.", {
+      satStyle: false,
+      validator: { type: "containsParenthesisPhrase", phrase: "the capital city" }
+    }),
+
+    // Commas for clarity
+    choose("cc_1", ["comma_clarity"], "Choose the sentence that makes the meaning clear.", [
+      "Let's eat, Grandma.",
+      "Let's eat Grandma.",
+      "Let's, eat Grandma.",
+      "Lets eat Grandma."
+    ], 0, "The comma shows that Grandma is being addressed, not eaten.", { difficulty: 2 }),
+    choose("cc_2", ["comma_clarity"], "Choose the sentence that avoids ambiguity.", [
+      "Most of the time, travellers worry about delays.",
+      "Most of the time travellers worry about delays.",
+      "Most, of the time travellers worry about delays.",
+      "Most of the time travellers, worry about delays."
+    ], 0, "The comma after time makes the meaning clear.", { difficulty: 3 }),
+    prod("cc_3", "fix", ["comma_clarity"], "Correct the punctuation in this sentence.", "Inside the cupboard under the stairs we found the torch.", "Inside the cupboard, under the stairs, we found the torch.", "The commas help the reader group the extra location detail clearly.", { difficulty: 3 }),
+    choose("cc_4", ["comma_clarity"], "Choose the best punctuated sentence.", [
+      "After the match, Sam's dad, the goalkeeper, smiled.",
+      "After the match Sam's dad the goalkeeper smiled.",
+      "After the match Sam's dad, the goalkeeper smiled.",
+      "After the match, Sam's dad the goalkeeper, smiled."
+    ], 0, "The commas separate the fronted adverbial and the parenthesis clearly.", { difficulty: 3 }),
+
+    // Colon list
+    prod("cl_1", "insert", ["colon_list"], "Insert the punctuation mark needed.", "We needed three things a torch, a map and a whistle.", "We needed three things: a torch, a map and a whistle.", "A colon can introduce the list after the complete opening clause.", { difficulty: 2, satStyle: true }),
+    choose("cl_2", ["colon_list"], "Choose the best punctuated sentence.", [
+      "For breakfast I had three things: toast, fruit and yoghurt.",
+      "For breakfast I had: three things toast, fruit and yoghurt.",
+      "For breakfast: I had three things toast, fruit and yoghurt.",
+      "For breakfast I had three things, toast, fruit and yoghurt."
+    ], 0, "A colon comes after a complete clause and before the list.", { difficulty: 2, satStyle: true }),
+    prod("cl_3", "fix", ["colon_list"], "Correct the punctuation in this sentence.", "My job was simple tidy the trays and stack the books.", "My job was simple: tidy the trays and stack the books.", "A colon can introduce what follows when the opening clause is complete.", { difficulty: 2, satStyle: false }),
+    prod("cl_4", "combine", ["colon_list"], "Rewrite the sentence using a colon before the list.", "We packed four items torches, maps, snacks and water.", "We packed four items: torches, maps, snacks and water.", "The colon introduces the list.", { difficulty: 2 }),
+    prod("cl_5", "transfer", ["colon_list"], "Finish this stem as one sentence with a colon and a list: We packed three things", "", "We packed three things: torches, maps and water bottles.", "A colon should introduce the list after the complete opening clause.", {
+      satStyle: false,
+      validator: { type: "containsStemColon", stem: "We packed three things" }
+    }),
+
+    // Semicolon
+    prod("sc_1", "insert", ["semicolon"], "Insert the punctuation mark needed.", "The rain had stopped the pitch was still slippery.", "The rain had stopped; the pitch was still slippery.", "A semi-colon can join these two related main clauses.", { difficulty: 3, satStyle: true }),
+    choose("sc_2", ["semicolon"], "Choose the best punctuated sentence.", [
+      "The bell rang; everyone hurried inside.",
+      "The bell rang, everyone hurried inside.",
+      "The bell rang: everyone hurried inside.",
+      "The bell rang; and everyone hurried inside."
+    ], 0, "A semi-colon neatly joins the two related main clauses.", { difficulty: 3, satStyle: true }),
+    prod("sc_3", "combine", ["semicolon"], "Join these two main clauses into one sentence using a semi-colon.", "The gate was locked. We waited for the caretaker.", "The gate was locked; we waited for the caretaker.", "A semi-colon joins the two related clauses.", { difficulty: 3 }),
+    prod("sc_4", "fix", ["semicolon"], "Correct the punctuation in this sentence.", "The sun had set, the field was still warm.", "The sun had set; the field was still warm.", "A comma splice is too weak here. A semi-colon fits better.", { difficulty: 3 }),
+    prod("sc_5", "transfer", ["semicolon"], "Join these two clauses with a semi-colon: The gate was locked / we waited for the caretaker.", "", "The gate was locked; we waited for the caretaker.", "The semi-colon joins two closely related main clauses.", {
+      satStyle: false,
+      validator: { type: "containsSemicolonPhrases", left: "The gate was locked", right: "we waited for the caretaker" }
+    }),
+
+    // Dashes between clauses
+    prod("dc_1", "combine", ["dash_clause"], "Rewrite these two clauses as one sentence using a dash.", "The path was flooded. We took the longer route.", ["The path was flooded — we took the longer route.", "The path was flooded - we took the longer route."], "A dash can mark a sharp boundary between two closely related clauses.", { difficulty: 3, satStyle: true }),
+    choose("dc_2", ["dash_clause"], "Choose the best punctuated sentence.", [
+      "The lights went out — the hall fell silent.",
+      "The lights went out, the hall fell silent.",
+      "The lights went out — and the hall fell silent.",
+      "The lights went out: the hall fell silent."
+    ], 0, "The dash marks the sudden shift between two closely related clauses.", { difficulty: 3, satStyle: true }),
+    prod("dc_3", "transfer", ["dash_clause"], "Join these two clauses with a dash: The path was flooded / we took the longer route.", "", "The path was flooded — we took the longer route.", "The dash marks the boundary between the two clauses.", {
+      satStyle: false,
+      validator: { type: "containsDashPhrases", left: "The path was flooded", right: "we took the longer route" }
+    }),
+
+    // Semi-colons within lists
+    prod("sl_1", "insert", ["semicolon_list"], "Add the punctuation needed.", "Our relay teams came from York, England Cardiff, Wales and Belfast, Northern Ireland.", "Our relay teams came from York, England; Cardiff, Wales; and Belfast, Northern Ireland.", "Each list item already contains a comma, so semi-colons separate the bigger list items clearly.", { difficulty: 4, satStyle: true }),
+    choose("sl_2", ["semicolon_list"], "Choose the best punctuated sentence.", [
+      "The speakers travelled from York, England; Cardiff, Wales; and Belfast, Northern Ireland.",
+      "The speakers travelled from York, England, Cardiff, Wales, and Belfast, Northern Ireland.",
+      "The speakers travelled from York, England; Cardiff, Wales, and Belfast, Northern Ireland.",
+      "The speakers travelled from York, England: Cardiff, Wales; and Belfast, Northern Ireland."
+    ], 0, "Semi-colons separate the list items because each item already contains a comma.", { difficulty: 4, satStyle: true }),
+    prod("sl_3", "fix", ["semicolon_list"], "Correct the punctuation in this sentence.", "On our map we marked York, England; Cardiff, Wales, and Belfast, Northern Ireland.", "On our map we marked York, England; Cardiff, Wales; and Belfast, Northern Ireland.", "When list items already contain commas, semi-colons separate each item clearly.", { difficulty: 4, satStyle: false }),
+
+    // Bullet points
+    choose("bp_1", ["bullet_points"], "Choose the best punctuated list.", [
+      "Bring:\n• a drink\n• a hat\n• a sketchbook",
+      "Bring\n• a drink\n• a hat\n• a sketchbook",
+      "Bring:\n• a drink.\n• a hat\n• a sketchbook.",
+      "Bring:\n• a drink;\n• a hat;\n• a sketchbook;"
+    ], 0, "The opening stem uses a colon, and the bullet points are punctuated consistently.", { difficulty: 3, satStyle: false }),
+    choose("bp_2", ["bullet_points"], "Choose the best punctuated list.", [
+      "Remember to:\n• line up quietly\n• bring your planner\n• return your library book",
+      "Remember to\n• line up quietly\n• bring your planner\n• return your library book",
+      "Remember to:\n• line up quietly.\n• bring your planner.\n• return your library book",
+      "Remember to:\n• line up quietly,\n• bring your planner,\n• return your library book,"
+    ], 0, "The stem introduces the list with a colon, and the bullet points are consistent fragments.", { difficulty: 3, satStyle: false }),
+    prod("bp_3", "fix", ["bullet_points"], "Rewrite the list so that it follows one consistent punctuation pattern.", "Pack\n• a coat\n• a drink\n• a torch", "Pack:\n• a coat\n• a drink\n• a torch", "The stem should introduce the list cleanly with a colon.", { difficulty: 3, satStyle: false, model: "Pack:\n• a coat\n• a drink\n• a torch" }),
+
+    // Hyphen
+    choose("hy_1", ["hyphen"], "Choose the sentence where the hyphen avoids ambiguity.", [
+      "We saw a man-eating shark near the reef.",
+      "We saw a man eating shark near the reef.",
+      "We saw a man, eating shark near the reef.",
+      "We saw a man eating-shark near the reef."
+    ], 0, "The hyphen shows that the shark eats people, rather than a man eating shark meat.", { difficulty: 3 }),
+    choose("hy_2", ["hyphen"], "Choose the best punctuated sentence.", [
+      "The little-used room was at the back of the hall.",
+      "The little used room was at the back of the hall.",
+      "The little-used room, was at the back of the hall.",
+      "The little used-room was at the back of the hall."
+    ], 0, "The hyphen joins little-used as one idea modifying room.", { difficulty: 3 }),
+    prod("hy_3", "transfer", ["hyphen"], "Write a sentence that includes the exact phrase 'man-eating shark'.", "", "The divers spotted a man-eating shark near the reef.", "The hyphen avoids ambiguity in the noun phrase.", {
+      satStyle: false,
+      validator: { type: "requiresTokens", tokens: ["man-eating shark"] }
+    }),
+
+    // Mixed and transfer-heavy review items
+    prod("mx_1", "fix", ["fronted_adverbial", "speech"], "Correct the punctuation in this sentence.", 'After lunch Mia said "We can finish the poster now".', ['After lunch, Mia said, "We can finish the poster now."','After lunch, Mia said, \'We can finish the poster now.\''], "The fronted adverbial needs a comma, and the direct speech needs a comma plus inverted commas with the full stop inside.", { difficulty: 3, satStyle: true }),
+    choose("mx_2", ["apostrophe_possession", "comma_clarity"], "Choose the best punctuated sentence.", [
+      "After the concert, the teachers' notes were left on the piano.",
+      "After the concert the teachers notes were left on the piano.",
+      "After the concert, the teacher's notes were left on the piano",
+      "After the concert the teachers' notes, were left on the piano."
+    ], 0, "The fronted adverbial is followed by a comma, teachers' shows plural possession, and the sentence ends with a full stop.", { difficulty: 3, satStyle: true }),
+    prod("mx_3", "insert", ["colon_list", "list_commas"], "Add the punctuation needed.", "For the trip we packed four things torches maps snacks and water.", "For the trip we packed four things: torches, maps, snacks and water.", "A colon introduces the list, and commas separate the list items.", { difficulty: 3, satStyle: true }),
+    prod("mx_4", "fix", ["parenthesis", "comma_clarity"], "Correct the punctuation in this sentence.", "My brother the tallest player in the team scored first.", "My brother, the tallest player in the team, scored first.", "The extra detail is parenthesis, so it needs commas on both sides.", { difficulty: 3 }),
+    prod("mx_5", "transfer", ["speech", "fronted_adverbial"], "Write one sentence that begins with 'At last' and includes direct speech.", "", 'At last, Noah shouted, "We made it!"', "The fronted adverbial needs a comma, and the spoken words need inverted commas and correct end punctuation.", {
+      satStyle: false,
+      validator: { type: "frontedAdverbialWithSpeech", phrase: "At last" }
+    }),
+    prod("mx_6", "transfer", ["colon_list", "list_commas"], "Write one sentence using this exact stem and finish it with a colon and a list: Our toolkit contained three items", "", "Our toolkit contained three items: glue, card and scissors.", "A complete opening clause can be followed by a colon and a list.", {
+      satStyle: false,
+      validator: { type: "containsStemColon", stem: "Our toolkit contained three items" }
+    })
+  ];
+
+  const MODES = [
+    { id: "smart", label: "Smart review", desc: "Adaptive mixed practice with spacing, interleaving, weak-item rescue, and delayed clean retries." },
+    { id: "guided", label: "Guided learn", desc: "Short rules, worked examples, contrastive examples, then faded support on one punctuation skill." },
+    { id: "insert", label: "Insert the punctuation", desc: "Punctuate under-punctuated sentences directly." },
+    { id: "fix", label: "Spot and fix", desc: "Correct sentences that contain punctuation mistakes." },
+    { id: "choose", label: "Choose the best version", desc: "Use carefully designed options only when comparison is useful." },
+    { id: "combine", label: "Sentence combining / rewrite", desc: "Rewrite sentences using the target punctuation accurately." },
+    { id: "weak", label: "Weak spots drill", desc: "Concentrate on the most fragile punctuation skills without repeating one item too obviously." },
+    { id: "transfer", label: "Writing transfer", desc: "More open sentence writing with light scaffolds and punctuation checks." },
+    { id: "gps", label: "True GPS test mode", desc: "Mini KS2 GPS-style paper with delayed feedback and separate test analytics." }
+  ];
+
+  const APP = {
+    db: null,
+    view: "practice",
+    session: null,
+    currentItem: null,
+    feedback: null,
+    renderOptions: null,
+    testTimer: null,
+    toast: "",
+    importText: "",
+    aiMessage: "",
+    aiGeneratedCount: 0
+  };
+
+  function defaultSettings() {
+    return {
+      dailyGoal: 12,
+      testLength: 10,
+      fontScale: 1,
+      speechEnabled: false,
+      speechRate: 1,
+      autoReadPrompt: false
+    };
+  }
+
+  function createProfile(name = "Learner 1") {
+    return {
+      id: uid("profile"),
+      name,
+      createdAt: now(),
+      itemStates: {},
+      attemptLog: [],
+      notes: ""
+    };
+  }
+
+  function defaultDB() {
+    const profile = createProfile("Learner 1");
+    return {
+      version: VERSION,
+      settings: defaultSettings(),
+      profiles: [profile],
+      activeProfileId: profile.id
+    };
+  }
+
+  function loadDB() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultDB();
+      const parsed = JSON.parse(raw);
+      return migrateDB(parsed);
+    } catch (err) {
+      console.warn("Failed to load DB:", err);
+      return defaultDB();
+    }
+  }
+
+  function migrateDB(db) {
+    const safe = {
+      version: VERSION,
+      settings: Object.assign(defaultSettings(), db.settings || {}),
+      profiles: Array.isArray(db.profiles) && db.profiles.length ? db.profiles : [createProfile("Learner 1")],
+      activeProfileId: db.activeProfileId || (db.profiles && db.profiles[0] ? db.profiles[0].id : null)
+    };
+
+    safe.profiles = safe.profiles.map(profile => ({
+      id: profile.id || uid("profile"),
+      name: profile.name || "Learner",
+      createdAt: profile.createdAt || now(),
+      itemStates: profile.itemStates || {},
+      attemptLog: Array.isArray(profile.attemptLog) ? profile.attemptLog : [],
+      notes: typeof profile.notes === "string" ? profile.notes : ""
+    }));
+
+    if (!safe.activeProfileId || !safe.profiles.some(p => p.id === safe.activeProfileId)) {
+      safe.activeProfileId = safe.profiles[0].id;
+    }
+
+    return safe;
+  }
+
+  function saveDB() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(APP.db));
+  }
+
+  function activeProfile() {
+    return APP.db.profiles.find(p => p.id === APP.db.activeProfileId) || APP.db.profiles[0];
+  }
+
+  function ensureItemState(profile, itemId) {
+    if (!profile.itemStates[itemId]) {
+      profile.itemStates[itemId] = {
+        attempts: 0,
+        correct: 0,
+        incorrect: 0,
+        streak: 0,
+        lapses: 0,
+        ease: 2.3,
+        intervalDays: 0,
+        dueAt: 0,
+        lastSeen: 0,
+        lastCorrect: null,
+        recent: []
+      };
+    }
+    return profile.itemStates[itemId];
+  }
+
+  function normalizeText(str) {
+    return String(str || "")
+      .replace(/\r/g, "")
+      .replace(/[“”]/g, '"')
+      .replace(/[‘’]/g, "'")
+      .replace(/[–—]/g, "—")
+      .replace(/\u00a0/g, " ")
+      .replace(/[ \t]+\n/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .replace(/[ \t]{2,}/g, " ")
+      .replace(/\s+([,.;:?!\)])/g, "$1")
+      .replace(/([\(\[])\s+/g, "$1")
+      .replace(/\s*—\s*/g, " — ")
+      .replace(/[ ]{2,}/g, " ")
+      .trim();
+  }
+
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function stripPunctuation(str) {
+    return normalizeText(str).toLowerCase().replace(/[^a-z0-9'\n ]/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  function itemStateSnapshot(profile, item) {
+    const st = ensureItemState(profile, item.id);
+    const accuracy = st.attempts ? st.correct / st.attempts : 0;
+    let bucket = "new";
+    if (st.attempts === 0) bucket = "new";
+    else if (accuracy < 0.65 || (st.lapses >= 2 && st.streak === 0)) bucket = "weak";
+    else if (st.dueAt && st.dueAt <= now()) bucket = "due";
+    else if (st.intervalDays >= 7 && st.streak >= 3 && accuracy >= 0.8) bucket = "secure";
+    else bucket = "learning";
+
+    const mastery = st.attempts === 0
+      ? 0
+      : Math.round(
+          100 *
+          (
+            accuracy * 0.55 +
+            Math.min(st.intervalDays / 14, 1) * 0.25 +
+            Math.min(st.streak / 4, 1) * 0.20
+          )
+        );
+
+    return {
+      state: st,
+      accuracy,
+      bucket,
+      mastery,
+      due: st.dueAt <= now()
+    };
+  }
+
+  function skillSnapshot(profile, skillId) {
+    const items = CONTENT.filter(item => item.skillIds.includes(skillId));
+    const snaps = items.map(item => itemStateSnapshot(profile, item));
+    const attempts = snaps.reduce((sum, snap) => sum + snap.state.attempts, 0);
+    const correct = snaps.reduce((sum, snap) => sum + snap.state.correct, 0);
+    const dueCount = snaps.filter(snap => snap.bucket === "due").length;
+    const weakCount = snaps.filter(snap => snap.bucket === "weak").length;
+    const secureCount = snaps.filter(snap => snap.bucket === "secure").length;
+    const mastery = snaps.length ? Math.round(snaps.reduce((sum, snap) => sum + snap.mastery, 0) / snaps.length) : 0;
+    return {
+      skill: SKILL_BY_ID[skillId],
+      items,
+      attempts,
+      correct,
+      dueCount,
+      weakCount,
+      secureCount,
+      mastery
+    };
+  }
+
+  function computeAnalytics(profile) {
+    const itemSnaps = CONTENT.map(item => ({ item, snap: itemStateSnapshot(profile, item) }));
+    const counts = {
+      new: 0, learning: 0, weak: 0, due: 0, secure: 0
+    };
+    itemSnaps.forEach(({ snap }) => counts[snap.bucket]++);
+    const attempts = profile.attemptLog.length;
+    const correct = profile.attemptLog.filter(log => log.correct).length;
+    const overallAccuracy = attempts ? Math.round((correct / attempts) * 100) : 0;
+
+    const byMode = ["smart", "guided", "insert", "fix", "choose", "combine", "weak", "transfer", "gps"]
+      .map(mode => {
+        const logs = profile.attemptLog.filter(log => log.sessionMode === mode);
+        const acc = logs.length ? Math.round(100 * logs.filter(log => log.correct).length / logs.length) : 0;
+        return { mode, attempts: logs.length, accuracy: acc };
+      });
+
+    const skillRows = SKILLS.map(skill => skillSnapshot(profile, skill.id))
+      .sort((a, b) => a.mastery - b.mastery);
+
+    const recentMistakes = [...profile.attemptLog]
+      .filter(log => !log.correct)
+      .slice(-8)
+      .reverse()
+      .map(log => {
+        const item = CONTENT.find(i => i.id === log.itemId);
+        return {
+          ...log,
+          item
+        };
+      });
+
+    const dailyMap = {};
+    profile.attemptLog.forEach(log => {
+      const date = new Date(log.ts).toISOString().slice(0, 10);
+      if (!dailyMap[date]) dailyMap[date] = { attempts: 0, correct: 0 };
+      dailyMap[date].attempts += 1;
+      if (log.correct) dailyMap[date].correct += 1;
+    });
+
+    const today = new Date();
+    let streak = 0;
+    const cursor = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    while (true) {
+      const key = cursor.toISOString().slice(0, 10);
+      if (dailyMap[key] && dailyMap[key].attempts > 0) {
+        streak += 1;
+        cursor.setDate(cursor.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+
+    const dueToday = itemSnaps.filter(row => row.snap.bucket === "due").length;
+    const weakItems = itemSnaps.filter(row => row.snap.bucket === "weak").length;
+
+    return {
+      itemSnaps,
+      counts,
+      attempts,
+      overallAccuracy,
+      skillRows,
+      recentMistakes,
+      dueToday,
+      weakItems,
+      byMode,
+      streak,
+      activeDays: Object.keys(dailyMap).length
+    };
+  }
+
+  function getWeakSkillIds(profile, limit = 3) {
+    return SKILLS
+      .map(skill => skillSnapshot(profile, skill.id))
+      .sort((a, b) => {
+        if (a.mastery !== b.mastery) return a.mastery - b.mastery;
+        return a.attempts - b.attempts;
+      })
+      .slice(0, limit)
+      .map(row => row.skill.id);
+  }
+
+  function chooseGuidedSkill(profile) {
+    const weakest = getWeakSkillIds(profile, 1)[0];
+    return weakest || SKILLS[0].id;
+  }
+
+  function weightedPick(options) {
+    const total = options.reduce((sum, row) => sum + row.weight, 0);
+    if (total <= 0) return options[0] || null;
+    let roll = Math.random() * total;
+    for (const row of options) {
+      roll -= row.weight;
+      if (roll <= 0) return row;
+    }
+    return options[options.length - 1] || null;
+  }
+
+  function getEligibleItems(mode, profile, extra = {}) {
+    let pool = CONTENT.slice();
+
+    if (mode === "insert") pool = pool.filter(item => item.mode === "insert");
+    if (mode === "fix") pool = pool.filter(item => item.mode === "fix");
+    if (mode === "choose") pool = pool.filter(item => item.mode === "choose");
+    if (mode === "combine") pool = pool.filter(item => item.mode === "combine");
+    if (mode === "transfer") pool = pool.filter(item => item.mode === "transfer");
+    if (mode === "guided") {
+      const skillId = extra.skillId || chooseGuidedSkill(profile);
+      pool = pool.filter(item => item.skillIds.includes(skillId) && item.mode !== "transfer");
+    }
+    if (mode === "weak") {
+      const weakSkills = getWeakSkillIds(profile, 3);
+      pool = pool.filter(item => item.skillIds.some(skillId => weakSkills.includes(skillId)));
+    }
+    if (mode === "gps") {
+      pool = pool.filter(item => item.satStyle && ["insert", "fix", "choose", "combine"].includes(item.mode));
+    }
+
+    return pool;
+  }
+
+  function selectAdaptiveItem(mode, extra = {}) {
+    const profile = activeProfile();
+    const session = APP.session;
+    const pool = getEligibleItems(mode, profile, extra);
+    const recentItems = session ? session.recentItems || [] : [];
+    const recentSkills = session ? session.recentSkills || [] : [];
+    const delayedRetryIds = session
+      ? session.retryQueue
+          .filter(entry => entry.afterCount <= session.answeredCount)
+          .map(entry => entry.itemId)
+      : [];
+
+    const weighted = pool
+      .map(item => {
+        const snap = itemStateSnapshot(profile, item);
+        let weight = 1;
+
+        if (snap.bucket === "due") weight *= 2.4;
+        if (snap.bucket === "weak") weight *= 2.8;
+        if (snap.bucket === "new") weight *= 1.5;
+        if (snap.bucket === "learning") weight *= 1.05;
+        if (snap.bucket === "secure") weight *= 0.35;
+
+        if (delayedRetryIds.includes(item.id)) weight *= 2.2;
+
+        const skillDeficit = item.skillIds
+          .map(skillId => 100 - skillSnapshot(profile, skillId).mastery)
+          .reduce((sum, n) => sum + n, 0) / Math.max(1, item.skillIds.length);
+        weight *= 1 + (skillDeficit / 160);
+
+        if (recentItems.includes(item.id)) weight *= 0.18;
+        if (item.skillIds.some(skillId => recentSkills.slice(-2).includes(skillId))) weight *= 0.62;
+        if (session && session.lastItemId === item.id) weight = 0;
+        if (mode === "smart" && item.mode === "transfer") weight *= 0.85;
+
+        return { item, weight };
+      })
+      .filter(row => row.weight > 0);
+
+    const pick = weightedPick(weighted);
+    return pick ? pick.item : pool[0] || null;
+  }
+
+  function beginSession(mode, extra = {}) {
+    const profile = activeProfile();
+    stopTimer();
+    APP.feedback = null;
+    APP.aiMessage = "";
+    APP.renderOptions = null;
+
+    if (mode === "gps") {
+      const length = clamp(parseInt(APP.db.settings.testLength, 10) || 10, 5, 20);
+      const queue = [];
+      const tempSession = {
+        mode,
+        startedAt: now(),
+        answeredCount: 0,
+        correctCount: 0,
+        recentItems: [],
+        recentSkills: [],
+        retryQueue: [],
+        queue: [],
+        queueIndex: 0,
+        responses: [],
+        timeLimitSec: Math.round(length * 54)
+      };
+      APP.session = tempSession;
+      while (queue.length < length) {
+        const item = selectAdaptiveItem("gps");
+        if (!item) break;
+        if (!queue.some(existing => existing.id === item.id)) {
+          queue.push(item);
+          tempSession.recentItems.push(item.id);
+          tempSession.recentSkills.push(item.skillIds[0]);
+        }
+      }
+      APP.session = {
+        mode,
+        startedAt: now(),
+        answeredCount: 0,
+        correctCount: 0,
+        recentItems: [],
+        recentSkills: [],
+        retryQueue: [],
+        queue,
+        queueIndex: 0,
+        responses: [],
+        timeLimitSec: Math.round(queue.length * 54),
+        remainingSec: Math.round(queue.length * 54),
+        guidedSkillId: null,
+        guidedHelp: 0
+      };
+      APP.currentItem = queue[0] || null;
+      if (APP.currentItem) prepareItemRender(APP.currentItem);
+      startTimer();
+    } else {
+      APP.session = {
+        mode,
+        startedAt: now(),
+        answeredCount: 0,
+        correctCount: 0,
+        recentItems: [],
+        recentSkills: [],
+        retryQueue: [],
+        guidedSkillId: mode === "guided" ? (extra.skillId || chooseGuidedSkill(profile)) : null,
+        guidedHelp: mode === "guided" ? 2 : 0
+      };
+      APP.currentItem = selectAdaptiveItem(mode, { skillId: APP.session.guidedSkillId });
+      prepareItemRender(APP.currentItem);
+    }
+
+    render();
+    focusResponseControl();
+    maybeSpeakPrompt();
+  }
+
+  function prepareItemRender(item) {
+    if (!item) {
+      APP.renderOptions = null;
+      return;
+    }
+    if (item.mode === "choose") {
+      const options = item.options.map((text, index) => ({ text, originalIndex: index }));
+      for (let i = options.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [options[i], options[j]] = [options[j], options[i]];
+      }
+      APP.renderOptions = options;
+    } else {
+      APP.renderOptions = null;
+    }
+  }
+
+  function nextQuestion() {
+    if (!APP.session) return;
+    APP.feedback = null;
+    APP.aiMessage = "";
+
+    if (APP.session.mode === "gps") {
+      APP.session.queueIndex += 1;
+      APP.currentItem = APP.session.queue[APP.session.queueIndex] || null;
+      prepareItemRender(APP.currentItem);
+      if (!APP.currentItem) {
+        finishTest();
+      } else {
+        render();
+        focusResponseControl();
+        maybeSpeakPrompt();
+      }
+      return;
+    }
+
+    APP.currentItem = selectAdaptiveItem(APP.session.mode, { skillId: APP.session.guidedSkillId });
+    prepareItemRender(APP.currentItem);
+    render();
+    focusResponseControl();
+    maybeSpeakPrompt();
+  }
+
+  function startTimer() {
+    stopTimer();
+    if (!APP.session || APP.session.mode !== "gps") return;
+    APP.testTimer = setInterval(() => {
+      if (!APP.session || APP.session.mode !== "gps") {
+        stopTimer();
+        return;
+      }
+      APP.session.remainingSec -= 1;
+      if (APP.session.remainingSec <= 0) {
+        APP.session.remainingSec = 0;
+        stopTimer();
+        finishTest();
+        return;
+      }
+      render();
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (APP.testTimer) {
+      clearInterval(APP.testTimer);
+      APP.testTimer = null;
+    }
+  }
+
+  function collectResponse() {
+    if (!APP.currentItem) return "";
+    if (APP.currentItem.mode === "choose") {
+      const chosen = document.querySelector('input[name="choice"]:checked');
+      return chosen ? chosen.value : "";
+    }
+    const editor = document.getElementById("responseEditor");
+    return editor ? editor.innerText : "";
+  }
+
+  function validateTransfer(item, response) {
+    const v = item.validator || {};
+    const text = normalizeText(response);
+    const lower = text.toLowerCase();
+    const model = item.model || item.answers[0];
+
+    switch (v.type) {
+      case "startsWithWordQuestion": {
+        const firstWordOkay = lower.startsWith(v.word.toLowerCase() + " ");
+        const endsQuestion = /[?]["']?$/.test(text);
+        const startsCapital = /^[A-Z]/.test(text);
+        const correct = firstWordOkay && endsQuestion && startsCapital;
+        return {
+          correct,
+          expected: model,
+          note: correct
+            ? "That begins like a question and ends with a question mark."
+            : `Start with ${v.word}, use a capital letter, and end with a question mark.`
+        };
+      }
+      case "startsWithPhraseComma": {
+        const target = v.phrase.toLowerCase();
+        const correct = lower.startsWith(target + ",") && /[.?!]["']?$/.test(text) && /^[A-Z]/.test(text);
+        return {
+          correct,
+          expected: model,
+          note: correct
+            ? "That uses the fronted adverbial comma correctly."
+            : `Start with "${v.phrase}," then continue the sentence and finish it correctly.`
+        };
+      }
+      case "requiresTokens": {
+        const missing = (v.tokens || []).filter(token => !lower.includes(token.toLowerCase()));
+        return {
+          correct: missing.length === 0 && /[.?!]["']?$/.test(text) && /^[A-Z]/.test(text),
+          expected: model,
+          note: missing.length
+            ? `Include these exact forms: ${missing.join(", ")}.`
+            : "Good. The required punctuated forms are present."
+        };
+      }
+      case "speechWithWords": {
+        const stripped = stripPunctuation(text);
+        const hasWords = stripped.includes(v.words.toLowerCase());
+        const hasQuote = /["']/g.test(text);
+        const hasQuestion = /\?["']?$/.test(text) || /["']\?/.test(text);
+        const startsCapital = /^[A-Z]/.test(text);
+        return {
+          correct: hasWords && hasQuote && hasQuestion && startsCapital,
+          expected: model,
+          note: hasWords && hasQuote && hasQuestion
+            ? "The spoken words are punctuated as a question."
+            : "Include inverted commas around the spoken words and keep the question mark with the speech."
+        };
+      }
+      case "containsParenthesisPhrase": {
+        const hasPhrase = lower.includes(v.phrase.toLowerCase());
+        const hasBrackets = /\(.*\)/.test(text);
+        const hasDashes = /—.*—/.test(text) || /- .* -/.test(text);
+        return {
+          correct: hasPhrase && (hasBrackets || hasDashes) && /[.?!]["']?$/.test(text),
+          expected: model,
+          note: hasPhrase && (hasBrackets || hasDashes)
+            ? "The extra detail is marked as parenthesis."
+            : `Include "${v.phrase}" as extra information inside brackets or dashes.`
+        };
+      }
+      case "containsStemColon": {
+        const startsStem = lower.startsWith(v.stem.toLowerCase());
+        const hasColon = text.includes(":");
+        const afterColon = text.split(":")[1] || "";
+        const listLike = (afterColon.match(/,/g) || []).length >= 1 || /\band\b/.test(afterColon.toLowerCase());
+        return {
+          correct: startsStem && hasColon && listLike && /[.?!]["']?$/.test(text),
+          expected: model,
+          note: startsStem && hasColon
+            ? "The sentence uses a colon to introduce the list."
+            : `Keep the opening stem and add a colon before the list.`
+        };
+      }
+      case "containsSemicolonPhrases": {
+        const left = stripPunctuation(v.left || "");
+        const right = stripPunctuation(v.right || "");
+        const strippedText = stripPunctuation(text);
+        const hasLeft = strippedText.includes(left);
+        const hasRight = strippedText.includes(right);
+        return {
+          correct: hasLeft && hasRight && text.includes(";"),
+          expected: model,
+          note: hasLeft && hasRight && text.includes(";")
+            ? "The clauses are joined with a semi-colon."
+            : "Use a semi-colon to join the two clauses."
+        };
+      }
+      case "containsDashPhrases": {
+        const left = stripPunctuation(v.left || "");
+        const right = stripPunctuation(v.right || "");
+        const strippedText = stripPunctuation(text);
+        const hasLeft = strippedText.includes(left);
+        const hasRight = strippedText.includes(right);
+        const hasDash = text.includes("—") || / - /.test(text);
+        return {
+          correct: hasLeft && hasRight && hasDash,
+          expected: model,
+          note: hasLeft && hasRight && hasDash
+            ? "The clauses are joined with a dash."
+            : "Use a dash to join the two clauses."
+        };
+      }
+      case "stemWithList": {
+        const stemOkay = lower.startsWith(v.stem.toLowerCase());
+        const commas = (text.match(/,/g) || []).length;
+        return {
+          correct: stemOkay && commas >= 1 && /[.?!]["']?$/.test(text),
+          expected: model,
+          note: stemOkay && commas >= 1
+            ? "That sentence includes a punctuated list."
+            : "Keep the stem and add a list with commas between items."
+        };
+      }
+      case "frontedAdverbialWithSpeech": {
+        const startsPhrase = lower.startsWith(v.phrase.toLowerCase() + ",");
+        const hasQuotes = /["']/g.test(text);
+        return {
+          correct: startsPhrase && hasQuotes && /[.?!]["']?$/.test(text),
+          expected: model,
+          note: startsPhrase && hasQuotes
+            ? "That combines a fronted adverbial with direct speech."
+            : `Begin with "${v.phrase}," and include correctly punctuated direct speech.`
+        };
+      }
+      default:
+        return { correct: false, expected: model, note: "No validator found." };
+    }
+  }
+
+  function evaluateResponse(item, response) {
+    if (item.mode === "choose") {
+      const selectedOriginalIndex = parseInt(response, 10);
+      const correct = selectedOriginalIndex === item.correctIndex;
+      return {
+        correct,
+        expected: item.model,
+        note: item.explanation
+      };
+    }
+
+    if (item.validator) {
+      return validateTransfer(item, response);
+    }
+
+    const actual = normalizeText(response);
+    const answers = item.answers.map(normalizeText);
+    const correct = answers.includes(actual);
+
+    return {
+      correct,
+      expected: item.model,
+      note: item.explanation
+    };
+  }
+
+  function logAttempt(profile, item, response, result) {
+    profile.attemptLog.push({
+      ts: now(),
+      itemId: item.id,
+      skillIds: item.skillIds.slice(),
+      response,
+      expected: result.expected,
+      correct: result.correct,
+      sessionMode: APP.session ? APP.session.mode : "smart"
+    });
+    if (profile.attemptLog.length > 1000) {
+      profile.attemptLog = profile.attemptLog.slice(-1000);
+    }
+  }
+
+  function updateScheduling(profile, item, result) {
+    const st = ensureItemState(profile, item.id);
+    st.attempts += 1;
+    st.lastSeen = now();
+    st.lastCorrect = result.correct;
+    st.recent.push(result.correct ? 1 : 0);
+    if (st.recent.length > 12) st.recent.shift();
+
+    if (result.correct) {
+      st.correct += 1;
+      st.streak += 1;
+      if (st.attempts === 1) {
+        st.intervalDays = 1;
+      } else if (st.streak === 2) {
+        st.intervalDays = Math.max(2, st.intervalDays + 2);
+      } else {
+        st.intervalDays = Math.max(1, Math.round((st.intervalDays || 1) * st.ease));
+      }
+      st.ease = clamp(st.ease + 0.06, 1.3, 3.2);
+      st.dueAt = now() + (st.intervalDays * DAY_MS);
+      if (APP.session && APP.session.mode === "guided") {
+        APP.session.guidedHelp = Math.max(0, APP.session.guidedHelp - 1);
+      }
+    } else {
+      st.incorrect += 1;
+      st.lapses += 1;
+      st.streak = 0;
+      st.ease = clamp(st.ease - 0.18, 1.3, 3.2);
+      st.intervalDays = 0;
+      st.dueAt = now() + (APP.session && APP.session.mode === "guided" ? 5 * MIN_MS : 20 * MIN_MS);
+      if (APP.session && APP.session.mode !== "gps") {
+        APP.session.retryQueue.push({
+          itemId: item.id,
+          afterCount: APP.session.answeredCount + 3
+        });
+      }
+      if (APP.session && APP.session.mode === "guided") {
+        APP.session.guidedHelp = Math.min(2, APP.session.guidedHelp + 1);
+      }
+    }
+  }
+
+  function submitCurrent() {
+    if (!APP.currentItem || !APP.session) return;
+
+    const response = collectResponse();
+    if (APP.currentItem.mode === "choose" && response === "") {
+      alert("Choose one answer first.");
+      return;
+    }
+    if (APP.currentItem.mode !== "choose" && normalizeText(response) === "") {
+      alert("Type your answer first.");
+      return;
+    }
+
+    const item = APP.currentItem;
+    const result = evaluateResponse(item, response);
+    const profile = activeProfile();
+
+    updateScheduling(profile, item, result);
+    logAttempt(profile, item, response, result);
+    saveDB();
+
+    APP.session.answeredCount += 1;
+    if (result.correct) APP.session.correctCount += 1;
+    APP.session.lastItemId = item.id;
+    APP.session.recentItems.push(item.id);
+    APP.session.recentSkills.push(item.skillIds[0]);
+    if (APP.session.recentItems.length > 6) APP.session.recentItems.shift();
+    if (APP.session.recentSkills.length > 6) APP.session.recentSkills.shift();
+
+    if (APP.session.mode === "gps") {
+      APP.session.responses.push({
+        itemId: item.id,
+        response,
+        result,
+        renderOptions: APP.renderOptions ? APP.renderOptions.slice() : null
+      });
+      nextQuestion();
+      return;
+    }
+
+    APP.feedback = {
+      response,
+      result,
+      item
+    };
+    render();
+  }
+
+  function finishTest() {
+    stopTimer();
+    if (!APP.session || APP.session.mode !== "gps") return;
+    APP.feedback = {
+      type: "testSummary",
+      session: APP.session
+    };
+    APP.currentItem = null;
+    render();
+  }
+
+  function formatTime(seconds) {
+    const mm = String(Math.floor(seconds / 60)).padStart(2, "0");
+    const ss = String(Math.floor(seconds % 60)).padStart(2, "0");
+    return `${mm}:${ss}`;
+  }
+
+  function maybeSpeakPrompt() {
+    if (!APP.db.settings.speechEnabled || !APP.db.settings.autoReadPrompt || !window.speechSynthesis || !APP.currentItem) return;
+    speakText(`${APP.currentItem.prompt} ${APP.currentItem.stem || ""}`);
+  }
+
+  function speakText(text) {
+    if (!APP.db.settings.speechEnabled || !window.speechSynthesis || !text) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = clamp(Number(APP.db.settings.speechRate) || 1, 0.7, 1.3);
+    window.speechSynthesis.speak(utter);
+  }
+
+  function focusResponseControl() {
+    requestAnimationFrame(() => {
+      if (!APP.currentItem) return;
+      if (APP.currentItem.mode === "choose") {
+        const radio = document.querySelector('input[name="choice"]');
+        if (radio) radio.focus();
+      } else {
+        const editor = document.getElementById("responseEditor");
+        if (editor) {
+          editor.focus();
+          placeCaretAtEnd(editor);
+        }
+      }
+    });
+  }
+
+  function placeCaretAtEnd(el) {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  function currentInputSeed(item) {
+    if (!item) return "";
+    if (item.mode === "insert" || item.mode === "fix") return item.stem || "";
+    if (item.mode === "combine") return item.stem || "";
+    return "";
+  }
+
+  function renderTabs() {
+    const tabs = [
+      { id: "practice", label: "Practice" },
+      { id: "dashboard", label: "Dashboard" },
+      { id: "data", label: "Profiles & data" },
+      { id: "settings", label: "Settings" },
+      { id: "about", label: "Skill map" }
+    ];
+    document.getElementById("tabs").innerHTML = tabs.map(tab => `
+      <button class="tab ${APP.view === tab.id ? "active" : ""}" data-tab="${tab.id}">${tab.label}</button>
+    `).join("");
+  }
+
+  function renderModeSidebar() {
+    const profile = activeProfile();
+    const analytics = computeAnalytics(profile);
+    const currentMode = APP.session ? APP.session.mode : "smart";
+    const weakSkillNames = getWeakSkillIds(profile, 3).map(id => SKILL_BY_ID[id].name);
+
+    return `
+      <div class="panel stack">
+        <div>
+          <h2 class="section-title">Modes</h2>
+          <div class="mode-list">
+            ${MODES.map(mode => `
+              <button class="mode-btn ${currentMode === mode.id ? "active" : ""}" data-mode="${mode.id}">
+                <strong>${mode.label}</strong>
+                <span>${mode.desc}</span>
+              </button>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="stack">
+          <div class="chips">
+            <span class="chip">Due now: ${analytics.dueToday}</span>
+            <span class="chip bad">Weak items: ${analytics.weakItems}</span>
+            <span class="chip good">Daily streak: ${analytics.streak}</span>
+          </div>
+          <div class="small muted">
+            Weakest skills: ${escapeHtml(weakSkillNames.join(" • ") || "None yet")}
+          </div>
+        </div>
+
+        ${APP.session && APP.session.mode === "guided" ? renderGuidedChooser() : ""}
+      </div>
+    `;
+  }
+
+  function renderGuidedChooser() {
+    const profile = activeProfile();
+    const selected = APP.session ? APP.session.guidedSkillId : chooseGuidedSkill(profile);
+    return `
+      <div class="stack">
+        <label for="guidedSkillSelect" class="small"><strong>Guided skill</strong></label>
+        <select id="guidedSkillSelect">
+          ${SKILLS.map(skill => `<option value="${skill.id}" ${selected === skill.id ? "selected" : ""}>${escapeHtml(skill.name)}</option>`).join("")}
+        </select>
+        <button class="secondary" id="restartGuidedBtn">Restart guided skill</button>
+      </div>
+    `;
+  }
+
+  function renderTeachBox(skillId) {
+    if (!skillId) return "";
+    const skill = SKILL_BY_ID[skillId];
+    const helpLevel = APP.session ? APP.session.guidedHelp : 0;
+    if (APP.session.mode !== "guided") return "";
+
+    return `
+      <div class="teach-box">
+        <h3 class="section-title">Guided support: ${escapeHtml(skill.name)}</h3>
+        <div class="small subtle">${escapeHtml(skill.rule)}</div>
+        <div class="teach-grid" style="margin-top:12px;">
+          <div class="contrast">
+            <div class="tiny muted">Worked example</div>
+            <div><strong>Before:</strong> ${escapeHtml(skill.workedBad)}</div>
+            <div><strong>After:</strong> ${escapeHtml(skill.workedGood)}</div>
+          </div>
+          <div class="contrast">
+            <div class="tiny muted">Contrast</div>
+            <div><strong>Not this:</strong> ${escapeHtml(skill.contrastBad)}</div>
+            <div><strong>Better:</strong> ${escapeHtml(skill.contrastGood)}</div>
+          </div>
+        </div>
+        ${helpLevel >= 1 ? `<div class="hint-box"><strong>Hint before you answer:</strong> ${escapeHtml(skill.rule)}</div>` : ""}
+        ${helpLevel >= 2 && APP.currentItem && APP.currentItem.hint ? `<div class="hint-box"><strong>Extra nudge:</strong> ${escapeHtml(APP.currentItem.hint)}</div>` : ""}
+      </div>
+    `;
+  }
+
+  function renderQuestionCard() {
+    if (!APP.session) {
+      return `
+        <div class="card">
+          <h2 class="section-title">Start a practice mode</h2>
+          <p class="subtle">The app is ready. Pick a mode on the left to begin. Smart review is the default daily route because it mixes due items, weak items, recent misses, and new material with weighted random selection.</p>
+        </div>
+      `;
+    }
+
+    if (APP.feedback && APP.feedback.type === "testSummary") {
+      return renderTestSummary(APP.feedback.session);
+    }
+
+    if (!APP.currentItem) {
+      return `
+        <div class="card">
+          <h2 class="section-title">Session complete</h2>
+          <p class="subtle">You have finished this set. Start another mode or return to Smart review.</p>
+        </div>
+      `;
+    }
+
+    const item = APP.currentItem;
+    const profile = activeProfile();
+    const snap = itemStateSnapshot(profile, item);
+    const headerChips = [
+      `<span class="chip">Item status: ${snap.bucket}</span>`,
+      `<span class="chip">Item mastery: ${snap.mastery}%</span>`
+    ];
+
+    if (APP.session.mode === "gps") {
+      headerChips.push(`<span class="chip">${APP.session.queueIndex + 1} / ${APP.session.queue.length}</span>`);
+      headerChips.push(`<span class="chip warn">Timer: <span class="timer">${formatTime(APP.session.remainingSec)}</span></span>`);
+    } else {
+      headerChips.push(`<span class="chip">${APP.session.answeredCount} answered</span>`);
+      if (APP.session.mode === "guided" && APP.session.guidedSkillId) {
+        headerChips.push(`<span class="chip">Focus: ${escapeHtml(SKILL_BY_ID[APP.session.guidedSkillId].name)}</span>`);
+      }
+    }
+
+    let responseArea = "";
+    if (item.mode === "choose") {
+      responseArea = `
+        <div class="choices">
+          ${APP.renderOptions.map(option => `
+            <label class="choice">
+              <input type="radio" name="choice" value="${option.originalIndex}">
+              <span>${escapeHtml(option.text)}</span>
+            </label>
+          `).join("")}
+        </div>
+      `;
+    } else {
+      responseArea = `
+        <div
+          class="editor"
+          id="responseEditor"
+          contenteditable="true"
+          spellcheck="false"
+          aria-label="Type your answer here"
+        >${escapeHtml(currentInputSeed(item))}</div>
+      `;
+    }
+
+    const maybeStem = (item.mode === "choose" && item.stem) ? `
+      <div class="question-stem">${escapeHtml(item.stem)}</div>
+    ` : "";
+
+    const speakButton = APP.db.settings.speechEnabled
+      ? `<button class="ghost" id="speakBtn" type="button">Read aloud</button>`
+      : "";
+
+    return `
+      <div class="card">
+        <div class="question-head">
+          <div class="chips">${headerChips.join("")}</div>
+          <div class="row">${speakButton}</div>
+        </div>
+
+        ${renderTeachBox(APP.session.guidedSkillId || null)}
+
+        <div class="question-prompt">${escapeHtml(item.prompt)}</div>
+        ${item.stem ? maybeStem : ""}
+        ${responseArea}
+
+        <div class="controls">
+          <button class="primary" id="submitBtn">Check answer</button>
+          <button class="ghost" id="resetBtn">Reset</button>
+          <button class="ghost" id="skipBtn">Skip for now</button>
+        </div>
+
+        ${APP.feedback ? renderFeedbackCard() : ""}
+      </div>
+    `;
+  }
+
+  function renderFeedbackCard() {
+    if (!APP.feedback || APP.feedback.type === "testSummary") return "";
+    const { item, result } = APP.feedback;
+    const firstSkill = item.skillIds[0];
+    const skillName = SKILL_BY_ID[firstSkill].name;
+
+    return `
+      <div class="feedback ${result.correct ? "good" : "bad"}" aria-live="polite">
+        <h3>${result.correct ? "Correct" : "Not quite yet"}</h3>
+        <div class="small"><strong>Skill:</strong> ${escapeHtml(skillName)}</div>
+        <div class="small" style="margin-top:6px;">${escapeHtml(result.note)}</div>
+        <div class="model-answer"><strong>Model answer:</strong>\n${escapeHtml(result.expected)}</div>
+        <div class="small subtle" style="margin-top:8px;">${escapeHtml(item.explanation)}</div>
+
+        <div class="controls">
+          <button class="primary" id="nextBtn">Next question</button>
+          ${!result.correct ? `<button class="secondary" id="aiExplainBtn">AI explanation</button>` : ""}
+          <button class="ghost" id="aiPracticeBtn">AI extra practice</button>
+        </div>
+
+        ${APP.aiMessage ? `<div class="ai-box"><strong>AI:</strong><div class="small" style="margin-top:8px; white-space: pre-wrap;">${escapeHtml(APP.aiMessage)}</div></div>` : ""}
+      </div>
+    `;
+  }
+
+  function renderTestSummary(session) {
+    const score = `${session.correctCount} / ${session.responses.length}`;
+    const percent = session.responses.length ? Math.round((session.correctCount / session.responses.length) * 100) : 0;
+
+    return `
+      <div class="card stack">
+        <div class="row">
+          <span class="chip good">Test score: ${score}</span>
+          <span class="chip">Accuracy: ${percent}%</span>
+        </div>
+        <div class="small subtle">This mode holds feedback until the end so the score is a cleaner measure of test performance. The detailed review below still feeds item scheduling and weakness tracking.</div>
+        <div class="bar-list">
+          ${session.responses.map((entry, index) => renderTestReviewRow(entry, index + 1)).join("")}
+        </div>
+        <div class="controls">
+          <button class="primary" id="restartSmartBtn">Back to smart review</button>
+          <button class="ghost" id="restartGpsBtn">Another GPS test</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderTestReviewRow(entry, number) {
+    const item = CONTENT.find(i => i.id === entry.itemId);
+    const response = entry.response || "";
+    const result = entry.result;
+    let optionsHtml = "";
+
+    if (item && item.mode === "choose" && entry.renderOptions) {
+      optionsHtml = `
+        <div class="choices">
+          ${entry.renderOptions.map(option => {
+            const cls = option.originalIndex === item.correctIndex
+              ? "correct"
+              : (String(option.originalIndex) === String(entry.response) ? "incorrect" : "");
+            return `
+              <div class="choice ${cls}">
+                <span>${option.originalIndex === item.correctIndex ? "✓" : (String(option.originalIndex) === String(entry.response) ? "✗" : "•")}</span>
+                <span>${escapeHtml(option.text)}</span>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="mistake">
+        <div class="row">
+          <strong>Question ${number}</strong>
+          <span class="chip ${result.correct ? "good" : "bad"}">${result.correct ? "Correct" : "Incorrect"}</span>
+        </div>
+        <div class="small" style="margin-top:6px;">${escapeHtml(item ? item.prompt : "")}</div>
+        ${item && item.stem ? `<div class="question-stem" style="margin-top:8px;">${escapeHtml(item.stem)}</div>` : ""}
+        ${optionsHtml}
+        ${item && item.mode !== "choose" ? `<div class="small" style="margin-top:8px;"><strong>Your answer:</strong> ${escapeHtml(response)}</div>` : ""}
+        <div class="model-answer" style="margin-top:8px;"><strong>Model answer:</strong>\n${escapeHtml(result.expected)}</div>
+        <div class="tiny muted" style="margin-top:8px;">${escapeHtml(item ? item.explanation : "")}</div>
+      </div>
+    `;
+  }
+
+  function renderPracticeView() {
+    const profile = activeProfile();
+    const analytics = computeAnalytics(profile);
+
+    return `
+      <div class="grid practice">
+        ${renderModeSidebar()}
+        <div class="stack">
+          <div class="stats-grid">
+            <div class="stat">
+              <div class="tiny muted">Overall accuracy</div>
+              <div class="num">${analytics.overallAccuracy}%</div>
+            </div>
+            <div class="stat">
+              <div class="tiny muted">Due now</div>
+              <div class="num">${analytics.dueToday}</div>
+            </div>
+            <div class="stat">
+              <div class="tiny muted">Secure items</div>
+              <div class="num">${analytics.counts.secure}</div>
+            </div>
+            <div class="stat">
+              <div class="tiny muted">Today streak</div>
+              <div class="num">${analytics.streak}</div>
+            </div>
+          </div>
+          ${renderQuestionCard()}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDashboardView() {
+    const profile = activeProfile();
+    const analytics = computeAnalytics(profile);
+
+    return `
+      <div class="stack">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="tiny muted">Attempts</div>
+            <div class="num">${analytics.attempts}</div>
+          </div>
+          <div class="stat">
+            <div class="tiny muted">Overall accuracy</div>
+            <div class="num">${analytics.overallAccuracy}%</div>
+          </div>
+          <div class="stat">
+            <div class="tiny muted">Active days</div>
+            <div class="num">${analytics.activeDays}</div>
+          </div>
+          <div class="stat">
+            <div class="tiny muted">Daily streak</div>
+            <div class="num">${analytics.streak}</div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h2 class="section-title">Item buckets</h2>
+            <div class="chips">
+              <span class="chip">New: ${analytics.counts.new}</span>
+              <span class="chip">Learning: ${analytics.counts.learning}</span>
+              <span class="chip bad">Weak: ${analytics.counts.weak}</span>
+              <span class="chip warn">Due: ${analytics.counts.due}</span>
+              <span class="chip good">Secure: ${analytics.counts.secure}</span>
+            </div>
+          </div>
+          <div class="card">
+            <h2 class="section-title">Mode accuracy</h2>
+            <div class="bar-list">
+              ${analytics.byMode.map(row => `
+                <div class="bar-row">
+                  <div class="bar-head">
+                    <span>${escapeHtml(MODES.find(m => m.id === row.mode).label)}</span>
+                    <span class="tiny muted">${row.accuracy}% • ${row.attempts} attempts</span>
+                  </div>
+                  <div class="bar-wrap"><div class="bar" style="width:${row.accuracy}%;"></div></div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Progress by punctuation skill</h2>
+          <div class="bar-list">
+            ${analytics.skillRows.map(row => `
+              <div class="bar-row">
+                <div class="bar-head">
+                  <span>${escapeHtml(row.skill.name)}</span>
+                  <span class="tiny muted">${row.mastery}% • due ${row.dueCount} • weak ${row.weakCount} • secure ${row.secureCount}</span>
+                </div>
+                <div class="bar-wrap"><div class="bar" style="width:${row.mastery}%;"></div></div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Recent mistakes</h2>
+          <div class="mistake-list">
+            ${analytics.recentMistakes.length ? analytics.recentMistakes.map(entry => `
+              <div class="mistake">
+                <div class="row">
+                  <span class="badge">${new Date(entry.ts).toLocaleString()}</span>
+                  <span class="chip bad">${escapeHtml(entry.sessionMode)}</span>
+                </div>
+                <div class="small" style="margin-top:8px;">${escapeHtml(entry.item ? entry.item.prompt : "")}</div>
+                ${entry.item && entry.item.stem ? `<div class="question-stem" style="margin-top:8px;">${escapeHtml(entry.item.stem)}</div>` : ""}
+                <div class="small" style="margin-top:8px;"><strong>Your answer:</strong> ${escapeHtml(entry.response)}</div>
+                <div class="small" style="margin-top:8px;"><strong>Model answer:</strong> ${escapeHtml(entry.expected)}</div>
+              </div>
+            `).join("") : `<div class="small subtle">No mistakes logged yet.</div>`}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDataView() {
+    const profile = activeProfile();
+    return `
+      <div class="stack">
+        <div class="two-col">
+          <div class="card">
+            <h2 class="section-title">Learner profiles</h2>
+            <div class="profile-list">
+              ${APP.db.profiles.map(p => `
+                <div class="profile-item ${p.id === APP.db.activeProfileId ? "active" : ""}">
+                  <div>
+                    <strong>${escapeHtml(p.name)}</strong>
+                    <div class="tiny muted">Created ${new Date(p.createdAt).toLocaleDateString()}</div>
+                  </div>
+                  <div class="row">
+                    ${p.id !== APP.db.activeProfileId ? `<button class="ghost" data-activate-profile="${p.id}">Use</button>` : ""}
+                    ${APP.db.profiles.length > 1 ? `<button class="danger" data-delete-profile="${p.id}">Delete</button>` : ""}
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+
+            <div class="controls" style="margin-top:12px;">
+              <button class="secondary" id="newProfileBtn">Create profile</button>
+              <button class="ghost" id="renameProfileBtn">Rename active profile</button>
+              <button class="danger" id="resetProfileBtn">Reset active progress</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title">Import / export</h2>
+            <div class="notice small">Exports include learner progress, settings, analytics logs, and profiles. API keys are excluded.</div>
+            <div class="controls">
+              <button class="primary" id="exportAllBtn">Export all data</button>
+              <button class="secondary" id="exportProfileBtn">Export active profile</button>
+            </div>
+
+            <div class="hr"></div>
+
+            <label class="small"><strong>Import JSON</strong></label>
+            <textarea class="textarea" id="importBox" placeholder="Paste exported JSON here"></textarea>
+            <div class="controls">
+              <button class="primary" id="importBtn">Import JSON</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Active learner notes</h2>
+          <textarea class="textarea" id="profileNotes">${escapeHtml(profile.notes || "")}</textarea>
+          <div class="controls">
+            <button class="secondary" id="saveNotesBtn">Save notes</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function loadAIConfig() {
+    const local = localStorage.getItem(AI_LOCAL_KEY);
+    const session = sessionStorage.getItem(AI_SESSION_KEY);
+    return Object.assign(
+      {
+        provider: "openai",
+        model: "",
+        apiKey: "",
+        rememberKey: false
+      },
+      local ? JSON.parse(local) : {},
+      session ? JSON.parse(session) : {}
+    );
+  }
+
+  function saveAIConfig(cfg) {
+    const safe = {
+      provider: cfg.provider || "openai",
+      model: cfg.model || "",
+      apiKey: cfg.apiKey || "",
+      rememberKey: !!cfg.rememberKey
+    };
+    if (safe.rememberKey) {
+      localStorage.setItem(AI_LOCAL_KEY, JSON.stringify(safe));
+      sessionStorage.removeItem(AI_SESSION_KEY);
+    } else {
+      const copy = Object.assign({}, safe);
+      localStorage.removeItem(AI_LOCAL_KEY);
+      sessionStorage.setItem(AI_SESSION_KEY, JSON.stringify(copy));
+    }
+  }
+
+  async function callAI(taskName, payload) {
+    const cfg = loadAIConfig();
+    if (!cfg.apiKey || !cfg.model) {
+      throw new Error("Add an API key and model in Settings before using AI.");
+    }
+
+    const system = [
+      "You are helping a KS2 punctuation practice app for England.",
+      "Return concise, safe, child-friendly output only.",
+      "Never mention that you are an AI assistant.",
+      "Keep explanations specific and actionable."
+    ].join(" ");
+
+    if (cfg.provider === "openai") {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${cfg.apiKey}`
+        },
+        body: JSON.stringify({
+          model: cfg.model,
+          temperature: 0.4,
+          messages: [
+            { role: "system", content: system },
+            { role: "user", content: buildAIPrompt(taskName, payload) }
+          ]
+        })
+      });
+      if (!response.ok) throw new Error(`OpenAI error ${response.status}`);
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content?.trim() || "";
+    }
+
+    if (cfg.provider === "anthropic") {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": cfg.apiKey,
+          "anthropic-version": "2023-06-01"
+        },
+        body: JSON.stringify({
+          model: cfg.model,
+          max_tokens: 500,
+          temperature: 0.4,
+          system,
+          messages: [
+            { role: "user", content: buildAIPrompt(taskName, payload) }
+          ]
+        })
+      });
+      if (!response.ok) throw new Error(`Anthropic error ${response.status}`);
+      const data = await response.json();
+      return data.content?.map(part => part.text || "").join("\n").trim() || "";
+    }
+
+    if (cfg.provider === "gemini") {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(cfg.model)}:generateContent?key=${encodeURIComponent(cfg.apiKey)}`;
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: `${system}\n\n${buildAIPrompt(taskName, payload)}` }
+              ]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.4
+          }
+        })
+      });
+      if (!response.ok) throw new Error(`Gemini error ${response.status}`);
+      const data = await response.json();
+      return data.candidates?.[0]?.content?.parts?.map(part => part.text || "").join("\n").trim() || "";
+    }
+
+    throw new Error("Unknown provider.");
+  }
+
+  function buildAIPrompt(taskName, payload) {
+    if (taskName === "explainMistake") {
+      return [
+        "Explain this punctuation mistake for a KS2 learner in England.",
+        "Use 3 very short paragraphs:",
+        "1) what the learner needed to notice,",
+        "2) what to fix,",
+        "3) one tiny memory tip.",
+        "",
+        `Prompt: ${payload.prompt}`,
+        `Original sentence or task: ${payload.stem || ""}`,
+        `Learner response: ${payload.response}`,
+        `Model answer: ${payload.expected}`,
+        `Skill: ${payload.skill}`
+      ].join("\n");
+    }
+
+    if (taskName === "generatePractice") {
+      return [
+        "Generate 3 fresh KS2 punctuation practice tasks for England.",
+        "Return strict JSON only with this shape:",
+        '{"items":[{"mode":"insert|fix|choose|combine","prompt":"...","stem":"...","answers":["..."],"options":["..."],"correctIndex":0,"explanation":"..."}]}',
+        "Rules:",
+        "- Focus on this skill only.",
+        "- Use original sentences, not copyrighted exam text.",
+        "- Keep them age-appropriate.",
+        "- For choose mode, include 4 options and one correct answer.",
+        "- For production modes, include an answers array with at least one exact accepted answer."
+        ,
+        `Skill: ${payload.skill}`,
+        `Rule: ${payload.rule}`
+      ].join("\n");
+    }
+
+    return JSON.stringify(payload, null, 2);
+  }
+
+  async function runAIExplain() {
+    if (!APP.feedback || !APP.feedback.item) return;
+    const item = APP.feedback.item;
+    const firstSkill = item.skillIds[0];
+    APP.aiMessage = "Working...";
+    render();
+    try {
+      const text = await callAI("explainMistake", {
+        prompt: item.prompt,
+        stem: item.stem,
+        response: APP.feedback.response,
+        expected: APP.feedback.result.expected,
+        skill: SKILL_BY_ID[firstSkill].name
+      });
+      APP.aiMessage = text || "No explanation returned.";
+    } catch (err) {
+      APP.aiMessage = `AI failed. ${err.message}. The core app still works fully without AI. Direct browser API calls can fail because of CORS, endpoint policy, or key restrictions.`;
+    }
+    render();
+  }
+
+  async function runAIGeneratePractice() {
+    const targetSkillId =
+      (APP.feedback && APP.feedback.item && APP.feedback.item.skillIds[0]) ||
+      getWeakSkillIds(activeProfile(), 1)[0] ||
+      "sentence_endings";
+
+    const skill = SKILL_BY_ID[targetSkillId];
+    APP.aiMessage = "Working...";
+    render();
+
+    try {
+      const text = await callAI("generatePractice", {
+        skill: skill.name,
+        rule: skill.rule
+      });
+      const jsonText = extractJson(text);
+      const parsed = JSON.parse(jsonText);
+      const items = (parsed.items || [])
+        .map((raw, index) => materialiseAIItem(raw, targetSkillId, index))
+        .filter(Boolean);
+
+      if (!items.length) throw new Error("No usable items returned.");
+
+      CONTENT.push(...items);
+      APP.aiGeneratedCount += items.length;
+      APP.aiMessage = `Added ${items.length} AI-generated practice items to this session. They are stored in memory for this browser tab and will behave like normal items in review.`;
+    } catch (err) {
+      APP.aiMessage = `AI failed. ${err.message}. You can still keep practising with the built-in item bank.`;
+    }
+    render();
+  }
+
+  function extractJson(text) {
+    const match = text.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error("The provider did not return JSON.");
+    return match[0];
+  }
+
+  function materialiseAIItem(raw, skillId, index) {
+    const id = `ai_${skillId}_${Date.now()}_${index}_${Math.random().toString(36).slice(2, 6)}`;
+    const mode = ["insert", "fix", "choose", "combine"].includes(raw.mode) ? raw.mode : "insert";
+    if (mode === "choose") {
+      if (!Array.isArray(raw.options) || typeof raw.correctIndex !== "number") return null;
+      return choose(
+        id,
+        [skillId],
+        raw.prompt || "Choose the best punctuated sentence.",
+        raw.options.slice(0, 4),
+        clamp(raw.correctIndex, 0, 3),
+        raw.explanation || SKILL_BY_ID[skillId].rule,
+        { satStyle: false, difficulty: 2, tags: ["ai"] }
+      );
+    }
+    if (!Array.isArray(raw.answers) || !raw.answers.length) return null;
+    return prod(
+      id,
+      mode,
+      [skillId],
+      raw.prompt || "Type the sentence with the correct punctuation.",
+      raw.stem || "",
+      raw.answers,
+      raw.explanation || SKILL_BY_ID[skillId].rule,
+      { satStyle: false, difficulty: 2, tags: ["ai"] }
+    );
+  }
+
+  function renderSettingsView() {
+    const ai = loadAIConfig();
+    return `
+      <div class="stack">
+        <div class="two-col">
+          <div class="card">
+            <h2 class="section-title">Practice settings</h2>
+            <div class="stack">
+              <label class="row">
+                <span class="small" style="min-width:170px;">Daily target</span>
+                <input id="dailyGoalInput" type="number" min="5" max="40" value="${APP.db.settings.dailyGoal}">
+              </label>
+              <label class="row">
+                <span class="small" style="min-width:170px;">GPS test length</span>
+                <input id="testLengthInput" type="number" min="5" max="20" value="${APP.db.settings.testLength}">
+              </label>
+              <label class="row">
+                <span class="small" style="min-width:170px;">Font scale</span>
+                <input id="fontScaleInput" type="range" min="0.9" max="1.2" step="0.05" value="${APP.db.settings.fontScale}">
+                <span class="badge">${APP.db.settings.fontScale.toFixed(2)}x</span>
+              </label>
+              <label class="row">
+                <input id="speechEnabledInput" type="checkbox" ${APP.db.settings.speechEnabled ? "checked" : ""}>
+                <span class="small">Enable minimal browser speech support</span>
+              </label>
+              <label class="row">
+                <input id="autoReadInput" type="checkbox" ${APP.db.settings.autoReadPrompt ? "checked" : ""}>
+                <span class="small">Auto-read each prompt aloud</span>
+              </label>
+              <label class="row">
+                <span class="small" style="min-width:170px;">Speech rate</span>
+                <input id="speechRateInput" type="range" min="0.7" max="1.3" step="0.05" value="${APP.db.settings.speechRate}">
+                <span class="badge">${Number(APP.db.settings.speechRate).toFixed(2)}</span>
+              </label>
+            </div>
+            <div class="controls">
+              <button class="primary" id="saveSettingsBtn">Save settings</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title">Optional AI</h2>
+            <div class="notice small">
+              This app works fully without AI. In a single local HTML file, client-side API keys are exposed to the browser environment. Session-only storage is safer. Direct browser calls may also fail because of CORS, auth policy, or provider restrictions. The AI code is isolated so you can later swap it for a tiny proxy.
+            </div>
+            <div class="stack" style="margin-top:12px;">
+              <label class="row">
+                <span class="small" style="min-width:120px;">Provider</span>
+                <select id="aiProviderInput">
+                  <option value="openai" ${ai.provider === "openai" ? "selected" : ""}>OpenAI</option>
+                  <option value="anthropic" ${ai.provider === "anthropic" ? "selected" : ""}>Anthropic</option>
+                  <option value="gemini" ${ai.provider === "gemini" ? "selected" : ""}>Google Gemini</option>
+                </select>
+              </label>
+              <label class="row">
+                <span class="small" style="min-width:120px;">Model</span>
+                <input id="aiModelInput" type="text" value="${escapeHtml(ai.model || "")}" placeholder="e.g. gpt-4.1-mini or gemini-2.5-flash">
+              </label>
+              <label class="row">
+                <span class="small" style="min-width:120px;">API key</span>
+                <input id="aiKeyInput" type="password" value="${escapeHtml(ai.apiKey || "")}" placeholder="Paste key">
+              </label>
+              <label class="row">
+                <input id="aiRememberInput" type="checkbox" ${ai.rememberKey ? "checked" : ""}>
+                <span class="small">Remember key on this device</span>
+              </label>
+            </div>
+            <div class="controls">
+              <button class="primary" id="saveAISettingsBtn">Save AI settings</button>
+              <button class="ghost" id="clearAISettingsBtn">Clear AI key</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderAboutView() {
+    return `
+      <div class="stack">
+        <div class="card">
+          <h2 class="section-title">Skill map</h2>
+          <div class="skill-map">
+            ${SKILLS.map(skill => `
+              <div class="skill-card">
+                <h4>${escapeHtml(skill.name)}</h4>
+                <div class="tiny muted">${escapeHtml(skill.phase)}</div>
+                <div class="small" style="margin-top:8px;">${escapeHtml(skill.rule)}</div>
+                <div class="tiny muted" style="margin-top:8px;">Prerequisites: ${skill.prereq.length ? skill.prereq.map(id => SKILL_BY_ID[id].name).join(" → ") : "None"}</div>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <h2 class="section-title">How the learning loop works</h2>
+            <div class="small subtle">
+              The app picks the next item with weighted random selection. Due items, weak items, recent misses, and under-practised content get priority, but the selector also reduces obvious repetition. After each attempt, the app gives concise feedback, updates item mastery, and schedules a cleaner retry later instead of inviting answer-copying straight away.
+            </div>
+          </div>
+          <div class="card">
+            <h2 class="section-title">Coverage notes</h2>
+            <div class="small subtle">
+              The starter bank covers sentence punctuation and capital letters, commas in lists, apostrophes for contraction and possession, speech punctuation, commas after fronted adverbials, parenthesis, commas for clarity, colons, semi-colons, dashes between clauses, semi-colons within lists, bullet points, hyphens, and mixed review. The content bank is separated from the scheduling and UI logic so you can add more items later.
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderView() {
+    const root = document.getElementById("view");
+    if (APP.view === "practice") root.innerHTML = renderPracticeView();
+    if (APP.view === "dashboard") root.innerHTML = renderDashboardView();
+    if (APP.view === "data") root.innerHTML = renderDataView();
+    if (APP.view === "settings") root.innerHTML = renderSettingsView();
+    if (APP.view === "about") root.innerHTML = renderAboutView();
+  }
+
+  function renderProfileSelect() {
+    const select = document.getElementById("profileSelect");
+    select.innerHTML = APP.db.profiles.map(profile => `
+      <option value="${profile.id}" ${profile.id === APP.db.activeProfileId ? "selected" : ""}>${escapeHtml(profile.name)}</option>
+    `).join("");
+  }
+
+  function applyFontScale() {
+    document.documentElement.style.setProperty("--font-scale", String(APP.db.settings.fontScale || 1));
+  }
+
+  function render() {
+    applyFontScale();
+    renderTabs();
+    renderProfileSelect();
+    renderView();
+    bindEvents();
+  }
+
+  function skipCurrent() {
+    if (!APP.currentItem || !APP.session) return;
+    const profile = activeProfile();
+    const st = ensureItemState(profile, APP.currentItem.id);
+    st.dueAt = now() + 10 * MIN_MS;
+    saveDB();
+    nextQuestion();
+  }
+
+  function resetCurrentInput() {
+    if (!APP.currentItem || APP.currentItem.mode === "choose") {
+      const radios = document.querySelectorAll('input[name="choice"]');
+      radios.forEach(radio => radio.checked = false);
+      return;
+    }
+    const editor = document.getElementById("responseEditor");
+    if (!editor) return;
+    editor.innerText = currentInputSeed(APP.currentItem);
+    focusResponseControl();
+  }
+
+  function exportData(kind = "all") {
+    const ai = loadAIConfig();
+    const payload = kind === "profile"
+      ? {
+          version: VERSION,
+          type: "profile",
+          profile: activeProfile()
+        }
+      : {
+          version: VERSION,
+          type: "all",
+          data: APP.db
+        };
+
+    if (payload.data && payload.data.aiConfig) delete payload.data.aiConfig;
+    if (payload.profile && payload.profile.aiConfig) delete payload.profile.aiConfig;
+    if (ai && ai.apiKey) {
+      // keys are intentionally not exported
+    }
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = kind === "profile" ? `ks2-punctuation-profile-${activeProfile().name.replace(/\s+/g, "-").toLowerCase()}.json` : "ks2-punctuation-data.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importDataFromText(text) {
+    try {
+      const parsed = JSON.parse(text);
+      if (parsed.type === "profile" && parsed.profile) {
+        const incoming = parsed.profile;
+        const existingIndex = APP.db.profiles.findIndex(p => p.id === incoming.id);
+        if (existingIndex >= 0) APP.db.profiles[existingIndex] = migrateDB({ profiles: [incoming], settings: APP.db.settings, activeProfileId: incoming.id }).profiles[0];
+        else APP.db.profiles.push(migrateDB({ profiles: [incoming], settings: APP.db.settings, activeProfileId: incoming.id }).profiles[0]);
+        APP.db.activeProfileId = incoming.id;
+      } else if (parsed.type === "all" && parsed.data) {
+        APP.db = migrateDB(parsed.data);
+      } else {
+        throw new Error("Unrecognised export format.");
+      }
+      saveDB();
+      render();
+      alert("Import complete.");
+    } catch (err) {
+      alert(`Import failed: ${err.message}`);
+    }
+  }
+
+  function bindEvents() {
+    document.querySelectorAll("[data-tab]").forEach(btn => {
+      btn.onclick = () => {
+        APP.view = btn.dataset.tab;
+        render();
+      };
+    });
+
+    const profileSelect = document.getElementById("profileSelect");
+    if (profileSelect) {
+      profileSelect.onchange = () => {
+        APP.db.activeProfileId = profileSelect.value;
+        saveDB();
+        if (APP.session) {
+          APP.session = null;
+          APP.currentItem = null;
+          APP.feedback = null;
+          stopTimer();
+        }
+        render();
+      };
+    }
+
+    const newProfileQuickBtn = document.getElementById("newProfileQuickBtn");
+    if (newProfileQuickBtn) {
+      newProfileQuickBtn.onclick = createNewProfileFlow;
+    }
+
+    const exportQuickBtn = document.getElementById("exportQuickBtn");
+    if (exportQuickBtn) {
+      exportQuickBtn.onclick = () => exportData("profile");
+    }
+
+    document.querySelectorAll("[data-mode]").forEach(btn => {
+      btn.onclick = () => {
+        beginSession(btn.dataset.mode);
+      };
+    });
+
+    const submitBtn = document.getElementById("submitBtn");
+    if (submitBtn) submitBtn.onclick = submitCurrent;
+
+    const nextBtn = document.getElementById("nextBtn");
+    if (nextBtn) nextBtn.onclick = nextQuestion;
+
+    const skipBtn = document.getElementById("skipBtn");
+    if (skipBtn) skipBtn.onclick = skipCurrent;
+
+    const resetBtn = document.getElementById("resetBtn");
+    if (resetBtn) resetBtn.onclick = resetCurrentInput;
+
+    const speakBtn = document.getElementById("speakBtn");
+    if (speakBtn && APP.currentItem) {
+      speakBtn.onclick = () => speakText(`${APP.currentItem.prompt} ${APP.currentItem.stem || ""}`);
+    }
+
+    const aiExplainBtn = document.getElementById("aiExplainBtn");
+    if (aiExplainBtn) aiExplainBtn.onclick = runAIExplain;
+
+    const aiPracticeBtn = document.getElementById("aiPracticeBtn");
+    if (aiPracticeBtn) aiPracticeBtn.onclick = runAIGeneratePractice;
+
+    const restartSmartBtn = document.getElementById("restartSmartBtn");
+    if (restartSmartBtn) restartSmartBtn.onclick = () => beginSession("smart");
+
+    const restartGpsBtn = document.getElementById("restartGpsBtn");
+    if (restartGpsBtn) restartGpsBtn.onclick = () => beginSession("gps");
+
+    const guidedSkillSelect = document.getElementById("guidedSkillSelect");
+    if (guidedSkillSelect) {
+      guidedSkillSelect.onchange = () => {
+        if (!APP.session) return;
+        APP.session.guidedSkillId = guidedSkillSelect.value;
+      };
+    }
+
+    const restartGuidedBtn = document.getElementById("restartGuidedBtn");
+    if (restartGuidedBtn) {
+      restartGuidedBtn.onclick = () => {
+        const skillId = document.getElementById("guidedSkillSelect").value;
+        beginSession("guided", { skillId });
+      };
+    }
+
+    const newProfileBtn = document.getElementById("newProfileBtn");
+    if (newProfileBtn) newProfileBtn.onclick = createNewProfileFlow;
+
+    const renameProfileBtn = document.getElementById("renameProfileBtn");
+    if (renameProfileBtn) renameProfileBtn.onclick = renameActiveProfileFlow;
+
+    const resetProfileBtn = document.getElementById("resetProfileBtn");
+    if (resetProfileBtn) {
+      resetProfileBtn.onclick = () => {
+        if (!confirm("Reset all progress for the active learner?")) return;
+        const profile = activeProfile();
+        profile.itemStates = {};
+        profile.attemptLog = [];
+        profile.notes = "";
+        saveDB();
+        APP.session = null;
+        APP.currentItem = null;
+        APP.feedback = null;
+        render();
+      };
+    }
+
+    document.querySelectorAll("[data-activate-profile]").forEach(btn => {
+      btn.onclick = () => {
+        APP.db.activeProfileId = btn.dataset.activateProfile;
+        saveDB();
+        APP.session = null;
+        APP.currentItem = null;
+        APP.feedback = null;
+        render();
+      };
+    });
+
+    document.querySelectorAll("[data-delete-profile]").forEach(btn => {
+      btn.onclick = () => {
+        const id = btn.dataset.deleteProfile;
+        const profile = APP.db.profiles.find(p => p.id === id);
+        if (!profile) return;
+        if (!confirm(`Delete profile "${profile.name}"?`)) return;
+        APP.db.profiles = APP.db.profiles.filter(p => p.id !== id);
+        if (APP.db.activeProfileId === id) {
+          APP.db.activeProfileId = APP.db.profiles[0].id;
+        }
+        saveDB();
+        render();
+      };
+    });
+
+    const exportAllBtn = document.getElementById("exportAllBtn");
+    if (exportAllBtn) exportAllBtn.onclick = () => exportData("all");
+
+    const exportProfileBtn = document.getElementById("exportProfileBtn");
+    if (exportProfileBtn) exportProfileBtn.onclick = () => exportData("profile");
+
+    const importBtn = document.getElementById("importBtn");
+    if (importBtn) {
+      importBtn.onclick = () => {
+        const text = document.getElementById("importBox").value.trim();
+        if (!text) {
+          alert("Paste JSON first.");
+          return;
+        }
+        importDataFromText(text);
+      };
+    }
+
+    const saveNotesBtn = document.getElementById("saveNotesBtn");
+    if (saveNotesBtn) {
+      saveNotesBtn.onclick = () => {
+        activeProfile().notes = document.getElementById("profileNotes").value;
+        saveDB();
+        alert("Notes saved.");
+      };
+    }
+
+    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+    if (saveSettingsBtn) {
+      saveSettingsBtn.onclick = () => {
+        APP.db.settings.dailyGoal = clamp(parseInt(document.getElementById("dailyGoalInput").value, 10) || 12, 5, 40);
+        APP.db.settings.testLength = clamp(parseInt(document.getElementById("testLengthInput").value, 10) || 10, 5, 20);
+        APP.db.settings.fontScale = clamp(parseFloat(document.getElementById("fontScaleInput").value) || 1, 0.9, 1.2);
+        APP.db.settings.speechEnabled = document.getElementById("speechEnabledInput").checked;
+        APP.db.settings.autoReadPrompt = document.getElementById("autoReadInput").checked;
+        APP.db.settings.speechRate = clamp(parseFloat(document.getElementById("speechRateInput").value) || 1, 0.7, 1.3);
+        saveDB();
+        render();
+        alert("Settings saved.");
+      };
+    }
+
+    const saveAISettingsBtn = document.getElementById("saveAISettingsBtn");
+    if (saveAISettingsBtn) {
+      saveAISettingsBtn.onclick = () => {
+        saveAIConfig({
+          provider: document.getElementById("aiProviderInput").value,
+          model: document.getElementById("aiModelInput").value.trim(),
+          apiKey: document.getElementById("aiKeyInput").value.trim(),
+          rememberKey: document.getElementById("aiRememberInput").checked
+        });
+        render();
+        alert("AI settings saved.");
+      };
+    }
+
+    const clearAISettingsBtn = document.getElementById("clearAISettingsBtn");
+    if (clearAISettingsBtn) {
+      clearAISettingsBtn.onclick = () => {
+        localStorage.removeItem(AI_LOCAL_KEY);
+        sessionStorage.removeItem(AI_SESSION_KEY);
+        render();
+        alert("AI settings cleared.");
+      };
+    }
+
+    const editor = document.getElementById("responseEditor");
+    if (editor) {
+      editor.onkeydown = (event) => {
+        if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
+          event.preventDefault();
+          submitCurrent();
+        }
+      };
+    }
+  }
+
+  function createNewProfileFlow() {
+    const name = prompt("New learner name:");
+    if (!name) return;
+    const profile = createProfile(name.trim() || "Learner");
+    APP.db.profiles.push(profile);
+    APP.db.activeProfileId = profile.id;
+    saveDB();
+    APP.session = null;
+    APP.currentItem = null;
+    APP.feedback = null;
+    render();
+  }
+
+  function renameActiveProfileFlow() {
+    const profile = activeProfile();
+    const name = prompt("Rename learner:", profile.name);
+    if (!name) return;
+    profile.name = name.trim() || profile.name;
+    saveDB();
+    render();
+  }
+
+  function init() {
+    APP.db = loadDB();
+    render();
+
+    document.addEventListener("keydown", event => {
+      const tag = document.activeElement ? document.activeElement.tagName.toLowerCase() : "";
+      const isTyping = tag === "input" || tag === "textarea";
+      if (event.key === "Enter" && !isTyping && APP.view === "practice" && APP.currentItem && APP.session && APP.session.mode !== "gps") {
+        if (APP.feedback) nextQuestion();
+        else submitCurrent();
+      }
+    });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

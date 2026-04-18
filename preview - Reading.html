@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KS2 Reading Mastery</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --ink:#1f2937;
+      --muted:#5b6575;
+      --line:#d7deea;
+      --accent:#2563eb;
+      --accent-2:#0f766e;
+      --good:#166534;
+      --warn:#b45309;
+      --bad:#b91c1c;
+      --soft:#eef4ff;
+      --soft-2:#ecfeff;
+      --shadow:0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, Arial, "Segoe UI", sans-serif;
+      background:linear-gradient(180deg,#f7f9fd 0%,#eef3fb 100%);
+      color:var(--ink);
+      line-height:1.5;
+    }
+    button,input,select,textarea{font:inherit}
+    .app{max-width:1380px;margin:0 auto;padding:18px}
+    header.app-header{
+      display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+      padding:18px 20px;background:var(--panel);border:1px solid var(--line);
+      border-radius:22px;box-shadow:var(--shadow);margin-bottom:16px
+    }
+    .title-wrap h1{margin:0 0 6px;font-size:clamp(1.45rem,2.8vw,2.2rem);line-height:1.1}
+    .title-wrap p{margin:0;max-width:940px;color:var(--muted)}
+    .header-right{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:flex-end;min-width:280px}
+    .mini{min-width:160px}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;
+      background:var(--soft);border:1px solid #cfe0ff;color:#1d4ed8;font-weight:700;white-space:nowrap
+    }
+    nav.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+    nav.tabs button{
+      border:none;border-radius:999px;padding:10px 15px;background:#dfe8f8;
+      color:#234;cursor:pointer;font-weight:700
+    }
+    nav.tabs button.active{background:var(--accent);color:#fff}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+    .grid{display:grid;gap:16px}
+    .grid.two{grid-template-columns:1fr 1fr}
+    .panel{
+      background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:16px
+    }
+    .panel h2,.panel h3{margin:0 0 10px;line-height:1.2}
+    .panel h2{font-size:1.2rem}
+    .panel h3{font-size:1rem;color:#0f172a}
+    .subtle{color:var(--muted);font-size:.95rem}
+    .control-row,.wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+    .field{display:flex;flex-direction:column;gap:6px;min-width:150px;flex:1 1 170px}
+    .field.tight{min-width:120px;flex:0 1 150px}
+    label{font-weight:700;color:#334155}
+    input[type="text"],input[type="number"],input[type="password"],select,textarea{
+      width:100%;padding:11px 12px;border-radius:12px;border:1px solid #bfd0e7;background:#fff;color:var(--ink)
+    }
+    textarea{min-height:110px;resize:vertical}
+    .mini input,.mini select{padding:9px 10px;border-radius:10px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    button.primary,button.secondary,button.ghost,button.warn,button.good{
+      border:none;border-radius:12px;padding:11px 14px;cursor:pointer;font-weight:700
+    }
+    button.primary{background:var(--accent);color:#fff}
+    button.secondary{background:#dbeafe;color:#1d4ed8}
+    button.good{background:#dcfce7;color:#166534}
+    button.warn{background:#ffedd5;color:#b45309}
+    button.ghost{background:#edf2f7;color:#334155}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .stats-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .stat{
+      border:1px solid var(--line);border-radius:14px;padding:12px;
+      background:linear-gradient(180deg,#fff 0%,#f8fbff 100%)
+    }
+    .stat .label{color:var(--muted);font-size:.9rem;margin-bottom:6px}
+    .stat .value{font-size:1.4rem;font-weight:800}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{
+      display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;
+      background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;font-size:.9rem;font-weight:700
+    }
+    .chip.good{background:#dcfce7;color:#166534;border-color:#bbf7d0}
+    .chip.warn{background:#fff7ed;color:#9a3412;border-color:#fed7aa}
+    .chip.bad{background:#fee2e2;color:#991b1b;border-color:#fecaca}
+    .chip.neutral{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+    .callout{padding:12px 14px;border-radius:14px;border:1px solid #bfdbfe;background:#eff6ff}
+    .callout.warn{border-color:#fed7aa;background:#fff7ed}
+    .callout.good{border-color:#bbf7d0;background:#f0fdf4}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .profile-card{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fbfdff}
+    .tiny{font-size:.88rem;color:var(--muted)}
+    .hidden{display:none !important}
+    .footer-note{color:var(--muted);font-size:.9rem;margin-top:12px}
+    .question-card{
+      border:1px solid var(--line);border-radius:18px;padding:18px;
+      background:linear-gradient(180deg,#fff 0%,#f9fbff 100%);margin-bottom:14px
+    }
+    .question-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .question-stem{font-size:1.02rem;margin-bottom:12px}
+    .question-stem p{margin:0 0 10px}
+    .answer-box{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}
+    .answer-box legend{font-weight:700;margin-bottom:8px}
+    .answer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+    .option-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0}
+    .option-row input{margin-top:2px}
+    .feedback{border-radius:16px;padding:14px;margin-top:16px;border:1px solid var(--line)}
+    .feedback.good{background:#f0fdf4;border-color:#bbf7d0}
+    .feedback.warn{background:#fff7ed;border-color:#fed7aa}
+    .feedback.bad{background:#fef2f2;border-color:#fecaca}
+    .feedback h3{margin:0 0 8px}
+    .worked{margin-top:12px;padding:12px;border-radius:14px;background:#ffffff;border:1px dashed #bfd0e7}
+    .worked ul,.worked ol{margin:8px 0 0 20px;padding:0}
+    .worked li{margin-bottom:6px}
+    .reading-workspace{display:grid;grid-template-columns:1.05fr 0.95fr;gap:16px}
+    .passage-card,.question-pane{border:1px solid var(--line);border-radius:18px;padding:16px;background:linear-gradient(180deg,#fff 0%,#f9fbff 100%)}
+    .passage-header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .passage-body{max-height:70vh;overflow:auto;padding-right:4px;border-top:1px solid #eef2f7;padding-top:12px}
+    .passage-body p{margin:0 0 14px;font-size:1rem}
+    .passage-body .poem-block{white-space:pre-line;font-size:1.03rem;line-height:1.7;margin:0 0 16px}
+    .para-num{
+      display:inline-flex;align-items:center;justify-content:center;width:1.35rem;height:1.35rem;
+      margin-right:8px;border-radius:999px;background:#eaf2ff;color:#1d4ed8;font-size:.8rem;
+      border:1px solid #bfd7ff;vertical-align:top;font-weight:700
+    }
+    .section-nav,.question-nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+    .section-nav button,.question-nav button{
+      min-width:42px;border:none;border-radius:10px;padding:9px 12px;cursor:pointer;font-weight:700;background:#e5eefc;color:#234
+    }
+    .section-nav button.current,.question-nav button.current{background:var(--accent);color:#fff}
+    .section-nav button.done,.question-nav button.done,.section-nav button.correct,.question-nav button.correct{background:#dcfce7;color:#166534}
+    .section-nav button.review,.question-nav button.review{background:#fff7ed;color:#9a3412}
+    .section-nav button.saved,.question-nav button.saved{background:#eff6ff;color:#1d4ed8}
+    .section-nav button.wrong,.question-nav button.wrong{background:#fee2e2;color:#991b1b}
+    .question-pane .meta-line{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+    .status-pill{padding:6px 10px;border-radius:999px;font-size:.86rem;font-weight:700}
+    .status-blank{background:#edf2f7;color:#475569}
+    .status-saved{background:#eff6ff;color:#1d4ed8}
+    .status-correct{background:#dcfce7;color:#166534}
+    .status-review{background:#fff7ed;color:#9a3412}
+    .status-wrong{background:#fee2e2;color:#991b1b}
+    .skill-row{
+      display:grid;grid-template-columns:210px 1fr 90px 105px;gap:10px;align-items:center;
+      padding:10px 0;border-bottom:1px solid #edf2f7
+    }
+    .skill-row:last-child{border-bottom:none}
+    .bar{width:100%;height:12px;background:#e9eef7;border-radius:999px;overflow:hidden;border:1px solid #dce4f2}
+    .bar > span{display:block;height:100%;background:linear-gradient(90deg,#60a5fa 0%,#2563eb 100%);border-radius:999px}
+    .status-new{color:#475569;font-weight:700}
+    .status-learning{color:#1d4ed8;font-weight:700}
+    .status-due{color:#b45309;font-weight:700}
+    .status-weak{color:#b91c1c;font-weight:700}
+    .status-secured{color:#166534;font-weight:700}
+    details{border:1px solid #dce5f2;border-radius:12px;padding:10px 12px;background:#fbfdff}
+    details + details{margin-top:10px}
+    summary{cursor:pointer;font-weight:700}
+    .pill-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+    .pill{padding:6px 10px;border-radius:999px;border:1px solid #dce5f2;background:#fff;font-size:.86rem}
+    .review-card{border:1px solid #dce5f2;border-radius:14px;padding:12px;background:#fff}
+    .mode-note{margin-top:12px;color:var(--muted)}
+    .small-table{width:100%;border-collapse:collapse;margin-top:8px;background:#fff}
+    .small-table th,.small-table td{border:1px solid #dbe5f3;padding:10px 12px;text-align:left;vertical-align:top}
+    .small-table th{background:#eff6ff}
+    @media (max-width:1080px){
+      .grid.two,.reading-workspace,.split{grid-template-columns:1fr}
+      .stats-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .skill-row{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      .app{padding:12px}
+      header.app-header{padding:16px}
+      .stats-row{grid-template-columns:1fr}
+      nav.tabs button{flex:1 1 auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="title-wrap">
+        <h1>KS2 Reading Mastery</h1>
+        <p>Offline-first reading practice for England KS2: original passages, adaptive review, evidence-led feedback, and a stricter SATs-style paper mode when you want it.</p>
+      </div>
+      <div class="header-right">
+        <div class="field mini">
+          <label for="currentLearnerSelect">Learner</label>
+          <select id="currentLearnerSelect"></select>
+        </div>
+        <div class="badge" id="dueBadge">0 due</div>
+        <div class="badge" id="streakBadge">0-day streak</div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabButtons">
+      <button class="active" data-tab="practice">Practice</button>
+      <button data-tab="analytics">Dashboard</button>
+      <button data-tab="profiles">Profiles &amp; Data</button>
+      <button data-tab="settings">Settings</button>
+      <button data-tab="method">Method</button>
+    </nav>
+
+    <section class="tab-panel active" id="tab-practice">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Practice setup</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="modeSelect">Mode</label>
+              <select id="modeSelect">
+                <option value="guided">Guided practice</option>
+                <option value="core">Core practice</option>
+                <option value="smart">Smart review</option>
+                <option value="evidence">Evidence hunt</option>
+                <option value="vocab">Vocabulary in context</option>
+                <option value="inference">Inference lab</option>
+                <option value="stamina">Stamina builder</option>
+                <option value="test">True SATs-style paper</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="skillSelect">Reading focus</label>
+              <select id="skillSelect"></select>
+            </div>
+            <div class="field">
+              <label for="genreSelect">Passage type</label>
+              <select id="genreSelect">
+                <option value="">Mixed</option>
+                <option value="fiction">Fiction</option>
+                <option value="non-fiction">Non-fiction</option>
+                <option value="poetry">Poetry</option>
+              </select>
+            </div>
+            <div class="field tight">
+              <label for="difficultySelect">Difficulty</label>
+              <select id="difficultySelect">
+                <option value="">Adaptive</option>
+                <option value="1">1 easier</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5 stretch</option>
+              </select>
+            </div>
+            <div class="field tight">
+              <label for="viewModeSelect">Question view</label>
+              <select id="viewModeSelect">
+                <option value="one">One at a time</option>
+                <option value="list">Full question list</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="startSessionBtn">Start / refresh session</button>
+            <button class="secondary" id="aiFreshSetBtn">AI fresh practice set</button>
+          </div>
+          <p class="mode-note" id="modeNote"></p>
+        </div>
+
+        <div class="panel">
+          <h2>Session view</h2>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="label">Marked</div>
+              <div class="value" id="sessionMarked">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Marks</div>
+              <div class="value" id="sessionScore">0/0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Independent</div>
+              <div class="value" id="sessionIndependence">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Timer</div>
+              <div class="value" id="sessionTimer">--:--</div>
+            </div>
+          </div>
+          <div class="chips" style="margin-top:12px;" id="sessionChips"></div>
+          <p class="footer-note" id="sessionSummary">No active session yet.</p>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="reading-workspace">
+          <div class="passage-card">
+            <div class="passage-header">
+              <div>
+                <h2 id="passageTitle" style="margin-bottom:4px;">Choose a mode and start.</h2>
+                <div class="chips" id="passageMeta"></div>
+              </div>
+              <div class="actions" style="margin-top:0;">
+                <button class="ghost hidden" id="readAloudBtn">Read passage aloud</button>
+              </div>
+            </div>
+            <div class="section-nav hidden" id="sectionNav"></div>
+            <div class="passage-body" id="passageBody">
+              <p class="subtle">The full passage will appear here. In mastery modes, the child reads first and gets the answer only after a real attempt. In the stricter paper mode, feedback waits until the end.</p>
+            </div>
+          </div>
+
+          <div class="question-pane">
+            <div class="meta-line" id="questionMetaLine">
+              <span class="status-pill status-blank">Ready</span>
+            </div>
+            <div class="question-nav hidden" id="questionNav"></div>
+            <div id="questionPane">
+              <div class="question-card">
+                <p>Use one-question mode for tighter effort-feedback cycles, or full-list mode to answer a whole section before marking.</p>
+              </div>
+            </div>
+            <div class="actions" id="questionActions"></div>
+            <div id="feedbackArea"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-analytics">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Overview</h2>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="label">Total questions</div>
+              <div class="value" id="anaTotalQuestions">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Accuracy</div>
+              <div class="value" id="anaAccuracy">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Independent accuracy</div>
+              <div class="value" id="anaIndependent">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Due now</div>
+              <div class="value" id="anaDue">0</div>
+            </div>
+          </div>
+          <div class="callout" style="margin-top:14px;">
+            <strong>Parent / teacher summary</strong>
+            <div id="parentSummary" style="margin-top:8px;"></div>
+          </div>
+          <div class="actions">
+            <button class="good" id="aiParentSummaryBtn">AI parent summary</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Review queue and common issues</h2>
+          <div id="reviewQueueList"></div>
+          <div class="footer-note">Correct answers after heavy support count differently from clean first-pass answers, so independence stays visible.</div>
+        </div>
+      </div>
+
+      <div class="grid two" style="margin-top:16px;">
+        <div class="panel">
+          <h2>Skill strength</h2>
+          <div id="skillAnalytics"></div>
+        </div>
+        <div class="panel">
+          <h2>Accuracy by passage and question type</h2>
+          <div id="genreAnalytics"></div>
+          <div style="margin-top:16px;" id="typeAnalytics"></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Recent activity</h2>
+        <div id="recentActivity"></div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-profiles">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Learner profiles</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="newLearnerName">New learner name</label>
+              <input type="text" id="newLearnerName" placeholder="e.g. Ava" />
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="createLearnerBtn">Create learner</button>
+            <button class="ghost" id="renameLearnerBtn">Rename current learner</button>
+            <button class="warn" id="deleteLearnerBtn">Delete current learner</button>
+          </div>
+          <div id="learnerList" style="margin-top:14px;"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Import / export / reset</h2>
+          <p class="subtle">Progress lives in your browser via localStorage. Export regularly if the data matters to you.</p>
+          <div class="actions">
+            <button class="secondary" id="exportCurrentBtn">Export current learner JSON</button>
+            <button class="secondary" id="exportAllBtn">Export all app data JSON</button>
+            <button class="ghost" id="importBtn">Import JSON</button>
+            <button class="warn" id="resetLearnerBtn">Reset current learner progress</button>
+            <button class="warn" id="resetAllBtn">Reset all app data</button>
+          </div>
+          <input type="file" id="importFileInput" accept=".json,application/json" class="hidden" />
+          <div class="callout warn" style="margin-top:14px;">Reset removes saved progress but not the HTML file itself.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-settings">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Reading settings</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="scaffoldModeSelect">Scaffold mode</label>
+              <select id="scaffoldModeSelect">
+                <option value="no">Off by default</option>
+                <option value="yes">On - allow extra pre-answer cues</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="showParagraphNumbersSelect">Show paragraph numbers</label>
+              <select id="showParagraphNumbersSelect">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="enableTtsSelect">Read-aloud controls</label>
+              <select id="enableTtsSelect">
+                <option value="no">Off</option>
+                <option value="yes">On for accessibility</option>
+              </select>
+            </div>
+            <div class="field tight">
+              <label for="speechRateInput">Read-aloud speed</label>
+              <input type="number" min="0.6" max="1.4" step="0.1" id="speechRateInput" />
+            </div>
+          </div>
+          <div class="footer-note">Scaffold mode is for teaching, not test fidelity. True paper mode still stays as strict as practical.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Optional AI</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="aiProviderSelect">Provider</label>
+              <select id="aiProviderSelect">
+                <option value="off">AI off</option>
+                <option value="openai">OpenAI</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="anthropic">Anthropic</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aiModelInput">Model name</label>
+              <input type="text" id="aiModelInput" placeholder="Enter model name" />
+            </div>
+          </div>
+          <div class="control-row" style="margin-top:8px;">
+            <div class="field">
+              <label for="aiKeyInput">API key</label>
+              <input type="password" id="aiKeyInput" placeholder="Stored in session by default" />
+            </div>
+            <div class="field tight">
+              <label for="rememberAiKey">Remember key locally</label>
+              <select id="rememberAiKey">
+                <option value="no">No - session only</option>
+                <option value="yes">Yes - localStorage</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="good" id="saveAiSettingsBtn">Save AI settings</button>
+            <button class="ghost" id="testAiBtn">Test AI connection</button>
+          </div>
+          <div class="callout warn" style="margin-top:14px;">
+            In a single local HTML file, any direct API key use is client-side. Session-only storage is the safer default. Some providers may still reject direct browser calls because of CORS or auth rules. The core app works fully with AI turned off, and the provider code is isolated so you can later attach a tiny proxy.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-method">
+      <div class="panel">
+        <h2>How this app is designed</h2>
+        <p>The loop is simple on purpose: read a real passage, answer without answer leakage, get focused feedback after effort, then see weak skills return later in mixed review. Smart review weights weak content domains, overdue review, under-practised passage types and recent misses so problems reappear before they fade.</p>
+        <div class="split">
+          <div>
+            <h3>What gets tracked</h3>
+            <div class="pill-list">
+              <span class="pill">Reading domain strength</span>
+              <span class="pill">Question-level memory</span>
+              <span class="pill">Passage-type coverage</span>
+              <span class="pill">Question-type accuracy</span>
+              <span class="pill">Independence vs scaffolded success</span>
+            </div>
+          </div>
+          <div>
+            <h3>Why the feedback waits</h3>
+            <div class="pill-list">
+              <span class="pill">No evidence is highlighted before the attempt</span>
+              <span class="pill">The skill label is hidden unless scaffold mode is on</span>
+              <span class="pill">A first wrong answer gets a nudge, not the answer</span>
+              <span class="pill">Test mode delays all feedback to the end</span>
+            </div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:16px;">
+          Built-in content is original and SATs-aligned in style, not copied from copyrighted test materials. AI can add fresh original passages, but the core loop, marking, analytics and review all work offline.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+
+    const STORAGE_KEY = "ks2_reading_mastery_v1";
+    const SESSION_AI_KEY = "ks2_reading_ai_session_key";
+    const APP_VERSION = 1;
+
+    const SKILLS = {
+      "2a": { name: "Vocabulary in context", domain: "KS2 content domain 2a" },
+      "2b": { name: "Retrieve and record information", domain: "KS2 content domain 2b" },
+      "2c": { name: "Summarise main ideas", domain: "KS2 content domain 2c" },
+      "2d": { name: "Inference with evidence", domain: "KS2 content domain 2d" },
+      "2e": { name: "Prediction", domain: "KS2 content domain 2e" },
+      "2f": { name: "How structure contributes", domain: "KS2 content domain 2f" },
+      "2g": { name: "Author word or phrase choices", domain: "KS2 content domain 2g" },
+      "2h": { name: "Make comparisons within a text", domain: "KS2 content domain 2h" }
+    };
+
+    const QUESTION_TYPE_LABELS = {
+      mcq: "Multiple choice",
+      short: "Short answer",
+      evidenceShort: "Answer + evidence",
+      open: "Short written explanation",
+      multiSelect: "Choose all that apply",
+      match: "Matching",
+      order: "Ordering"
+    };
+
+    const MISCONCEPTIONS = {
+      no_attempt: "No real attempt made",
+      misread_detail: "Important detail missed or misread",
+      weak_evidence: "Answer not anchored in the text",
+      vocab_out_of_context: "Word meaning guessed without using the sentence",
+      summary_too_narrow: "Focused on one detail instead of the main idea",
+      prediction_not_text_based: "Prediction not supported by clues in the text",
+      author_choice_literal_only: "Described the words but not their effect",
+      whole_text_structure: "Missed how one part builds on another",
+      comparison_partial: "Only one side of the comparison was used",
+      sequence_tracking: "Events were not tracked in the right order",
+      selection_slip: "An option was chosen without checking the text carefully"
+    };
+
+    const MINIMAL_HINTS = {
+      "2a": "Reread the sentence with the word in it. Try a meaning that keeps the whole sentence sensible.",
+      "2b": "Go back to the exact place in the text and hunt for the detail, not just the general topic.",
+      "2c": "Step back from single details. What is the biggest idea the paragraph or section is really about?",
+      "2d": "Answer the idea first, then prove it with a short phrase from the text.",
+      "2e": "Use clues from what has just happened or what the character has learned.",
+      "2f": "Think about how the writer moves from one part of the text to the next.",
+      "2g": "Name the word or phrase, then explain the picture, feeling or effect it creates.",
+      "2h": "Make sure you mention both things being compared, not just one."
+    };
+
+    const STRONG_HINTS = {
+      "2a": "Replace the tricky word with another meaning. Which option makes the rest of the sentence fit best?",
+      "2b": "Find the paragraph that mentions the idea, then look for the exact noun, action or number the question wants.",
+      "2c": "Imagine you had to explain this part in one line to someone else. Which details would you keep, and which would you cut?",
+      "2d": "Use a frame: I think ___ because the text says ___. Keep the evidence short and exact.",
+      "2e": "A good prediction grows out of clues. Start with 'Because the text shows ..., it is likely that ...'.",
+      "2f": "Ask what job this paragraph does in the whole text: introduce, add a problem, give an example, shift viewpoint, or conclude.",
+      "2g": "A stronger answer often uses this frame: The writer uses '___' to suggest ___ / make the reader feel ___.",
+      "2h": "Use a comparison frame: At first / in one part ___, but later / in another part ___."
+    };
+
+    const BUILTIN_PASSAGES = [{"id": "red_tin_box", "title": "The Red Tin Box", "genre": "fiction", "difficulty": 2, "isLong": false, "blocks": ["By mid-morning, the rain had turned the yard behind Grandad's house into a tray of silver puddles. Nia had already played cards, sorted buttons into jam jars and looked through every cupboard in the narrow kitchen. When Grandad said she could explore the loft, she climbed the ladder with the serious feeling that treasure might be hiding under the dust.", "The loft smelled of old paper and warm wood. At the back, behind a rolled-up rug, she found a red tin box no bigger than a lunch tin. Its paint was chipped at the corners, but someone had once polished the lid until it shone. Inside were not coins or jewellery, but dozens of folded slips of paper tied with blue thread.", "Grandad laughed when he saw her puzzled face. \"That was your gran's noticing box,\" he said. \"When work was busy and money was tight, she made herself write down one thing each day that was worth noticing.\" Nia untied the bundle. The slips held small, exact observations: first swallow above the canal; smell of oranges on a freezing Tuesday; Mrs Khan laughing before six o'clock; plum tree trying again after the frost.", "At first, Nia thought the notes were odd. None of them sounded important. Yet when she read them a second time, the house around her seemed to change. The ticking hall clock no longer sounded lonely. The rain on the skylight no longer felt like weather that was trapping her indoors. It was as if the box had quietly opened a second version of the day, one she had almost missed.", "She carried the tin downstairs and sat beside the window while Grandad mended a broken drawer handle. By lunchtime, Nia had started her own list on the back of an old envelope: the strip of gold light on the sink, the hiss of the kettle, the way the wet yard held the shape of the clouds."], "questions": [{"id": "rtb_q1", "type": "short", "skill": "2b", "marks": 1, "stem": "What did Nia find inside the red tin box?", "check": {"keywordAny": [["fold", "slip", "paper"], ["note"], ["paper", "thread"]]}, "modelAnswer": "Folded slips of paper with notes on them.", "explanation": "The box held folded slips of paper tied with blue thread.", "hint": "Look again at the end of the second paragraph."}, {"id": "rtb_q2", "type": "mcq", "skill": "2a", "marks": 1, "stem": "What does the phrase \"worth noticing\" mean in paragraph 3?", "options": ["expensive enough to keep", "important enough to pay attention to", "too difficult to understand", "hidden so that others cannot see it"], "correct": 1, "modelAnswer": "important enough to pay attention to", "explanation": "Grandad explains that Gran wrote down one thing each day that deserved attention, even if it was small.", "hint": "Think about why Gran wrote one thing down each day."}, {"id": "rtb_q3", "type": "evidenceShort", "skill": "2d", "marks": 2, "stem": "How does Nia's view of the house change after she reads the notes? Use a short quotation or phrase from the text to support your answer.", "answerCheck": {"keywordAny": [["house", "seem", "chang"], ["see", "day", "different"], ["notice", "small", "thing"], ["less", "bore"]]}, "evidenceCheck": {"containsAny": ["opened a second version of the day", "the house around her seemed to change", "the ticking hall clock no longer sounded lonely", "the rain on the skylight no longer felt like weather that was trapping her indoors"]}, "answerMarks": 1, "evidenceMarks": 1, "modelAnswer": "She starts to see the house and day differently, noticing interesting details instead of just feeling bored. Evidence could include: \"the house around her seemed to change\".", "explanation": "The notes help Nia notice value in ordinary things, so the same house feels fuller and more interesting.", "hint": "Answer the change first, then copy a few words that prove it.", "reread": [4]}, {"id": "rtb_q4", "type": "mcq", "skill": "2c", "marks": 2, "stem": "Which option best summarises paragraphs 3 and 4?", "options": ["Grandad tells Nia to clean the loft, and she feels annoyed that she has to work.", "Nia learns that Gran recorded small daily details, and this helps Nia notice the day differently.", "Nia decides the notes are silly, so she puts the box back in the loft.", "Grandad explains how expensive the box was when Gran bought it."], "correct": 1, "modelAnswer": "Nia learns that Gran recorded small daily details, and this helps Nia notice the day differently.", "explanation": "Those paragraphs explain what the notes are for and how they change Nia's thinking.", "hint": "Pick the choice that includes both the notes and their effect on Nia."}, {"id": "rtb_q5", "type": "open", "skill": "2g", "marks": 2, "stem": "Why does the writer say the plum tree was \"trying again after the frost\"?", "rubric": [{"label": "Explains personification", "check": {"keywordAny": [["tree", "sound", "like", "person"], ["personif"], ["giv", "tree", "human"]]}}, {"label": "Shows persistence or recovery", "check": {"keywordAny": [["recover"], ["start", "again"], ["keep", "grow"], ["persever"], ["not", "give", "up"]]}}], "modelAnswer": "The writer makes the tree sound like a person so that its recovery feels brave and hopeful, as if it is making another effort after damage from the frost.", "explanation": "This choice of words personifies the tree and makes the small detail feel hopeful.", "hint": "Think about how the tree is made to sound almost human."}, {"id": "rtb_q6", "type": "short", "skill": "2e", "marks": 1, "stem": "What is Nia most likely to do the next day? Explain briefly.", "check": {"keywordAny": [["keep", "list"], ["write", "notic"], ["make", "note"], ["start", "own", "list"]]}, "modelAnswer": "She is likely to keep writing her own noticing list.", "explanation": "The final paragraph shows she has already begun her own list, so continuing it is the most likely next step.", "hint": "Use the final paragraph to make your prediction."}]}, {"id": "city_swifts", "title": "Why Swifts Choose Towns", "genre": "non-fiction", "difficulty": 2, "isLong": false, "blocks": ["Swifts are dark, narrow-winged birds that spend astonishing amounts of time in the air. Unlike many birds, they may eat, drink and even sleep while flying. They arrive in Britain in late spring after a long migration from Africa, and for a few months their sharp calls race over streets, rivers and school roofs.", "Although people often imagine wildlife far from buildings and traffic, swifts have learned to use towns well. Older buildings can contain small gaps beneath tiles or behind brickwork, which make safe nest spaces high above the ground. Warm air over roofs and roads can also lift flying insects, giving swifts plenty to eat as they sweep and turn.", "However, town life can create problems too. When roofs are repaired or walls are sealed, the narrow holes that swifts have used for years may disappear. Because swifts often return to the same nesting place each summer, they can lose a home without warning. To help, some builders now fit special swift bricks that leave a safe cavity inside a wall.", "In June and July, groups of swifts sometimes rush together at dusk in what birdwatchers call screaming parties. The name sounds dramatic, but the birds are not angry. They are calling to one another as they twist through the evening air. For many people, that noisy flight is a sign that summer in the town is properly under way."], "questions": [{"id": "sw_q1", "type": "short", "skill": "2b", "marks": 1, "stem": "According to paragraph 1, what makes swifts unusual compared with many other birds?", "check": {"keywordAny": [["most", "time", "air"], ["spend", "life", "air"], ["eat", "drink", "sleep", "fly"]]}, "modelAnswer": "They spend most of their lives in the air and can even eat, drink and sleep while flying.", "explanation": "Paragraph 1 explains that swifts do a remarkable amount while flying.", "hint": "Find the line in paragraph 1 that lists things swifts can do while flying."}, {"id": "sw_q2", "type": "mcq", "skill": "2a", "marks": 1, "stem": "What does the word \"migration\" mean in paragraph 1?", "options": ["a noisy group of birds calling together", "a long seasonal journey from one place to another", "the repairing of roofs and walls", "a place hidden high inside a building"], "correct": 1, "modelAnswer": "a long seasonal journey from one place to another", "explanation": "The text says swifts arrive after a long migration from Africa, meaning a seasonal journey.", "hint": "Use the words around \"from Africa\" to help."}, {"id": "sw_q3", "type": "evidenceShort", "skill": "2d", "marks": 2, "stem": "Why can repairing buildings be a problem for swifts? Use a short quotation or phrase from the text to support your answer.", "answerCheck": {"keywordAny": [["repair", "seal", "block", "nest"], ["lose", "home"], ["hole", "disappear"], ["nest", "place", "gone"]]}, "evidenceCheck": {"containsAny": ["the narrow holes that swifts have used for years may disappear", "lose a home without warning", "return to the same nesting place each summer", "small gaps beneath tiles"]}, "answerMarks": 1, "evidenceMarks": 1, "modelAnswer": "Repairs can remove the holes where swifts nest, so they may lose their usual home. Evidence could include: \"the narrow holes ... may disappear\".", "explanation": "Paragraph 3 explains both the physical change to buildings and why that matters to birds that return to the same site.", "hint": "State the problem in your own words, then copy the phrase that proves it.", "reread": [3]}, {"id": "sw_q4", "type": "mcq", "skill": "2c", "marks": 2, "stem": "Which option best summarises paragraph 2?", "options": ["Swifts dislike towns because traffic scares insects away.", "Towns can suit swifts because buildings offer nest spaces and warm air can gather insects.", "Only new buildings are useful to swifts because they are clean and bright.", "Swifts spend all winter hidden in gaps under roof tiles."], "correct": 1, "modelAnswer": "Towns can suit swifts because buildings offer nest spaces and warm air can gather insects.", "explanation": "The paragraph gives two main reasons towns can help swifts: nesting spaces and food.", "hint": "Choose the answer that includes both homes and food."}, {"id": "sw_q5", "type": "open", "skill": "2f", "marks": 2, "stem": "How does paragraph 3 build on the information in paragraphs 1 and 2?", "rubric": [{"label": "Adds a problem or challenge", "check": {"keywordAny": [["problem"], ["difficulti"], ["repair", "seal"], ["hole", "disappear"], ["lose", "home"]]}}, {"label": "Adds a solution or response", "check": {"keywordAny": [["swift", "brick"], ["help"], ["builder"], ["safe", "cavity"], ["solution"]]}}], "modelAnswer": "Paragraph 3 moves from explaining why towns can suit swifts to warning that building repairs can remove nest spaces, and then it adds a solution: swift bricks.", "explanation": "The structure shifts from benefits to difficulties and then offers a practical response.", "hint": "Think about how the writer moves from good news to a problem, then to help."}, {"id": "sw_q6", "type": "open", "skill": "2g", "marks": 2, "stem": "Why does the writer include the phrase \"screaming parties\" in paragraph 4?", "rubric": [{"label": "Shows noise or energy", "check": {"keywordAny": [["noisy"], ["loud"], ["energetic"], ["busy"], ["dramatic"], ["excit"]]}}, {"label": "Creates vivid picture or interest", "check": {"keywordAny": [["picture"], ["imag"], ["reader"], ["vivid"], ["memorable"], ["catch", "attent"]]}}], "modelAnswer": "It makes the swifts' evening flight sound noisy, lively and memorable, helping the reader picture the birds twisting through the air.", "explanation": "The unusual phrase catches attention and paints a vivid scene.", "hint": "Think about the sound and feeling the phrase creates."}, {"id": "sw_q7", "type": "match", "skill": "2h", "marks": 2, "stem": "Match each feature to how it helps swifts.", "prompts": ["gaps under tiles or brickwork", "warm air over roofs and roads", "swift bricks"], "options": ["collect flying insects where swifts can catch them", "provide a safe cavity for nesting inside a wall", "offer older nest spaces high above the ground"], "correctMap": {"0": "2", "1": "0", "2": "1"}, "modelAnswer": "Gaps under tiles or brickwork -> offer older nest spaces high above the ground; warm air -> collect flying insects; swift bricks -> provide a safe cavity inside a wall.", "explanation": "This question asks you to compare three different details from the text and link each one to its job.", "hint": "Find the part of the passage that explains how each feature helps swifts."}]}, {"id": "museum_after_closing", "title": "Museum After Closing", "genre": "poetry", "difficulty": 2, "isLong": false, "blocks": ["When the front doors breathe shut\nand the last shoe-squeak fades,\nmoonlight pours along the floor\nin thin, careful blades.\n\nThe helmets in the glass case\nhold a cold and patient gleam.\nA dinosaur rib remembers rain.\nThe maps begin to dream.\n\nSomewhere, the tall clock clears its throat\nand walks on its own small shoes.\nPortraits listen from their frames.\nDust chooses what to lose.\n\nNothing moves, the guard would say,\nlocking up with jangling keys.\nYet all night long the museum hums\nwith its quiet industries."], "questions": [{"id": "mac_q1", "type": "mcq", "skill": "2a", "marks": 1, "stem": "What does the word \"blades\" suggest in the first stanza?", "options": ["The moonlight falls in sharp, thin strips.", "The floor is made from metal.", "Someone is fighting in the museum.", "The moonlight is too bright to look at."], "correct": 0, "modelAnswer": "The moonlight falls in sharp, thin strips.", "explanation": "The image of blades suggests something narrow and sharp-edged.", "hint": "Think about the shape of a blade."}, {"id": "mac_q2", "type": "short", "skill": "2d", "marks": 1, "stem": "Which object in the poem is described as if it could move by itself?", "check": {"keywordAny": [["clock"]]}, "modelAnswer": "The tall clock.", "explanation": "The clock is said to clear its throat and walk on its own small shoes.", "hint": "Look in the third stanza."}, {"id": "mac_q3", "type": "open", "skill": "2g", "marks": 2, "stem": "Why does the poet describe the clock as \"walking on its own small shoes\"?", "rubric": [{"label": "Gives clock human qualities", "check": {"keywordAny": [["human"], ["personif"], ["person"], ["alive"], ["character"]]}}, {"label": "Suggests ticking or careful movement", "check": {"keywordAny": [["tick"], ["small", "step"], ["careful", "move"], ["quiet", "move"], ["sound"]]}}], "modelAnswer": "The poet gives the clock human qualities, making its ticking seem like small careful footsteps in the quiet museum.", "explanation": "The phrase turns a sound into a movement the reader can picture.", "hint": "What does the clock really do, and how has that been turned into a picture?"}, {"id": "mac_q4", "type": "mcq", "skill": "2c", "marks": 1, "stem": "Which sentence best matches the mood of the poem?", "options": ["The museum feels bright, busy and noisy.", "The museum feels spooky in a violent way.", "The museum feels quiet but strangely alive.", "The museum feels empty and completely lifeless."], "correct": 2, "modelAnswer": "The museum feels quiet but strangely alive.", "explanation": "The poem keeps the setting calm and hushed, while suggesting hidden activity all night.", "hint": "Choose the option that fits both the stillness and the hidden life."}, {"id": "mac_q5", "type": "open", "skill": "2d", "marks": 3, "stem": "How does the poet make the museum seem both quiet and busy? Give two ways.", "rubric": [{"label": "Mentions quiet details", "check": {"keywordAny": [["quiet"], ["last", "shoe", "squeak"], ["moonlight"], ["careful"], ["locking", "up"], ["nothing", "moves"]]}}, {"label": "Mentions hidden activity", "check": {"keywordAny": [["map", "dream"], ["clock"], ["portrait", "listen"], ["dust", "choos"], ["museum", "hums"], ["industri"]]}}, {"label": "Explains contrast", "check": {"keywordAny": [["both"], ["while"], ["even", "though"], ["contrast"], ["seem", "still", "but"]]}}], "modelAnswer": "The poem uses quiet images such as the fading shoe-squeak and careful moonlight, but it also gives objects secret activity: maps dream, portraits listen and the museum hums with \"quiet industries\".", "explanation": "A strong answer notices the contrast between silence and hidden life.", "hint": "Find one detail that is calm and one that suggests secret activity."}]}, {"id": "greenhouse_window", "title": "The Greenhouse Window", "genre": "fiction", "difficulty": 3, "isLong": false, "blocks": ["Sami liked the greenhouse before anyone else arrived. At half past seven it belonged to watering cans, seed trays and the first clean smell of damp soil. The panes along the east side usually caught the earliest light, but on Monday one square of glass looked milky and wrong, as if the morning had been rubbed away.", "He set down the hose and saw the problem at once. A sheet of plywood, which had been left against the frame after Saturday's storm, had slipped sideways in the night and blocked the light from one bench. The runner-bean seedlings below it leaned so sharply that their thin stems almost touched the compost. Sami felt heat climb into his face. He had stacked the board there after helping to tidy up.", "When Miss Dara arrived, he began apologising before she had even put down her bag. She looked at the window, then at the seedlings, then at Sami's miserable expression. \"Good,\" she said, to his surprise. \"You noticed in time.\" Together they moved the board, turned each tray a quarter turn and tied the weakest stems to short bamboo canes. Sunlight spread back across the bench in a pale rectangle.", "\"Plants are excellent forgivers,\" Miss Dara said, opening the roof vent. \"They don't ask whether something went wrong. They just use whatever light comes next.\" Sami was not sure people were so sensible, but he nodded. Before school, he checked the bench again. The seedlings were still crooked, yet they no longer looked desperate. They looked busy.", "By Thursday, tiny hooks of new growth had curled upward from the tops of the stems. Sami stopped at the greenhouse door and grinned. The window still carried a hairline crack, but the bench beneath it had turned the colour of bottled spring."], "questions": [{"id": "gw_q1", "type": "short", "skill": "2b", "marks": 1, "stem": "What had blocked the light from the seedlings?", "check": {"keywordAny": [["sheet", "plywood"], ["board"], ["plywood", "board"]]}, "modelAnswer": "A sheet of plywood / a board.", "explanation": "Paragraph 2 explains that a sheet of plywood had slipped sideways and blocked the light.", "hint": "Look near the start of paragraph 2."}, {"id": "gw_q2", "type": "evidenceShort", "skill": "2d", "marks": 2, "stem": "How can you tell Sami feels guilty? Use evidence from the text.", "answerCheck": {"keywordAny": [["apologis"], ["heat", "face"], ["miserabl"], ["his", "fault"], ["stack", "board"]]}, "evidenceCheck": {"containsAny": ["Sami felt heat climb into his face", "he began apologising before she had even put down her bag", "his miserable expression", "He had stacked the board there"]}, "answerMarks": 1, "evidenceMarks": 1, "modelAnswer": "We can tell Sami feels guilty because he thinks the problem is his fault and starts apologising straight away. Evidence could include: \"he began apologising before she had even put down her bag\".", "explanation": "The writer shows Sami's guilt through his body language and how quickly he apologises.", "hint": "Look for a physical reaction and something he says or does.", "reread": [2, 3]}, {"id": "gw_q3", "type": "mcq", "skill": "2a", "marks": 1, "stem": "What does Miss Dara mean when she says, \"Plants are excellent forgivers\"?", "options": ["Plants can talk when they are upset.", "Plants never need sunlight again once they have had some.", "Plants keep growing if you fix the problem quickly instead of holding a grudge.", "Plants like people better when they are given names."], "correct": 2, "modelAnswer": "Plants keep growing if you fix the problem quickly instead of holding a grudge.", "explanation": "Miss Dara means that plants respond to light and care in the present; they do not stay angry.", "hint": "Think about what the plants do after the problem is fixed."}, {"id": "gw_q4", "type": "order", "skill": "2b", "marks": 2, "stem": "Number these events from 1 (first) to 4 (last).", "items": ["Miss Dara and Sami tie weak stems to bamboo canes.", "Sami notices the east-side window looks wrong.", "New growth curls upward from the seedlings.", "The plywood is moved away from the frame."], "correctPositions": [3, 1, 4, 2], "modelAnswer": "1 Sami notices the window looks wrong; 2 the plywood is moved; 3 they tie weak stems; 4 new growth appears.", "explanation": "Ordering questions reward careful tracking of the sequence across the passage.", "hint": "Start with the discovery, then follow the actions that fix the problem."}, {"id": "gw_q5", "type": "open", "skill": "2g", "marks": 2, "stem": "Why does the writer say the seedlings no longer looked desperate and \"looked busy\" instead?", "rubric": [{"label": "Shows change in condition", "check": {"keywordAny": [["healthier"], ["recover"], ["better"], ["less", "damage"], ["chang"]]}}, {"label": "Suggests growth or purposeful activity", "check": {"keywordAny": [["grow"], ["active"], ["working"], ["trying"], ["toward", "light"], ["busy"]]}}], "modelAnswer": "The phrase shows that the seedlings are recovering. Instead of seeming weak and in trouble, they seem active and ready to grow toward the light.", "explanation": "The writer uses a human-sounding description to show the plants' recovery.", "hint": "What does the new word choice suggest about the plants now?"}, {"id": "gw_q6", "type": "short", "skill": "2e", "marks": 1, "stem": "What is Sami most likely to do the next morning? Why?", "check": {"keywordAny": [["check", "bench"], ["look", "seedling"], ["visit", "greenhous"], ["notice", "light"]]}, "modelAnswer": "He is likely to check the bench or seedlings again because he now feels responsible for noticing problems early.", "explanation": "The ending shows Sami has started paying close attention, so repeating that behaviour is the safest prediction.", "hint": "Base your answer on what he learns from Miss Dara and the ending."}]}, {"id": "salt_marsh_makers", "title": "Salt Marsh Makers", "genre": "non-fiction", "difficulty": 3, "isLong": false, "blocks": ["At first glance, a salt marsh can look like an untidy edge where land, river and sea have failed to agree. Mud glistens, channels twist and the ground may seem too wet to trust. Yet this shifting place is one of the busiest builders on the coast.", "When the tide slows, tiny grains of silt settle out of the water. Special plants such as cordgrass trap more of that silt with their stems and roots, so the mud surface gradually rises. Over years, what began as soft, low ground can become a thick patchwork of creeks, pools and grassy platforms.", "That patchwork matters. Salt marshes can soften the force of waves and storm surges before the water reaches houses, roads or farmland farther inland. They also provide feeding and nesting places for insects, fish and birds. Curlews probe the mud, young fish shelter in creeks and migrating birds stop to refuel.", "People once dismissed marshes as useless wasteland because they were awkward to cross and difficult to farm. Scientists now understand that losing them can leave coasts more exposed, not less. In some places, sea walls are being moved back so that new marsh can form naturally.", "A salt marsh is not neat, and it does not stay still. That is exactly why it works. Its strength comes from movement, from roots holding silt one day and new water spreading it the next."], "questions": [{"id": "sm_q1", "type": "short", "skill": "2b", "marks": 1, "stem": "Which plant is named in the text as helping to trap silt?", "check": {"keywordAny": [["cordgrass"]]}, "modelAnswer": "Cordgrass.", "explanation": "Paragraph 2 names cordgrass as a plant that traps silt.", "hint": "Look in paragraph 2 for the specific plant name."}, {"id": "sm_q2", "type": "mcq", "skill": "2a", "marks": 1, "stem": "What does the word \"dismissed\" mean in paragraph 4?", "options": ["carefully protected", "measured and mapped", "treated as unimportant", "filled with extra water"], "correct": 2, "modelAnswer": "treated as unimportant", "explanation": "People once dismissed marshes as useless wasteland, meaning they treated them as having little value.", "hint": "Use the phrase \"useless wasteland\" to help."}, {"id": "sm_q3", "type": "mcq", "skill": "2c", "marks": 2, "stem": "Which statement best summarises paragraph 3?", "options": ["Salt marshes are always dry enough to build houses on.", "Salt marshes matter because they protect coasts and support many living things.", "Only curlews and fish can survive in a salt marsh.", "Storms create salt marshes in a single afternoon."], "correct": 1, "modelAnswer": "Salt marshes matter because they protect coasts and support many living things.", "explanation": "Paragraph 3 focuses on the marsh's protective role and its value as a habitat.", "hint": "Find the answer that includes both protection and wildlife."}, {"id": "sm_q4", "type": "mcq", "skill": "2b", "marks": 1, "stem": "Which statement is presented as a past view in the text?", "options": ["Salt marshes can soften the force of waves.", "Young fish shelter in creeks.", "Scientists now understand their value.", "Salt marshes are useless wasteland."], "correct": 3, "modelAnswer": "Salt marshes are useless wasteland.", "explanation": "Paragraph 4 says people once dismissed marshes in this way.", "hint": "Look for the idea the writer disagrees with now."}, {"id": "sm_q5", "type": "open", "skill": "2f", "marks": 2, "stem": "How does the writer change the reader's view of salt marshes from the start of the text to the end?", "rubric": [{"label": "Starts with appearance or mistaken impression", "check": {"keywordAny": [["first", "glance"], ["untidy"], ["wet"], ["failed", "agree"], ["seem"]]}}, {"label": "Ends with value or strength", "check": {"keywordAny": [["busy", "builder"], ["strength"], ["work"], ["protect"], ["value"], ["movement"]]}}], "modelAnswer": "The writer begins with how messy or untrustworthy a marsh can seem, then gradually shows that this same untidy movement is what makes it strong and useful.", "explanation": "This is a whole-text structure question: the opening impression is revised by later explanation.", "hint": "Compare the first paragraph with the final sentence."}, {"id": "sm_q6", "type": "match", "skill": "2b", "marks": 2, "stem": "Match each detail to the job it is doing in the text.", "prompts": ["curlews probe the mud", "sea walls are being moved back", "cordgrass traps silt"], "options": ["an example of wildlife using the marsh", "an example of people helping new marsh to form", "an explanation of how marsh ground builds up"], "correctMap": {"0": "0", "1": "1", "2": "2"}, "modelAnswer": "Curlews -> wildlife example; sea walls moved back -> people helping marsh form; cordgrass traps silt -> how marsh builds up.", "explanation": "Each detail plays a different job in the overall explanation.", "hint": "Ask what each detail is there to show."}, {"id": "sm_q7", "type": "open", "skill": "2g", "marks": 2, "stem": "Why does the writer call the salt marsh a \"busy builder\"?", "rubric": [{"label": "Shows it is active", "check": {"keywordAny": [["active"], ["busy"], ["working"], ["constantly"], ["build"]]}}, {"label": "Links to creating or shaping coast", "check": {"keywordAny": [["shape", "land"], ["trap", "silt"], ["raise", "ground"], ["form", "creek"], ["build", "coast"]]}}], "modelAnswer": "The phrase makes the marsh sound active and productive. It is \"building\" by trapping silt and gradually shaping the coastline.", "explanation": "The writer uses a compact image to make a scientific process feel vivid and purposeful.", "hint": "What is the marsh creating over time?"}]}, {"id": "night_ferry", "title": "Night Ferry", "genre": "poetry", "difficulty": 3, "isLong": false, "blocks": ["The ferry noses out from the harbour wall,\nslow as a thought being said aloud.\nWindows carry squares of talk,\nwarm against the water's shroud.\n\nRopes relax. The gulls grow small.\nThe town unbuttons, light by light.\nBehind us, chimneys keep their smoke.\nAhead, the channel folds up night.\n\nA child leans hard against the rail\nand names each buoy a floating star.\nThe engine counts beneath our feet.\nHome changes shape, but not how far."], "questions": [{"id": "nf_q1", "type": "mcq", "skill": "2a", "marks": 1, "stem": "What does the word \"shroud\" suggest in stanza 1?", "options": ["The water feels bright and cheerful.", "The water seems dark and covering.", "The water is full of waves and spray.", "The water is too shallow for the boat."], "correct": 1, "modelAnswer": "The water seems dark and covering.", "explanation": "A shroud suggests something that wraps or covers, so the water feels dark and enclosing.", "hint": "Think about the kind of image the word creates."}, {"id": "nf_q2", "type": "short", "skill": "2d", "marks": 1, "stem": "What happens to the town as the ferry moves away?", "check": {"keywordAny": [["light", "small"], ["light", "fad"], ["grow", "small"], ["behind", "us"], ["town", "unbutton"]]}, "modelAnswer": "The town seems to loosen and its lights fade or grow smaller as the ferry moves away.", "explanation": "The second stanza describes the town changing as distance increases.", "hint": "Look at the second stanza."}, {"id": "nf_q3", "type": "evidenceShort", "skill": "2d", "marks": 2, "stem": "How can you tell the child is excited or imaginative? Use evidence from the poem.", "answerCheck": {"keywordAny": [["name", "buoy", "star"], ["imagin"], ["excit"], ["lean", "rail"]]}, "evidenceCheck": {"containsAny": ["leans hard against the rail", "names each buoy a floating star"]}, "answerMarks": 1, "evidenceMarks": 1, "modelAnswer": "The child seems excited and imaginative because they lean forward eagerly and call each buoy \"a floating star\".", "explanation": "The poet shows both physical eagerness and creative thinking.", "hint": "Find one action and one image linked to the child."}, {"id": "nf_q4", "type": "open", "skill": "2g", "marks": 2, "stem": "What is the effect of the phrase \"The engine counts beneath our feet\"?", "rubric": [{"label": "Shows steady rhythm or sound", "check": {"keywordAny": [["rhythm"], ["beat"], ["regular"], ["steady"], ["count"], ["sound"]]}}, {"label": "Suggests movement or progress", "check": {"keywordAny": [["journey"], ["move"], ["travel"], ["progress"], ["carry", "on"]]}}], "modelAnswer": "The phrase turns the engine's steady sound into counting, which suggests rhythm, movement and the sense that the journey is carrying everyone forward.", "explanation": "The engine is personified in a way that emphasises steady travel.", "hint": "Think about what counting feels like: random or regular?"}, {"id": "nf_q5", "type": "open", "skill": "2c", "marks": 2, "stem": "What is the best summary of the poem?", "rubric": [{"label": "Includes leaving harbour or town", "check": {"keywordAny": [["leave", "harbour"], ["move", "away", "town"], ["ferry", "out"]]}}, {"label": "Includes mood of calm travel at night", "check": {"keywordAny": [["night"], ["calm"], ["quiet"], ["journey"], ["water"]]}}], "modelAnswer": "The poem describes a calm night journey by ferry as the travellers leave the town behind and move across dark water.", "explanation": "A summary should capture the main situation and mood without retelling every detail.", "hint": "Keep only the biggest ideas: where, when and what feeling."}]}, {"id": "tide_clock", "title": "The Keeper of the Tide Clock", "genre": "fiction", "difficulty": 5, "isLong": true, "blocks": ["All summer, the harbour clock had seemed to Mara like a face that had forgotten its own expression. It hung above the stone archway leading to the quay, rimmed with rust and salt, one hand frozen between numbers no one trusted any longer. Tourists still photographed it because it looked beautifully old. Fishermen glanced past it to the glowing screens in their palms.", "Mara was staying with her aunt Lila, who repaired watches and clocks in a narrow shop below the harbour tower. Every drawer in the workroom held springs, screws or tiny labelled envelopes. Lila claimed that every good clock was really a question about attention. Mara did not know what that meant, but she liked hearing tools click softly on the bench while gulls argued outside.", "The town was preparing for its annual Lantern Walk to St Brannock's Island. At the year's lowest summer tide, people crossed the causeway at dusk, carrying paper lanterns to the ruined chapel on the far side. Stalls were being painted. Ropes were being checked. Children had already started boasting about who would dare to walk back last.", "On Tuesday, while Lila delivered a repaired kitchen timer, Mara climbed the spiral stairs inside the harbour tower. She expected dust and pigeon feathers. She did not expect a sound. Yet halfway up, just as the wind dropped, she heard a faint tick ... tick ... tick, so light she might have imagined it. At the top room she found the clock's inner frame, larger than a table, its gears furred with old grease. Wedged beside one brass wheel was a ribbon of dry sand.", "On a shelf near the window lay a thin notebook tied with black string. The first page read: Notes of Elias Penhal, keeper of the tide clock. Most pages held figures, moon times and weather marks, but in the margins he had left blunt instructions: wind from the south-west shortens the safe crossing; trust the sea, not the crowd; if the channel speaks early, ring early.", "When Mara showed the notebook to the Lantern Walk organisers that evening, they smiled kindly and returned to their planning. Mr Teague, who chaired the committee, tapped the printed tide table on his clipboard. Another woman lifted her phone and said the harbour app updated every hour. \"It's a charming relic,\" Mr Teague said of the tower clock, \"but charm is not the same as accuracy.\" Lila said nothing. Later, in the shop, she only asked Mara what the notebook had made her notice.", "By Thursday, Mara had removed the dry sand from the gear and brushed away enough dirt to free a second wheel. She did not tell anyone except Lila that the mechanism now moved a little if she nudged it. It still stuck after a few turns, as though the clock were clearing its throat after years of silence. On the wall below the narrow window, she also found a faded green line. Lila told her it marked the height of a tide that had flooded the quay before Mara was born.", "The evening of the walk arrived hot and bright. By sunset, however, a new wind had started to press in from the south-west, flattening the harbour water and pushing a skin of ripples up the channel. Lanterns bobbed ahead like a patient trail of stars as people set off across the causeway. Mara carried one too, but the notebook's warning sat in her mind so heavily that it seemed to change the colour of the air.", "Halfway to the island, she heard it: not a crash, not a shout, but a quick licking sound against the causeway stones. Water was already curling into a side channel that had been bare ten minutes earlier. Farther ahead, the crowd kept moving. Mr Teague was laughing. Someone called back that the app still showed plenty of time. Mara looked at the wind, then at the water, and knew the notebook had not been written by someone who liked dramatic advice. It had been written by someone who had watched.", "She turned and ran. By the time she reached the tower stair, her breath tore at her throat. The bell hammer above the clock had seized with rust, and it took both hands and all her weight to jerk it free. The first strike came out dull. The second boomed across the quay. Heads lifted. Lanterns stopped. Then the line on the causeway broke and began flowing shoreward instead of out.", "Afterwards, when the walkers had returned red-faced and breathless but safe, Mr Teague stood under the tower with one hand on the back of his neck. He did not apologise exactly. He only said that the bell had made everyone look up, and looking up had made them look at the water properly. Lila, locking the shop, said, \"A good clock is never magic. It simply teaches people when to pay attention.\"", "The next morning, Mara climbed the tower again. The gears still needed proper repair, and the sand would certainly creep back, but she wound the mechanism as far as it would go and listened. This time the ticking held. From the quay below came the rattle of crates, the slap of ropes and the answering cry of gulls. The harbour, she thought, was not silent at all. It had only been waiting for somebody to hear it."], "questions": [{"id": "tc_q1", "type": "short", "skill": "2b", "marks": 1, "stem": "What annual event was the town preparing for?", "check": {"keywordAny": [["lantern", "walk"], ["walk", "st", "brannock"], ["causeway", "lantern"]]}, "modelAnswer": "The annual Lantern Walk to St Brannock's Island.", "explanation": "Paragraph 3 introduces the Lantern Walk.", "hint": "Look in paragraph 3."}, {"id": "tc_q2", "type": "mcq", "skill": "2a", "marks": 1, "stem": "What does the word \"relic\" suggest in paragraph 6?", "options": ["something modern and reliable", "something old from the past", "something heavy and dangerous", "something hidden under the sea"], "correct": 1, "modelAnswer": "something old from the past", "explanation": "Mr Teague calls the clock a relic because he sees it as an old object from the past.", "hint": "Think about how Mr Teague feels about the clock."}, {"id": "tc_q3", "type": "evidenceShort", "skill": "2d", "marks": 2, "stem": "What do Elias Penhal's notes suggest about him? Use evidence from the text.", "answerCheck": {"keywordAny": [["careful"], ["observ"], ["experienc"], ["respect", "sea"], ["practical"], ["watch"]]}, "evidenceCheck": {"containsAny": ["trust the sea, not the crowd", "wind from the south-west shortens the safe crossing", "if the channel speaks early, ring early", "someone who had watched"]}, "answerMarks": 1, "evidenceMarks": 1, "modelAnswer": "His notes suggest he was careful, observant and practical. Evidence could include: \"trust the sea, not the crowd\".", "explanation": "The notes show repeated close observation and a serious respect for the sea.", "hint": "Describe what kind of person leaves instructions like these, then quote one.", "reread": [5, 9]}, {"id": "tc_q4", "type": "open", "skill": "2b", "marks": 2, "stem": "Give two things Mara discovered inside the harbour tower that made her think the tide clock might still matter.", "rubric": [{"label": "Heard ticking", "check": {"keywordAny": [["tick"]]}}, {"label": "Found sand in gear", "check": {"keywordAny": [["sand", "gear"], ["sand", "wheel"], ["dry", "sand"]]}}, {"label": "Found Penhal's notebook", "check": {"keywordAny": [["notebook"], ["elias", "penhal"], ["black", "string"]]}}, {"label": "Found flood line", "check": {"keywordAny": [["green", "line"], ["flood", "mark"], ["height", "tide"]]}}], "modelAnswer": "Possible answers include: she heard faint ticking, found sand stuck in a gear, found Elias Penhal's notebook, or found the faded green flood line.", "explanation": "Several discoveries inside the tower show Mara that the clock is not just an empty decoration.", "hint": "Choose any two discoveries from paragraphs 4, 5 and 7."}, {"id": "tc_q5", "type": "open", "skill": "2f", "marks": 3, "stem": "How does paragraph 6 increase the tension in the story?", "rubric": [{"label": "Adults dismiss warning", "check": {"keywordAny": [["smil", "kindly"], ["charming", "relic"], ["phone"], ["app"], ["committee"], ["did", "not", "listen"], ["dismiss"]]}}, {"label": "Shows conflict between old and new ways of judging safety", "check": {"keywordAny": [["clock", "versus", "app"], ["notebook", "versus", "table"], ["old", "new"], ["crowd", "versus", "sea"], ["conflict"]]}}, {"label": "Makes reader worry Mara may be right but ignored", "check": {"keywordAny": [["reader", "worry"], ["danger"], ["ignored"], ["not", "believ"], ["tension"]]}}], "modelAnswer": "The paragraph raises tension because the organisers politely ignore Mara's warning and trust their printed table or app instead. That creates a conflict between careful observation and confident planning, so the reader begins to worry that Mara may be right too late.", "explanation": "Tension grows when a possible danger is noticed but not taken seriously.", "hint": "What do the adults choose to trust, and why does that worry the reader?"}, {"id": "tc_q6", "type": "multiSelect", "skill": "2b", "marks": 2, "stem": "Which two things warned Mara that the crossing was becoming unsafe?", "options": ["a new wind pressing in from the south-west", "the chapel bell ringing from the island", "water curling into a side channel earlier than expected", "tourists taking photographs of the clock"], "correctSet": [0, 2], "modelAnswer": "The correct answers are the south-west wind and the water curling into a side channel early.", "explanation": "Both of these details connect directly to the notebook's warning and the changing conditions.", "hint": "Choose the two details linked to weather or water, not to people."}, {"id": "tc_q7", "type": "evidenceShort", "skill": "2d", "marks": 2, "stem": "How do we know Mara trusts observation more than the crowd by the end of the story? Use evidence.", "answerCheck": {"keywordAny": [["listen", "water"], ["trust", "notebook"], ["look", "water"], ["pay", "attent"], ["observ"]]}, "evidenceCheck": {"containsAny": ["the notebook's warning sat in her mind", "knew the notebook had not been written by someone who liked dramatic advice", "It had been written by someone who had watched", "looking up had made them look at the water properly", "waiting for somebody to hear it"]}, "answerMarks": 1, "evidenceMarks": 1, "modelAnswer": "By the end, Mara trusts close observation more than the crowd's confidence. Evidence could include: \"It had been written by someone who had watched.\"", "explanation": "Her actions show she values what careful watching reveals, even when others are relaxed.", "hint": "Focus on what Mara chooses to believe when the crowd keeps walking."}, {"id": "tc_q8", "type": "open", "skill": "2g", "marks": 3, "stem": "What is the effect of the final sentence: \"It had only been waiting for somebody to hear it\"?", "rubric": [{"label": "Gives harbour human qualities", "check": {"keywordAny": [["personif"], ["human"], ["alive"], ["voice"], ["waiting"]]}}, {"label": "Links back to theme of attention or listening", "check": {"keywordAny": [["pay", "attent"], ["listen"], ["notice"], ["hear"], ["theme"]]}}, {"label": "Creates satisfying or hopeful ending", "check": {"keywordAny": [["hope"], ["satisfy"], ["ending"], ["complete"], ["change"], ["new", "understand"]]}}], "modelAnswer": "The final sentence personifies the harbour, making it seem as if it has a voice. This ties the ending to the story's theme of paying attention and gives the ending a satisfying sense that Mara has learned how to listen properly.", "explanation": "The line works as both an image and a final statement of the story's main idea.", "hint": "Think about what has changed in Mara by the end."}, {"id": "tc_q9", "type": "open", "skill": "2c", "marks": 3, "stem": "Summarise what Mara discovers in the tower and why it matters.", "rubric": [{"label": "Mentions mechanical clues", "check": {"keywordAny": [["tick"], ["gear"], ["sand"], ["mechanism"], ["bell", "hammer"]]}}, {"label": "Mentions written or historical clues", "check": {"keywordAny": [["notebook"], ["elias", "penhal"], ["instruction"], ["green", "line"], ["flood", "mark"]]}}, {"label": "Explains why discoveries matter", "check": {"keywordAny": [["warning"], ["safe"], ["cross"], ["help", "save"], ["clock", "still", "matter"], ["attention"]]}}], "modelAnswer": "Mara discovers mechanical signs that the clock is not completely dead, such as ticking and a jammed gear, and historical clues such as Elias Penhal's notebook and the flood line. These matter because they help her understand real signs of danger and later warn the walkers in time.", "explanation": "A strong summary keeps the main discoveries and their importance, without retelling every detail.", "hint": "Group the discoveries into what she finds and why those finds matter."}, {"id": "tc_q10", "type": "order", "skill": "2b", "marks": 3, "stem": "Number these events from 1 (first) to 5 (last).", "items": ["Mara frees the bell hammer and rings the bell.", "Mara hears faint ticking in the tower.", "The organisers tell Mara they trust the tide table and app.", "Water begins curling into a side channel on the causeway.", "Mara winds the mechanism again the next morning."], "correctPositions": [4, 1, 2, 3, 5], "modelAnswer": "1 Mara hears ticking; 2 the organisers trust the app; 3 water curls into the side channel; 4 she rings the bell; 5 she winds the mechanism next morning.", "explanation": "This sequence tracks the story from first clue to final resolution.", "hint": "Start with the first discovery in the tower, then follow the cause-and-effect."}, {"id": "tc_q11", "type": "open", "skill": "2e", "marks": 2, "stem": "What is Aunt Lila most likely to expect from Mara after these events? Give a reason for your prediction.", "rubric": [{"label": "Predicts Mara will help keep or repair clock / watch carefully", "check": {"keywordAny": [["help", "clock"], ["wind", "clock"], ["repair"], ["keep", "watch"], ["pay", "attent"], ["look", "careful"]]}}, {"label": "Uses reason from text", "check": {"keywordAny": [["learn"], ["notic"], ["good", "clock", "question", "attention"], ["Lila"], ["because"]]}}], "modelAnswer": "Aunt Lila is likely to expect Mara to keep helping with the tide clock and to keep paying close attention, because Lila sees clocks as a lesson in noticing properly and Mara has shown she can do that.", "explanation": "Predictions need to fit both the character and what has just changed.", "hint": "Base your answer on what Lila values throughout the story."}, {"id": "tc_q12", "type": "open", "skill": "2h", "marks": 4, "stem": "Compare how people see the tide clock at the start and at the end of the story.", "rubric": [{"label": "Start: old decoration or ignored object", "check": {"keywordAny": [["tourist"], ["photograph"], ["beautifully", "old"], ["frozen"], ["no", "trust"], ["glance", "past"], ["relic"]]}}, {"label": "End: useful warning / reason to look up", "check": {"keywordAny": [["bell"], ["safe"], ["warning"], ["look", "up"], ["look", "water"], ["matter"], ["attention"]]}}, {"label": "Mentions change in understanding", "check": {"keywordAny": [["chang"], ["instead"], ["before", "after"], ["from", "to"], ["realis"]]}}, {"label": "Uses detail from both parts", "check": {"keywordAny": [["start"], ["end"], ["at", "first"], ["afterward"], ["beginning"], ["ending"]]}}], "modelAnswer": "At the start, people treat the tide clock mainly as an old object: tourists photograph it and fishermen ignore it in favour of phone screens. By the end, the bell it controls has helped people notice the danger properly, so the clock becomes a useful warning rather than just a decoration. The story changes the clock from a relic into something worth trusting and attending to.", "explanation": "Comparison questions need evidence from both sides, not just one.", "hint": "Make sure you mention one view from the start and one from the end."}, {"id": "tc_q13", "type": "open", "skill": "2d", "marks": 4, "stem": "The story suggests that careful observation matters more than confidence. How far do you agree? Use evidence from different parts of the story.", "rubric": [{"label": "States view clearly", "check": {"keywordAny": [["agree"], ["observation", "matter"], ["careful", "watch"], ["confidence", "not", "enough"], ["far", "agree"]]}}, {"label": "Uses evidence from early/middle of story", "check": {"keywordAny": [["notebook"], ["tick"], ["sand"], ["organiser"], ["app"], ["Lila"], ["relic"]]}}, {"label": "Uses evidence from climax/end", "check": {"keywordAny": [["side", "channel"], ["bell"], ["look", "water"], ["safe"], ["waiting", "hear"], ["look", "up"]]}}, {"label": "Explains link between evidence and idea", "check": {"keywordAny": [["show"], ["because"], ["therefore"], ["this", "means"], ["prove"], ["suggest"]]}}], "modelAnswer": "I agree to a great extent. The story repeatedly shows that paying close attention leads to safer decisions than sounding confident. Mara notices the ticking, the sand and Penhal's notebook, while the organisers rely on a table and an app because they sound official. At the causeway, Mara watches the wind and hears the water changing, then rings the bell. Afterwards, even Mr Teague realises that the bell made people look up and look at the water properly. The story does not say confidence is useless, but it does show that confidence without observation can be risky.", "explanation": "A high-scoring answer needs a clear view, evidence from different parts and explanation of how that evidence supports the idea.", "hint": "Use at least one detail from before the walk and one from during or after it."}]}, {"id": "messages_from_deep", "title": "Messages from the Deep", "genre": "non-fiction", "difficulty": 4, "isLong": true, "blocks": ["For centuries, the deep ocean was imagined more easily than it was explored. Once sunlight disappears, the sea becomes a place of pressure, cold and distance. Sending a person there is difficult, expensive and sometimes impossible. That is why many discoveries now begin with machines.", "Some of these machines are remotely operated vehicles, or ROVs. They are connected to a ship by a long cable that sends power down and information back. Cameras, lights and gripping arms allow them to inspect shipwrecks, collect samples or place instruments on the sea floor. Because they remain linked to a ship, pilots can control them very precisely.", "Other machines, such as underwater gliders, travel for far longer but with less direct control. A glider changes its buoyancy to sink or rise, and small wings turn that movement into forward travel. It may spend weeks gathering temperature, salinity and current data before surfacing briefly to send a packet of information by satellite.", "The deep sea still surprises scientists. Some animals make their own light through bioluminescence, producing flashes or glows to attract prey, confuse predators or recognise members of their own species. Other creatures survive enormous pressure with soft bodies, unusual chemicals or flexible structures that would fail nearer the surface.", "Bringing animals up quickly can damage them, which is one reason deep-sea research depends so heavily on images and careful measurements taken where the animals live. A fish that seems clumsy in a tank may be perfectly suited to drifting in darkness half a kilometre down. Context matters.", "Studying the deep ocean is not only about collecting strange facts. The deep sea helps regulate Earth's climate, stores carbon and influences the movement of heat around the planet. Understanding it better can improve weather models, guide conservation and show how life solves problems in extreme conditions.", "Even now, huge areas of the ocean floor remain poorly mapped. Each mission adds only a little to the picture, rather like sketching a vast landscape by torchlight. Yet piece by piece, the darkness becomes more legible, and the sea begins to answer questions that humans have only recently learned how to ask."], "questions": [{"id": "md_q1", "type": "short", "skill": "2b", "marks": 1, "stem": "Why do many deep-ocean discoveries now begin with machines instead of people?", "check": {"keywordAny": [["pressure"], ["cold"], ["distance"], ["difficult", "expens"], ["send", "person", "hard"], ["imposs"]]}, "modelAnswer": "Because the deep ocean is cold, high-pressure and far away, so sending people there is difficult, expensive or impossible.", "explanation": "Paragraph 1 gives several reasons machines are often used first.", "hint": "Use paragraph 1."}, {"id": "md_q2", "type": "mcq", "skill": "2a", "marks": 1, "stem": "What does the word \"precisely\" mean in paragraph 2?", "options": ["in a very exact way", "at a very fast speed", "for a very low cost", "without any cable at all"], "correct": 0, "modelAnswer": "in a very exact way", "explanation": "The cable lets pilots control ROVs very exactly.", "hint": "Think about the benefit of being linked to the ship."}, {"id": "md_q3", "type": "open", "skill": "2h", "marks": 2, "stem": "Give one difference between an ROV and an underwater glider.", "rubric": [{"label": "ROV linked by cable / precise control", "check": {"keywordAny": [["cable"], ["ship"], ["precise", "control"], ["pilot"]]}}, {"label": "Glider travels longer / less direct control / gathers data over time", "check": {"keywordAny": [["week"], ["long"], ["less", "direct"], ["buoyanc"], ["surface", "briefly"], ["data"]]}}], "modelAnswer": "An ROV stays linked to a ship by cable and can be controlled very precisely, while a glider travels for much longer with less direct control and surfaces only briefly to send data.", "explanation": "Comparison needs a contrast between both machines, not just a fact about one.", "hint": "Mention one feature of each machine."}, {"id": "md_q4", "type": "mcq", "skill": "2c", "marks": 2, "stem": "Which statement best summarises paragraph 4?", "options": ["Deep-sea animals are all transparent and harmless.", "Deep-sea animals use a range of special adaptations to survive.", "Scientists prefer not to study animals in the deep sea.", "Pressure in the deep sea makes all movement impossible."], "correct": 1, "modelAnswer": "Deep-sea animals use a range of special adaptations to survive.", "explanation": "Paragraph 4 gives several survival adaptations, including bioluminescence and flexible structures.", "hint": "Choose the option that captures the paragraph's main idea."}, {"id": "md_q5", "type": "open", "skill": "2d", "marks": 3, "stem": "Why does the writer say, \"Context matters\" in paragraph 5?", "rubric": [{"label": "Explains creatures need to be understood in their natural environment", "check": {"keywordAny": [["where", "live"], ["natural", "environment"], ["habitat"], ["deep", "sea", "condition"], ["context"]]}}, {"label": "Mentions damage or change when brought up", "check": {"keywordAny": [["bring", "up", "quick"], ["damage"], ["tank"], ["surface"], ["clumsy", "tank"]]}}, {"label": "Links to need for images/measurements in place", "check": {"keywordAny": [["image"], ["measurement"], ["research"], ["where", "animals", "live"], ["depend", "heavily"]]}}], "modelAnswer": "The writer means that deep-sea animals have to be understood in the environment they evolved for. Bringing them to the surface can damage them or make them seem awkward, so scientists rely on images and measurements taken where the animals actually live.", "explanation": "The phrase sums up why location and conditions affect what scientists can conclude.", "hint": "Think about what changes when a deep-sea animal is moved."}, {"id": "md_q6", "type": "open", "skill": "2f", "marks": 2, "stem": "How does paragraph 6 broaden the text?", "rubric": [{"label": "Moves from strange creatures / machines to wider importance", "check": {"keywordAny": [["not", "only"], ["broaden"], ["wider"], ["bigger"], ["beyond", "fact"], ["more", "than", "strange"]]}}, {"label": "Mentions climate / carbon / conservation", "check": {"keywordAny": [["climate"], ["carbon"], ["weather"], ["conservation"], ["heat", "planet"]]}}], "modelAnswer": "Paragraph 6 broadens the text by moving beyond fascinating machines and creatures to explain why the deep ocean matters to the whole planet, including climate and conservation.", "explanation": "This is a structure question about how the writer widens the focus.", "hint": "What new scale or importance appears in paragraph 6?"}, {"id": "md_q7", "type": "open", "skill": "2g", "marks": 2, "stem": "Why does the writer compare mapping the sea floor to \"sketching a vast landscape by torchlight\"?", "rubric": [{"label": "Shows limited visibility / partial knowledge", "check": {"keywordAny": [["small", "part"], ["limited"], ["partial"], ["cannot", "see", "all"], ["torchlight"], ["little", "picture"]]}}, {"label": "Shows slow, gradual progress", "check": {"keywordAny": [["slow"], ["piece", "by", "piece"], ["gradual"], ["one", "mission"], ["bit", "by", "bit"]]}}], "modelAnswer": "The comparison shows that scientists can only see and record a small part at a time, so progress is slow and incomplete even though it keeps growing.", "explanation": "The image makes a mapping problem easier to picture.", "hint": "What can a torchlight not do all at once?"}, {"id": "md_q8", "type": "short", "skill": "2e", "marks": 1, "stem": "What might scientists be able to do better if deep-ocean knowledge improves?", "check": {"keywordAny": [["weather", "model"], ["guide", "conserv"], ["understand", "climate"], ["solve", "problem", "extreme"]]}, "modelAnswer": "They may improve weather models, guide conservation and understand life in extreme conditions better.", "explanation": "Paragraph 6 lists several possible benefits of better understanding.", "hint": "Use the list in paragraph 6."}]}];
+    const TEST_PAPERS = [{"id": "paper_a", "title": "Original KS2-style Paper A", "timeLimitMin": 60, "totalMarks": 50, "sections": [{"passageId": "city_swifts", "questionIds": ["sw_q1", "sw_q2", "sw_q3", "sw_q4", "sw_q5", "sw_q6", "sw_q7"]}, {"passageId": "museum_after_closing", "questionIds": ["mac_q1", "mac_q2", "mac_q3", "mac_q4", "mac_q5"]}, {"passageId": "tide_clock", "questionIds": ["tc_q1", "tc_q2", "tc_q3", "tc_q4", "tc_q5", "tc_q6", "tc_q7", "tc_q8", "tc_q9", "tc_q10", "tc_q12", "tc_q13"]}]}];
+
+    function uid() { return "id_" + Math.random().toString(36).slice(2, 10) + "_" + Date.now().toString(36); }
+    function clamp(n, min, max) { return Math.min(max, Math.max(min, n)); }
+    function nowMs() { return Date.now(); }
+    function isoNow() { return new Date().toISOString(); }
+    function todayKey(ts = Date.now()) {
+      const d = new Date(ts);
+      return [d.getFullYear(), String(d.getMonth()+1).padStart(2, "0"), String(d.getDate()).padStart(2, "0")].join("-");
+    }
+    function diffDays(aKey, bKey) {
+      const a = new Date(aKey + "T00:00:00");
+      const b = new Date(bKey + "T00:00:00");
+      return Math.round((b - a) / 86400000);
+    }
+    function average(nums) { return nums.length ? nums.reduce((a,b)=>a+b,0) / nums.length : 0; }
+    function escapeHtml(str) {
+      return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+    function nl2br(str) { return escapeHtml(str).replace(/\n/g, "<br>"); }
+    function normaliseText(str) {
+      return String(str || "")
+        .toLowerCase()
+        .replace(/[’']/g, "")
+        .replace(/[^a-z0-9\s-]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+    function tokenise(str) { return normaliseText(str).split(" ").filter(Boolean); }
+    function hasStem(tokens, stem) {
+      const s = String(stem || "").toLowerCase();
+      return tokens.some(t => t === s || t.startsWith(s));
+    }
+    function groupMatches(tokens, group) { return (group || []).every(stem => hasStem(tokens, stem)); }
+    function checkMatches(text, check) {
+      if (!check) return false;
+      const norm = normaliseText(text);
+      const tokens = tokenise(text);
+      if (!norm) return false;
+      if (check.exactAny && check.exactAny.some(ans => {
+        const n = normaliseText(ans);
+        return norm === n || norm.includes(n) || n.includes(norm);
+      })) return true;
+      if (check.containsAny && check.containsAny.some(ans => norm.includes(normaliseText(ans)))) return true;
+      if (check.keywordAny && check.keywordAny.some(group => groupMatches(tokens, group))) return true;
+      return false;
+    }
+    function overlapRatio(a, b) {
+      const setA = new Set(tokenise(a).filter(t => t.length > 2));
+      const setB = new Set(tokenise(b).filter(t => t.length > 2));
+      if (!setA.size || !setB.size) return 0;
+      let overlap = 0;
+      for (const t of setA) if (setB.has(t)) overlap += 1;
+      return overlap / Math.min(setA.size, setB.size);
+    }
+    function evidenceMatches(text, check) {
+      if (!text || !check) return false;
+      if (checkMatches(text, check)) return true;
+      if (check.containsAny && check.containsAny.some(snippet => overlapRatio(text, snippet) >= 0.55)) return true;
+      return false;
+    }
+    function scoreRubric(text, rubric, maxScore) {
+      let score = 0;
+      const matched = [];
+      (rubric || []).forEach(point => {
+        if (checkMatches(text, point.check)) {
+          score += 1;
+          matched.push(point.label || "Point");
+        }
+      });
+      return { score: Math.min(maxScore || score, score), matched };
+    }
+    function isResponseNonEmpty(response) {
+      if (!response) return false;
+      return Object.values(response).some(v => Array.isArray(v) ? v.length : String(v || "").trim() !== "");
+    }
+    function setEqual(a, b) {
+      if (a.size !== b.size) return false;
+      for (const x of a) if (!b.has(x)) return false;
+      return true;
+    }
+    function formatDateTime(ts) {
+      if (!ts) return "—";
+      return new Date(ts).toLocaleString("en-GB", { year:"numeric", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
+    }
+    function formatMsClock(ms) {
+      const total = Math.max(0, Math.floor(ms / 1000));
+      const mins = Math.floor(total / 60);
+      const secs = total % 60;
+      return `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+    }
+    function wordCountFromPassage(passage) {
+      return passage.blocks.join(" ").trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function defaultNode() {
+      return { attempts: 0, correct: 0, wrong: 0, strength: 0.25, intervalDays: 0, dueAt: 0, lastSeenAt: null, lastWrongAt: null, correctStreak: 0 };
+    }
+    function makeLearner(name) {
+      return {
+        id: uid(),
+        name: name || "Learner",
+        createdAt: isoNow(),
+        settings: { scaffoldMode: false, showParagraphNumbers: true, enableTTS: false, speechRate: 1 },
+        skills: {}, passages: {}, questions: {}, genres: {}, qtypes: {},
+        misconceptions: {}, retryQueue: [], events: [], sessions: [],
+        lastPracticeDay: null, streakDays: 0
+      };
+    }
+    function defaultAppState() {
+      const learner = makeLearner("Learner 1");
+      return {
+        version: APP_VERSION,
+        currentLearnerId: learner.id,
+        learners: { [learner.id]: learner },
+        customPassages: {},
+        globalSettings: { ai: { provider:"off", model:"", rememberKey:false, storedKey:"" } }
+      };
+    }
+    function normaliseLearner(learner) {
+      const clean = Object.assign(makeLearner(learner.name || "Learner"), learner);
+      clean.settings = Object.assign({ scaffoldMode:false, showParagraphNumbers:true, enableTTS:false, speechRate:1 }, learner.settings || {});
+      clean.skills = learner.skills || {};
+      clean.passages = learner.passages || {};
+      clean.questions = learner.questions || {};
+      clean.genres = learner.genres || {};
+      clean.qtypes = learner.qtypes || {};
+      clean.misconceptions = learner.misconceptions || {};
+      clean.retryQueue = (learner.retryQueue || []).filter(x => x && x.questionId);
+      clean.events = (learner.events || []).slice(-900);
+      clean.sessions = (learner.sessions || []).slice(-120);
+      clean.lastPracticeDay = clean.lastPracticeDay || null;
+      clean.streakDays = Number.isFinite(clean.streakDays) ? clean.streakDays : 0;
+      return clean;
+    }
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultAppState();
+        const parsed = JSON.parse(raw);
+        if (!parsed.learners || !Object.keys(parsed.learners).length) return defaultAppState();
+        parsed.version = APP_VERSION;
+        parsed.customPassages = parsed.customPassages || {};
+        if (!parsed.globalSettings) parsed.globalSettings = { ai:{ provider:"off", model:"", rememberKey:false, storedKey:"" } };
+        if (!parsed.globalSettings.ai) parsed.globalSettings.ai = { provider:"off", model:"", rememberKey:false, storedKey:"" };
+        for (const learnerId of Object.keys(parsed.learners)) parsed.learners[learnerId] = normaliseLearner(parsed.learners[learnerId]);
+        if (!parsed.currentLearnerId || !parsed.learners[parsed.currentLearnerId]) parsed.currentLearnerId = Object.keys(parsed.learners)[0];
+        return parsed;
+      } catch (err) {
+        console.error(err);
+        return defaultAppState();
+      }
+    }
+
+    let state = loadState();
+    const ui = { activeTab: "practice", session: null, timerInterval: null };
+
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function currentLearner() { return state.learners[state.currentLearnerId]; }
+    function getAllPassages() { return BUILTIN_PASSAGES.concat(Object.values(state.customPassages || {})); }
+    function getPassageMap() { const map = {}; getAllPassages().forEach(p => { map[p.id] = p; }); return map; }
+    function getQuestionRefMap() {
+      const map = {};
+      getAllPassages().forEach(p => (p.questions || []).forEach((q, idx) => { map[q.id] = { passageId:p.id, question:q, index:idx }; }));
+      return map;
+    }
+    function ensureSkillNode(skillId) { const learner = currentLearner(); if (!learner.skills[skillId]) learner.skills[skillId] = defaultNode(); return learner.skills[skillId]; }
+    function ensurePassageNode(passageId) { const learner = currentLearner(); if (!learner.passages[passageId]) learner.passages[passageId] = defaultNode(); return learner.passages[passageId]; }
+    function ensureQuestionNode(questionId) { const learner = currentLearner(); if (!learner.questions[questionId]) learner.questions[questionId] = defaultNode(); return learner.questions[questionId]; }
+    function ensureGenreNode(genre) { const learner = currentLearner(); if (!learner.genres[genre]) learner.genres[genre] = defaultNode(); return learner.genres[genre]; }
+    function ensureQTypeNode(type) { const learner = currentLearner(); if (!learner.qtypes[type]) learner.qtypes[type] = defaultNode(); return learner.qtypes[type]; }
+    function statusFromNode(node) {
+      const now = Date.now();
+      if (!node || !node.attempts) return "new";
+      if ((node.strength || 0) < 0.42 || (node.wrong || 0) > (node.correct || 0) + 1) return "weak";
+      if ((node.dueAt || 0) <= now) return "due";
+      if ((node.strength || 0) >= 0.82 && (node.intervalDays || 0) >= 7 && (node.correctStreak || 0) >= 3) return "secured";
+      return "learning";
+    }
+    function humanStatus(status) { return ({ new:"New", learning:"Learning", due:"Due", weak:"Weak", secured:"Secured" })[status] || status; }
+    function learnerDueCount() {
+      const learner = currentLearner();
+      const now = nowMs();
+      let count = learner.retryQueue.filter(x => x.dueAt <= now).length;
+      for (const skillId of Object.keys(SKILLS)) {
+        const node = learner.skills[skillId];
+        if (node && node.attempts && (node.dueAt || 0) <= now) count += 1;
+      }
+      return count;
+    }
+    function updateStreak() {
+      const learner = currentLearner();
+      const today = todayKey();
+      if (!learner.lastPracticeDay) { learner.lastPracticeDay = today; learner.streakDays = 1; return; }
+      if (learner.lastPracticeDay === today) return;
+      const gap = diffDays(learner.lastPracticeDay, today);
+      learner.streakDays = gap === 1 ? learner.streakDays + 1 : 1;
+      learner.lastPracticeDay = today;
+    }
+    function bumpMisconception(tag) {
+      if (!tag) return;
+      const learner = currentLearner();
+      if (!learner.misconceptions[tag]) learner.misconceptions[tag] = { count:0, lastSeenAt:null };
+      learner.misconceptions[tag].count += 1;
+      learner.misconceptions[tag].lastSeenAt = isoNow();
+    }
+    function recordEvent(event) {
+      const learner = currentLearner();
+      learner.events.push(event);
+      if (learner.events.length > 900) learner.events = learner.events.slice(-900);
+    }
+    function recordSessionSummary(extra) {
+      const learner = currentLearner();
+      learner.sessions.push(Object.assign({ createdAt: isoNow() }, extra || {}));
+      if (learner.sessions.length > 120) learner.sessions = learner.sessions.slice(-120);
+    }
+    function weakSkillIds() {
+      const learner = currentLearner();
+      return Object.keys(SKILLS).sort((a,b) => {
+        const A = learner.skills[a] || defaultNode();
+        const B = learner.skills[b] || defaultNode();
+        const scoreA = (1 - A.strength) + ((A.wrong || 0) / Math.max(1, A.attempts));
+        const scoreB = (1 - B.strength) + ((B.wrong || 0) / Math.max(1, B.attempts));
+        return scoreB - scoreA;
+      });
+    }
+
+    function getAIKey() {
+      const ai = state.globalSettings.ai || {};
+      if (ai.rememberKey) return ai.storedKey || "";
+      return sessionStorage.getItem(SESSION_AI_KEY) || "";
+    }
+    function setAIKey(value, remember) {
+      const ai = state.globalSettings.ai;
+      ai.rememberKey = !!remember;
+      if (remember) { ai.storedKey = value || ""; sessionStorage.removeItem(SESSION_AI_KEY); }
+      else { ai.storedKey = ""; if (value) sessionStorage.setItem(SESSION_AI_KEY, value); else sessionStorage.removeItem(SESSION_AI_KEY); }
+      saveState();
+    }
+    function aiEnabled() {
+      const ai = state.globalSettings.ai || {};
+      return ai.provider && ai.provider !== "off" && ai.model && getAIKey();
+    }
+
+    async function callAI(systemPrompt, userPrompt, temperature = 0.2) {
+      const ai = state.globalSettings.ai;
+      const key = getAIKey();
+      if (!ai.provider || ai.provider === "off" || !ai.model || !key) throw new Error("AI is not configured.");
+      if (ai.provider === "openai") {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: { "Content-Type":"application/json", "Authorization": `Bearer ${key}` },
+          body: JSON.stringify({ model: ai.model, temperature, messages: [{ role:"system", content: systemPrompt }, { role:"user", content: userPrompt }] })
+        });
+        if (!res.ok) throw new Error(`OpenAI error ${res.status}`);
+        const data = await res.json();
+        return data.choices?.[0]?.message?.content || "";
+      }
+      if (ai.provider === "gemini") {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(ai.model)}:generateContent?key=${encodeURIComponent(key)}`, {
+          method: "POST",
+          headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({ systemInstruction: { parts:[{ text: systemPrompt }] }, contents: [{ parts:[{ text: userPrompt }] }], generationConfig: { temperature } })
+        });
+        if (!res.ok) throw new Error(`Gemini error ${res.status}`);
+        const data = await res.json();
+        return (data.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("");
+      }
+      if (ai.provider === "anthropic") {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: { "Content-Type":"application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
+          body: JSON.stringify({ model: ai.model, max_tokens: 1200, temperature, system: systemPrompt, messages: [{ role:"user", content:userPrompt }] })
+        });
+        if (!res.ok) throw new Error(`Anthropic error ${res.status}`);
+        const data = await res.json();
+        return (data.content || []).map(part => part.text || "").join("");
+      }
+      throw new Error("Unknown AI provider.");
+    }
+    function extractJsonBlock(text) {
+      const raw = String(text || "").trim();
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch (e) {}
+      const match = raw.match(/\{[\s\S]*\}$/) || raw.match(/\{[\s\S]*\}/);
+      if (!match) return null;
+      try { return JSON.parse(match[0]); } catch (e) { return null; }
+    }
+
+    function defaultMisconceptionForSkill(skill) {
+      return ({
+        "2a":"vocab_out_of_context",
+        "2b":"misread_detail",
+        "2c":"summary_too_narrow",
+        "2d":"weak_evidence",
+        "2e":"prediction_not_text_based",
+        "2f":"whole_text_structure",
+        "2g":"author_choice_literal_only",
+        "2h":"comparison_partial"
+      })[skill] || "misread_detail";
+    }
+
+    function makeResult(question, score, maxScore, details) {
+      const correct = score === maxScore;
+      return {
+        questionId: question.id, score, maxScore, correct,
+        misconception: details.misconception || null,
+        feedbackShort: details.feedbackShort || "",
+        feedbackLong: details.feedbackLong || "",
+        modelAnswer: details.modelAnswer || question.modelAnswer || "",
+        evidenceSnippets: details.evidenceSnippets || [],
+        matched: details.matched || []
+      };
+    }
+
+    function evaluateQuestion(question, response) {
+      const qType = question.type;
+      const evidenceSnippets = (question.evidenceCheck && question.evidenceCheck.containsAny) ? question.evidenceCheck.containsAny.slice(0,2) : [];
+      if (qType === "mcq") {
+        const selected = Number(response.answer);
+        const correct = selected === Number(question.correct);
+        return makeResult(question, correct ? question.marks : 0, question.marks, {
+          misconception: correct ? null : (question.skill === "2a" ? "vocab_out_of_context" : "selection_slip"),
+          feedbackShort: correct ? "Correct." : "Not quite. Check the text again.",
+          feedbackLong: question.explanation || "",
+          evidenceSnippets
+        });
+      }
+      if (qType === "short") {
+        const answer = String(response.answer || "");
+        const correct = checkMatches(answer, question.check);
+        return makeResult(question, correct ? question.marks : 0, question.marks, {
+          misconception: correct ? null : defaultMisconceptionForSkill(question.skill),
+          feedbackShort: correct ? "Correct." : "Not quite yet.",
+          feedbackLong: question.explanation || "",
+          evidenceSnippets
+        });
+      }
+      if (qType === "evidenceShort") {
+        const answer = String(response.answer || "");
+        const evidence = String(response.evidence || "");
+        const answerMarks = Number(question.answerMarks || 1);
+        const evidenceMarks = Number(question.evidenceMarks || 1);
+        const answerOk = checkMatches(answer, question.answerCheck);
+        const evidenceOk = evidenceMatches(evidence, question.evidenceCheck);
+        const score = (answerOk ? answerMarks : 0) + (evidenceOk ? evidenceMarks : 0);
+        let misconception = null;
+        if (!answerOk && !evidenceOk) misconception = defaultMisconceptionForSkill(question.skill);
+        else if (answerOk && !evidenceOk) misconception = "weak_evidence";
+        else if (!answerOk && evidenceOk) misconception = defaultMisconceptionForSkill(question.skill);
+        return makeResult(question, score, question.marks, {
+          misconception,
+          feedbackShort: score === question.marks ? "Correct." : score > 0 ? "Partly right." : "Not quite yet.",
+          feedbackLong: question.explanation || "",
+          evidenceSnippets
+        });
+      }
+      if (qType === "open") {
+        const combined = `${String(response.answer || "")} ${String(response.evidence || "")}`.trim();
+        const scored = scoreRubric(combined, question.rubric || [], question.marks);
+        return makeResult(question, scored.score, question.marks, {
+          misconception: scored.score === question.marks ? null : defaultMisconceptionForSkill(question.skill),
+          feedbackShort: scored.score === question.marks ? "Strong answer." : scored.score > 0 ? "Partly there." : "This needs tighter text-based thinking.",
+          feedbackLong: question.explanation || "",
+          evidenceSnippets,
+          matched: scored.matched
+        });
+      }
+      if (qType === "multiSelect") {
+        const selected = new Set((response.answer || []).map(Number));
+        const correctSet = new Set((question.correctSet || []).map(Number));
+        let score = 0;
+        if (setEqual(selected, correctSet)) score = question.marks;
+        else {
+          let good = 0; let bad = 0;
+          selected.forEach(x => { if (correctSet.has(x)) good += 1; else bad += 1; });
+          if (!bad && good > 0) score = Math.min(question.marks - 1 || 1, 1);
+        }
+        return makeResult(question, score, question.marks, {
+          misconception: score === question.marks ? null : defaultMisconceptionForSkill(question.skill),
+          feedbackShort: score === question.marks ? "Correct." : score > 0 ? "Some choices are right." : "Check each option against the text carefully.",
+          feedbackLong: question.explanation || "",
+          evidenceSnippets
+        });
+      }
+      if (qType === "match") {
+        const mapping = response.map || {};
+        const prompts = question.prompts || [];
+        let correctCount = 0;
+        prompts.forEach((_, i) => { if (String(mapping[i]) === String(question.correctMap[i])) correctCount += 1; });
+        const score = correctCount === prompts.length ? question.marks : Math.floor((correctCount / prompts.length) * question.marks);
+        return makeResult(question, score, question.marks, {
+          misconception: score === question.marks ? null : (question.skill === "2h" ? "comparison_partial" : "misread_detail"),
+          feedbackShort: score === question.marks ? "Correct." : correctCount ? "Some matches are right." : "Try matching each detail to its exact job in the text.",
+          feedbackLong: question.explanation || "",
+          evidenceSnippets
+        });
+      }
+      if (qType === "order") {
+        const orderMap = response.order || {};
+        const correct = question.correctPositions || [];
+        let correctCount = 0;
+        correct.forEach((pos, idx) => { if (Number(orderMap[idx]) === Number(pos)) correctCount += 1; });
+        const score = correctCount === correct.length ? question.marks : Math.floor((correctCount / correct.length) * question.marks);
+        return makeResult(question, score, question.marks, {
+          misconception: score === question.marks ? null : "sequence_tracking",
+          feedbackShort: score === question.marks ? "Correct order." : correctCount ? "Some parts are in the right place." : "Track the sequence more carefully across the text.",
+          feedbackLong: question.explanation || "",
+          evidenceSnippets
+        });
+      }
+      return makeResult(question, 0, question.marks, { misconception: "misread_detail", feedbackShort: "This question type is not available.", feedbackLong: "" });
+    }
+
+    function outcomeQuality(result, attempts, supportLevel) {
+      const attemptsNum = attempts || 1;
+      const support = supportLevel || 0;
+      if (result.correct) {
+        if (support >= 2) return 3;
+        if (support === 1) return attemptsNum === 1 ? 3.4 : 3;
+        if (attemptsNum === 1) return 5;
+        if (attemptsNum === 2) return 3.7;
+        return 3.2;
+      }
+      if (result.score > 0) return 1.5;
+      return 0;
+    }
+    function updateNodeFromQuality(node, quality) {
+      node.attempts += 1;
+      node.lastSeenAt = isoNow();
+      const now = nowMs();
+      if (quality >= 4.8) {
+        node.correct += 1; node.correctStreak += 1;
+        node.strength = clamp(node.strength + 0.13, 0.05, 0.99);
+        node.intervalDays = node.intervalDays ? Math.min(45, node.intervalDays * 2) : 1;
+        node.dueAt = now + node.intervalDays * 86400000;
+      } else if (quality >= 4) {
+        node.correct += 1; node.correctStreak += 1;
+        node.strength = clamp(node.strength + 0.09, 0.05, 0.98);
+        node.intervalDays = node.intervalDays ? Math.min(28, node.intervalDays * 1.7) : 1;
+        node.dueAt = now + node.intervalDays * 86400000;
+      } else if (quality >= 3) {
+        node.correct += 1; node.correctStreak = Math.max(1, node.correctStreak);
+        node.strength = clamp(node.strength + 0.04, 0.05, 0.95);
+        node.intervalDays = node.intervalDays ? Math.max(0.25, node.intervalDays * 0.9) : 0.25;
+        node.dueAt = now + Math.max(6 * 3600000, node.intervalDays * 86400000);
+      } else {
+        node.wrong += 1; node.correctStreak = 0;
+        node.strength = clamp(node.strength - (quality > 0 ? 0.08 : 0.15), 0.02, 0.95);
+        node.intervalDays = Math.max(0.04, (node.intervalDays || 0.2) * 0.45);
+        node.dueAt = now + (quality > 0 ? 20 : 12) * 60000;
+        node.lastWrongAt = isoNow();
+      }
+    }
+    function enqueueRetry(questionRef, result) {
+      const learner = currentLearner();
+      const dueAt = nowMs() + (result.correct ? 6 * 3600000 : 15 * 60000);
+      learner.retryQueue.push({ questionId: questionRef.question.id, passageId: questionRef.passageId, skillId: questionRef.question.skill, dueAt, reason: result.correct ? "supported-or-shaky" : "recent-miss" });
+      learner.retryQueue = learner.retryQueue.sort((a,b) => a.dueAt - b.dueAt).slice(-400);
+    }
+    function applyQuestionUpdate(questionRef, result, attempts, supportLevel, response, mode, durationSec) {
+      const quality = outcomeQuality(result, attempts, supportLevel);
+      const question = questionRef.question;
+      const passage = getPassageMap()[questionRef.passageId];
+      updateStreak();
+      updateNodeFromQuality(ensureSkillNode(question.skill), quality);
+      updateNodeFromQuality(ensurePassageNode(questionRef.passageId), quality);
+      updateNodeFromQuality(ensureQuestionNode(question.id), quality);
+      updateNodeFromQuality(ensureGenreNode(passage.genre), quality);
+      updateNodeFromQuality(ensureQTypeNode(question.type), quality);
+      if (result.misconception) bumpMisconception(result.misconception);
+      if (!result.correct || quality < 4) enqueueRetry(questionRef, result);
+      recordEvent({
+        timestamp: isoNow(), passageId: questionRef.passageId, questionId: question.id, title: passage.title,
+        genre: passage.genre, qType: question.type, skill: question.skill, score: result.score, maxScore: result.maxScore,
+        correct: result.correct, attempts, supportLevel, mode, durationSec: durationSec || 0, response
+      });
+      saveState();
+    }
+    function getRecentEvents(limit = 20) { return currentLearner().events.slice(-limit).reverse(); }
+    function recentPassagePenalty(passageId) { return getRecentEvents(8).filter(e => e.passageId === passageId).length; }
+    function recentQuestionPenalty(questionId) { return getRecentEvents(12).filter(e => e.questionId === questionId).length; }
+
+    function modeDescription(mode) {
+      return ({
+        guided: "Shorter passages, faster feedback, and optional scaffolded nudges after a real first attempt.",
+        core: "Full passage practice with mixed questions and careful feedback after effort.",
+        smart: "Adaptive mixed review across weak domains, overdue items, missed question types and under-used passage types.",
+        evidence: "Answer and prove it from the text. This mode leans hard on inference-plus-evidence habits.",
+        vocab: "Meaning from context, not from memorised definitions.",
+        inference: "Inference, evidence and author effect questions mixed together.",
+        stamina: "Longer unseen passages with time awareness and delayed section feedback.",
+        test: "A one-hour original paper with three texts and delayed feedback, close to KS2 SATs conditions where practical."
+      })[mode] || "";
+    }
+    function relevantQuestionsForMode(passage, mode, skillFilter) {
+      let qs = (passage.questions || []).slice();
+      if (skillFilter) qs = qs.filter(q => q.skill === skillFilter);
+      if (mode === "guided") qs = qs.filter(q => passage.difficulty <= 3);
+      if (mode === "evidence") qs = qs.filter(q => q.type === "evidenceShort" || q.skill === "2d" || q.skill === "2g" || q.skill === "2h");
+      if (mode === "vocab") qs = qs.filter(q => q.skill === "2a");
+      if (mode === "inference") qs = qs.filter(q => ["2d","2g","2h","2f"].includes(q.skill));
+      if (mode === "stamina") qs = passage.isLong ? qs : [];
+      if (!qs.length && skillFilter) qs = (passage.questions || []).slice();
+      return qs;
+    }
+    function takeDueRetryEntry(skillFilter, genreFilter) {
+      const learner = currentLearner();
+      const passageMap = getPassageMap();
+      const now = nowMs();
+      const due = learner.retryQueue.filter(entry => {
+        if (entry.dueAt > now) return false;
+        if (skillFilter && entry.skillId !== skillFilter) return false;
+        if (genreFilter) {
+          const passage = passageMap[entry.passageId];
+          if (!passage || passage.genre !== genreFilter) return false;
+        }
+        return true;
+      }).sort((a,b) => a.dueAt - b.dueAt);
+      if (!due.length) return null;
+      const entry = due[0];
+      const idx = learner.retryQueue.indexOf(entry);
+      if (idx >= 0) learner.retryQueue.splice(idx, 1);
+      return entry;
+    }
+    function chooseWeightedPassage(mode, skillFilter, genreFilter, difficultyFilter, preferQuestionId) {
+      const learner = currentLearner();
+      const passages = getAllPassages().filter(p => {
+        if (mode === "test") return false;
+        if (genreFilter && p.genre !== genreFilter) return false;
+        if (difficultyFilter && Number(p.difficulty) !== Number(difficultyFilter)) return false;
+        if (mode === "guided" && p.difficulty > 3) return false;
+        if (mode === "stamina" && !p.isLong) return false;
+        return relevantQuestionsForMode(p, mode, skillFilter).length > 0;
+      });
+      if (!passages.length) return null;
+      const weighted = passages.map(p => {
+        const relevant = relevantQuestionsForMode(p, mode, skillFilter);
+        const pNode = learner.passages[p.id] || defaultNode();
+        const gNode = learner.genres[p.genre] || defaultNode();
+        let weight = 1 + (1 - pNode.strength) * 2 + (1 - gNode.strength) * 1.4;
+        if (pNode.attempts === 0) weight += 0.8;
+        if (gNode.attempts < 4) weight += 0.6;
+        const qWeights = relevant.map(q => {
+          const qNode = learner.questions[q.id] || defaultNode();
+          const sNode = learner.skills[q.skill] || defaultNode();
+          const tNode = learner.qtypes[q.type] || defaultNode();
+          let qw = (1 - qNode.strength) * 3 + (1 - sNode.strength) * 3 + (1 - tNode.strength) * 1.2;
+          if (qNode.attempts === 0) qw += 0.5;
+          if (qNode.attempts && (qNode.dueAt || 0) <= nowMs()) qw += 2;
+          if (qNode.lastWrongAt && (Date.now() - new Date(qNode.lastWrongAt).getTime()) < 3*86400000) qw += 1.8;
+          qw *= Math.pow(0.65, recentQuestionPenalty(q.id));
+          if (preferQuestionId && q.id === preferQuestionId) qw += 5;
+          return qw;
+        });
+        weight += average(qWeights);
+        weight *= Math.pow(0.6, recentPassagePenalty(p.id));
+        return [p, Math.max(0.05, weight)];
+      });
+      let total = weighted.reduce((sum, pair) => sum + pair[1], 0);
+      let roll = Math.random() * total;
+      for (const [passage, weight] of weighted) { roll -= weight; if (roll <= 0) return passage; }
+      return weighted[weighted.length - 1][0];
+    }
+    function chooseQuestionIdsForPassage(passage, mode, skillFilter, forcedQuestionId) {
+      const learner = currentLearner();
+      let relevant = relevantQuestionsForMode(passage, mode, skillFilter);
+      if (!relevant.length) relevant = (passage.questions || []).slice();
+      if (mode === "guided") return relevant.slice(0, Math.min(4, relevant.length)).map(q => q.id);
+      if (mode === "core") return relevant.slice(0, Math.min(6, relevant.length)).map(q => q.id);
+      if (mode === "stamina") return relevant.map(q => q.id);
+      const ranked = relevant.slice().sort((a,b) => {
+        const aNode = learner.questions[a.id] || defaultNode();
+        const bNode = learner.questions[b.id] || defaultNode();
+        const aSkill = learner.skills[a.skill] || defaultNode();
+        const bSkill = learner.skills[b.skill] || defaultNode();
+        let aScore = (1 - aNode.strength) * 3 + (1 - aSkill.strength) * 3 + ((aNode.dueAt || 0) <= nowMs() ? 2 : 0);
+        let bScore = (1 - bNode.strength) * 3 + (1 - bSkill.strength) * 3 + ((bNode.dueAt || 0) <= nowMs() ? 2 : 0);
+        if (forcedQuestionId === a.id) aScore += 5;
+        if (forcedQuestionId === b.id) bScore += 5;
+        return bScore - aScore;
+      });
+      const limit = mode === "smart" ? 3 : 4;
+      const selected = ranked.slice(0, Math.min(limit, ranked.length)).map(q => q.id);
+      if (forcedQuestionId && !selected.includes(forcedQuestionId)) selected.unshift(forcedQuestionId);
+      const orderMap = {}; passage.questions.forEach((q, idx) => { orderMap[q.id] = idx; });
+      return Array.from(new Set(selected)).sort((a,b) => orderMap[a] - orderMap[b]);
+    }
+
+    function buildPracticeSession(mode, skillFilter, genreFilter, difficultyFilter, viewMode) {
+      const retry = mode === "smart" || mode === "evidence" || mode === "vocab" || mode === "inference" ? takeDueRetryEntry(skillFilter, genreFilter) : null;
+      const passage = retry ? (getPassageMap()[retry.passageId] || chooseWeightedPassage(mode, skillFilter, genreFilter, difficultyFilter, retry.questionId))
+                            : chooseWeightedPassage(mode, skillFilter, genreFilter, difficultyFilter, null);
+      if (!passage) return null;
+      const questionIds = chooseQuestionIdsForPassage(passage, mode, skillFilter, retry ? retry.questionId : null);
+      return {
+        id: uid(), mode, strict: false,
+        delayedFeedback: mode === "stamina" || viewMode === "list",
+        viewMode, startedAt: nowMs(), marked: false, currentSectionIndex: 0, currentQuestionIndex: 0,
+        sections: [{ passageId: passage.id, questionIds, responses: {}, results: {}, attempts: {}, support: {}, firstWrong: {}, startedAtByQuestion: {} }]
+      };
+    }
+    function buildTestSession(viewMode) {
+      const paper = TEST_PAPERS[0];
+      return {
+        id: uid(), mode: "test", strict: true, delayedFeedback: true, viewMode, startedAt: nowMs(),
+        marked: false, paperId: paper.id, timeLimitMin: paper.timeLimitMin, currentSectionIndex: 0, currentQuestionIndex: 0,
+        sections: paper.sections.map(sec => ({ passageId: sec.passageId, questionIds: sec.questionIds.slice(), responses: {}, results: {}, attempts: {}, support: {}, firstWrong: {}, startedAtByQuestion: {} }))
+      };
+    }
+    function startSession() {
+      const mode = document.getElementById("modeSelect").value;
+      const skillFilter = document.getElementById("skillSelect").value || "";
+      const genreFilter = document.getElementById("genreSelect").value || "";
+      const difficultyFilter = document.getElementById("difficultySelect").value || "";
+      const viewMode = document.getElementById("viewModeSelect").value || "one";
+      ui.session = mode === "test" ? buildTestSession(viewMode) : buildPracticeSession(mode, skillFilter, genreFilter, difficultyFilter, viewMode);
+      if (!ui.session) { alert("No matching passage found for that combination yet. Try Mixed or Adaptive."); return; }
+      renderPracticeWorkspace();
+      renderSessionMeta();
+    }
+
+    function currentSection() { return ui.session ? ui.session.sections[ui.session.currentSectionIndex] : null; }
+    function currentQuestionId() { const section = currentSection(); return section ? section.questionIds[ui.session.currentQuestionIndex] : null; }
+    function getQuestionRef(questionId) { return getQuestionRefMap()[questionId]; }
+    function getQuestion(questionId) { const ref = getQuestionRef(questionId); return ref ? ref.question : null; }
+    function getPassageForCurrentSection() { const section = currentSection(); return section ? getPassageMap()[section.passageId] : null; }
+    function totalAvailableMarks(session = ui.session) {
+      if (!session) return 0;
+      let total = 0;
+      session.sections.forEach(sec => sec.questionIds.forEach(qid => { const q = getQuestion(qid); if (q) total += q.marks; }));
+      return total;
+    }
+    function currentScore(session = ui.session) {
+      if (!session) return 0;
+      let total = 0;
+      session.sections.forEach(sec => Object.values(sec.results || {}).forEach(r => { total += r.score || 0; }));
+      return total;
+    }
+    function markedCount(session = ui.session) {
+      if (!session) return 0;
+      let total = 0;
+      session.sections.forEach(sec => { total += Object.keys(sec.results || {}).length; });
+      return total;
+    }
+    function answeredCount(session = ui.session) {
+      if (!session) return 0;
+      let total = 0;
+      session.sections.forEach(sec => sec.questionIds.forEach(qid => { if (isResponseNonEmpty(sec.responses[qid])) total += 1; }));
+      return total;
+    }
+    function independencePct(session = ui.session) {
+      if (!session) return 0;
+      const events = [];
+      session.sections.forEach(sec => sec.questionIds.forEach(qid => {
+        const res = sec.results[qid];
+        if (res) events.push(outcomeQuality(res, sec.attempts[qid] || 1, sec.support[qid] || 0) / 5);
+      }));
+      return events.length ? Math.round(average(events) * 100) : 0;
+    }
+    function maybeTimerTick() {
+      let label = "--:--";
+      if (ui.session) {
+        if (ui.session.mode === "test") {
+          const limitMs = (ui.session.timeLimitMin || 60) * 60000;
+          const remaining = Math.max(0, limitMs - (nowMs() - ui.session.startedAt));
+          label = formatMsClock(remaining);
+          if (remaining <= 0 && !ui.session.marked) markWholeSession(true);
+        } else {
+          label = formatMsClock(nowMs() - ui.session.startedAt);
+        }
+      }
+      document.getElementById("sessionTimer").textContent = label;
+    }
+
+    function renderHeader() {
+      const learner = currentLearner();
+      const select = document.getElementById("currentLearnerSelect");
+      select.innerHTML = Object.values(state.learners).map(l => `<option value="${l.id}" ${l.id === state.currentLearnerId ? "selected" : ""}>${escapeHtml(l.name)}</option>`).join("");
+      document.getElementById("dueBadge").textContent = `${learnerDueCount()} due`;
+      document.getElementById("streakBadge").textContent = `${learner.streakDays || 0}-day streak`;
+    }
+    function renderTabs() {
+      document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.remove("active"));
+      document.querySelectorAll("#tabButtons button").forEach(btn => btn.classList.remove("active"));
+      document.querySelector(`#tab-${ui.activeTab}`).classList.add("active");
+      document.querySelector(`#tabButtons button[data-tab="${ui.activeTab}"]`).classList.add("active");
+    }
+    function renderSkillSelect() {
+      const options = [`<option value="">Mixed</option>`].concat(Object.entries(SKILLS).map(([id, skill]) => `<option value="${id}">${escapeHtml(skill.name)}</option>`));
+      document.getElementById("skillSelect").innerHTML = options.join("");
+    }
+    function renderSettings() {
+      const learner = currentLearner();
+      document.getElementById("scaffoldModeSelect").value = learner.settings.scaffoldMode ? "yes" : "no";
+      document.getElementById("showParagraphNumbersSelect").value = learner.settings.showParagraphNumbers ? "yes" : "no";
+      document.getElementById("enableTtsSelect").value = learner.settings.enableTTS ? "yes" : "no";
+      document.getElementById("speechRateInput").value = learner.settings.speechRate || 1;
+      const ai = state.globalSettings.ai;
+      document.getElementById("aiProviderSelect").value = ai.provider || "off";
+      document.getElementById("aiModelInput").value = ai.model || "";
+      document.getElementById("rememberAiKey").value = ai.rememberKey ? "yes" : "no";
+      document.getElementById("aiKeyInput").value = getAIKey();
+    }
+    function renderProfiles() {
+      const learnerCards = Object.values(state.learners).map(l => {
+        const count = l.events ? l.events.length : 0;
+        const current = l.id === state.currentLearnerId;
+        return `<div class="profile-card"><div class="wrap" style="justify-content:space-between;align-items:center;"><div><strong>${escapeHtml(l.name)}</strong><div class="tiny">${count} logged questions</div></div><div class="chip ${current ? "good" : "neutral"}">${current ? "Current" : "Saved profile"}</div></div></div>`;
+      }).join("");
+      document.getElementById("learnerList").innerHTML = learnerCards || "<p class='subtle'>No learners yet.</p>";
+    }
+
+    function renderSessionMeta() {
+      const mode = document.getElementById("modeSelect").value;
+      document.getElementById("modeNote").textContent = modeDescription(mode);
+      if (!ui.session) {
+        document.getElementById("sessionMarked").textContent = "0";
+        document.getElementById("sessionScore").textContent = "0/0";
+        document.getElementById("sessionIndependence").textContent = "0%";
+        document.getElementById("sessionTimer").textContent = "--:--";
+        document.getElementById("sessionSummary").textContent = "No active session yet.";
+        document.getElementById("sessionChips").innerHTML = "";
+        return;
+      }
+      document.getElementById("sessionMarked").textContent = ui.session.delayedFeedback && !ui.session.marked ? answeredCount(ui.session) : markedCount(ui.session);
+      document.getElementById("sessionScore").textContent = `${currentScore(ui.session)}/${totalAvailableMarks(ui.session)}`;
+      document.getElementById("sessionIndependence").textContent = `${independencePct(ui.session)}%`;
+      maybeTimerTick();
+      const chips = [];
+      chips.push(`<span class="chip neutral">${escapeHtml(modeDescription(ui.session.mode).split(".")[0])}</span>`);
+      chips.push(`<span class="chip neutral">${ui.session.viewMode === "list" ? "Full question list" : "One question at a time"}</span>`);
+      if (ui.session.mode === "test") chips.push(`<span class="chip warn">60-minute strict paper</span>`);
+      if (ui.session.mode === "stamina") chips.push(`<span class="chip warn">Long passage</span>`);
+      if (ui.session.mode === "smart") chips.push(`<span class="chip warn">Adaptive review</span>`);
+      document.getElementById("sessionChips").innerHTML = chips.join("");
+      const totalQ = ui.session.sections.reduce((sum, sec) => sum + sec.questionIds.length, 0);
+      const answered = answeredCount(ui.session);
+      document.getElementById("sessionSummary").textContent = ui.session.mode === "test"
+        ? (ui.session.marked
+            ? `Original Paper A marked. Review each text and question to see feedback and model answers.`
+            : `Original Paper A in progress. ${answered}/${totalQ} responses saved. Feedback stays hidden until the end.`)
+        : `${labelForMode(ui.session.mode)} in progress. ${markedCount(ui.session)}/${totalQ} questions marked so far.`;
+    }
+
+    function labelForMode(mode) {
+      return ({
+        guided:"Guided practice",
+        core:"Core practice",
+        smart:"Smart review",
+        evidence:"Evidence hunt",
+        vocab:"Vocabulary in context",
+        inference:"Inference lab",
+        stamina:"Stamina builder",
+        test:"True SATs-style paper"
+      })[mode] || mode;
+    }
+    function sectionTitle(section, index) {
+      const p = getPassageMap()[section.passageId];
+      return ui.session.mode === "test" ? `Text ${index + 1}` : p.title;
+    }
+
+    function renderPassage() {
+      const section = currentSection();
+      const passage = getPassageForCurrentSection();
+      if (!section || !passage) {
+        document.getElementById("passageTitle").textContent = "Choose a mode and start.";
+        document.getElementById("passageMeta").innerHTML = "";
+        document.getElementById("passageBody").innerHTML = `<p class="subtle">The passage will appear here.</p>`;
+        document.getElementById("sectionNav").classList.add("hidden");
+        document.getElementById("readAloudBtn").classList.add("hidden");
+        return;
+      }
+      document.getElementById("passageTitle").textContent = passage.title;
+      const meta = [
+        `<span class="chip neutral">${escapeHtml(passage.genre)}</span>`,
+        `<span class="chip neutral">Difficulty ${passage.difficulty}</span>`,
+        `<span class="chip neutral">${wordCountFromPassage(passage)} words</span>`
+      ];
+      document.getElementById("passageMeta").innerHTML = meta.join("");
+      const learner = currentLearner();
+      const showNums = learner.settings.showParagraphNumbers && ui.session.mode !== "test";
+      document.getElementById("passageBody").innerHTML = passage.blocks.map((block, idx) => {
+        const num = showNums ? `<span class="para-num">${idx+1}</span>` : "";
+        if (passage.genre === "poetry") return `<div class="poem-block">${num}${nl2br(block)}</div>`;
+        return `<p>${num}${escapeHtml(block)}</p>`;
+      }).join("");
+      const sectionNav = document.getElementById("sectionNav");
+      if (ui.session.sections.length > 1) {
+        sectionNav.classList.remove("hidden");
+        sectionNav.innerHTML = ui.session.sections.map((sec, idx) => {
+          const done = sec.questionIds.every(qid => !!sec.results[qid] || (ui.session.mode === "test" && isResponseNonEmpty(sec.responses[qid])));
+          const classes = [idx === ui.session.currentSectionIndex ? "current" : "", done ? "done" : ""].join(" ").trim();
+          return `<button class="${classes}" data-section-index="${idx}">${sectionTitle(sec, idx)}</button>`;
+        }).join("");
+      } else {
+        sectionNav.classList.add("hidden");
+        sectionNav.innerHTML = "";
+      }
+      document.getElementById("readAloudBtn").classList.toggle("hidden", !learner.settings.enableTTS);
+    }
+
+    function questionStatusClass(section, qid) {
+      const res = section.results[qid];
+      if (res) return res.correct ? "status-correct" : (res.score > 0 ? "status-review" : "status-wrong");
+      if (isResponseNonEmpty(section.responses[qid])) return "status-saved";
+      return "status-blank";
+    }
+    function questionStatusText(section, qid) {
+      const res = section.results[qid];
+      if (res) return res.correct ? "Marked correct" : (res.score > 0 ? "Marked review" : "Marked wrong");
+      if (isResponseNonEmpty(section.responses[qid])) return "Saved";
+      return "Blank";
+    }
+    function renderQuestionNav() {
+      const nav = document.getElementById("questionNav");
+      const section = currentSection();
+      if (!ui.session || !section || ui.session.viewMode !== "one") {
+        nav.classList.add("hidden");
+        nav.innerHTML = "";
+        return;
+      }
+      nav.classList.remove("hidden");
+      nav.innerHTML = section.questionIds.map((qid, idx) => {
+        const statusClass = questionStatusClass(section, qid).replace("status-","");
+        const cls = [idx === ui.session.currentQuestionIndex ? "current" : "", statusClass].join(" ").trim();
+        return `<button class="${cls}" data-question-index="${idx}">${idx+1}</button>`;
+      }).join("");
+    }
+
+    function renderInputForQuestion(question, response, disabled) {
+      response = response || {};
+      const disabledAttr = disabled ? "disabled" : "";
+      if (question.type === "mcq") {
+        return `<fieldset class="answer-box"><legend>Your answer</legend>${
+          (question.options || []).map((opt, idx) => `<label class="option-row"><input type="radio" name="q_${question.id}_mcq" value="${idx}" ${String(response.answer) === String(idx) ? "checked" : ""} ${disabledAttr}/><span>${escapeHtml(opt)}</span></label>`).join("")
+        }</fieldset>`;
+      }
+      if (question.type === "multiSelect") {
+        const selected = new Set((response.answer || []).map(String));
+        return `<fieldset class="answer-box"><legend>Choose all that apply</legend>${
+          (question.options || []).map((opt, idx) => `<label class="option-row"><input type="checkbox" name="q_${question.id}_ms" value="${idx}" ${selected.has(String(idx)) ? "checked" : ""} ${disabledAttr}/><span>${escapeHtml(opt)}</span></label>`).join("")
+        }</fieldset>`;
+      }
+      if (question.type === "short") {
+        return `<div class="answer-box"><label for="q_${question.id}_answer">Your answer</label><input id="q_${question.id}_answer" type="text" value="${escapeHtml(response.answer || "")}" ${disabledAttr}/></div>`;
+      }
+      if (question.type === "evidenceShort") {
+        return `<div class="answer-grid">
+          <div class="answer-box"><label for="q_${question.id}_answer">Your answer</label><input id="q_${question.id}_answer" type="text" value="${escapeHtml(response.answer || "")}" ${disabledAttr}/></div>
+          <div class="answer-box"><label for="q_${question.id}_evidence">Evidence from the text</label><textarea id="q_${question.id}_evidence" ${disabledAttr}>${escapeHtml(response.evidence || "")}</textarea></div>
+        </div>`;
+      }
+      if (question.type === "open") {
+        return `<div class="answer-box"><label for="q_${question.id}_answer">Your written answer</label><textarea id="q_${question.id}_answer" ${disabledAttr}>${escapeHtml(response.answer || "")}</textarea></div>`;
+      }
+      if (question.type === "match") {
+        return `<div class="answer-box"><table class="small-table"><thead><tr><th>Detail</th><th>Best match</th></tr></thead><tbody>${
+          (question.prompts || []).map((prompt, idx) => `<tr><td>${escapeHtml(prompt)}</td><td><select id="q_${question.id}_m_${idx}" ${disabledAttr}><option value="">Choose</option>${
+            (question.options || []).map((opt, optIdx) => `<option value="${optIdx}" ${String((response.map||{})[idx]) === String(optIdx) ? "selected" : ""}>${escapeHtml(opt)}</option>`).join("")
+          }</select></td></tr>`).join("")
+        }</tbody></table></div>`;
+      }
+      if (question.type === "order") {
+        return `<div class="answer-box"><table class="small-table"><thead><tr><th>Event</th><th>Position</th></tr></thead><tbody>${
+          (question.items || []).map((item, idx) => `<tr><td>${escapeHtml(item)}</td><td><select id="q_${question.id}_o_${idx}" ${disabledAttr}><option value="">Choose</option>${
+            (question.items || []).map((_, posIdx) => `<option value="${posIdx+1}" ${String((response.order||{})[idx]) === String(posIdx+1) ? "selected" : ""}>${posIdx+1}</option>`).join("")
+          }</select></td></tr>`).join("")
+        }</tbody></table></div>`;
+      }
+      return "";
+    }
+
+    function feedbackHtml(question, result, finalStage, section, qid) {
+      const tone = result.correct ? "good" : (result.score > 0 ? "warn" : "bad");
+      const learner = currentLearner();
+      const hint1 = question.hint || MINIMAL_HINTS[question.skill];
+      const hint2 = STRONG_HINTS[question.skill];
+      const reread = question.reread && question.reread.length ? `Reread ${question.reread.map(n => `paragraph ${n}`).join(" and ")}.` : "";
+      if (!finalStage) {
+        return `<div class="feedback ${tone}"><h3>${result.score > 0 ? "Partly right" : "Not quite yet"}</h3><p>${escapeHtml(hint1)}</p>${reread ? `<p><strong>Reread cue:</strong> ${escapeHtml(reread)}</p>` : ""}${(section.support[qid] || 0) >= 1 ? `<p><strong>Stronger help:</strong> ${escapeHtml(hint2)}</p>` : ""}</div>`;
+      }
+      const evidenceList = result.evidenceSnippets && result.evidenceSnippets.length ? `<ul>${result.evidenceSnippets.map(sn => `<li>${escapeHtml(sn)}</li>`).join("")}</ul>` : "";
+      const matchedList = result.matched && result.matched.length ? `<p><strong>You included:</strong> ${escapeHtml(result.matched.join("; "))}</p>` : "";
+      return `<div class="feedback ${tone}">
+        <h3>${result.correct ? "Correct" : result.score > 0 ? "Partly right" : "Review this answer"}</h3>
+        <p>${escapeHtml(result.feedbackLong || question.explanation || "")}</p>
+        ${matchedList}
+        <div class="worked">
+          <strong>Model answer</strong>
+          <p>${escapeHtml(result.modelAnswer || question.modelAnswer || "")}</p>
+          ${evidenceList ? `<div style="margin-top:10px;"><strong>Evidence that mattered</strong>${evidenceList}</div>` : ""}
+          ${!result.correct && learner.settings.scaffoldMode ? `<p class="tiny" style="margin-top:10px;"><strong>Teaching frame:</strong> ${escapeHtml(STRONG_HINTS[question.skill])}</p>` : ""}
+        </div>
+      </div>`;
+    }
+
+    function renderSingleQuestion() {
+      const section = currentSection();
+      const qid = currentQuestionId();
+      const question = getQuestion(qid);
+      if (!question) {
+        document.getElementById("questionPane").innerHTML = `<div class="question-card"><p>No question loaded.</p></div>`;
+        document.getElementById("questionActions").innerHTML = "";
+        document.getElementById("feedbackArea").innerHTML = "";
+        return;
+      }
+      if (!section.startedAtByQuestion[qid]) section.startedAtByQuestion[qid] = nowMs();
+      const result = section.results[qid];
+      const response = section.responses[qid] || {};
+      const disabled = !!result;
+      const learner = currentLearner();
+      const skillChip = learner.settings.scaffoldMode && !result ? `<span class="chip neutral">${escapeHtml(SKILLS[question.skill].name)}</span>` : (result ? `<span class="chip neutral">${escapeHtml(SKILLS[question.skill].name)}</span>` : "");
+      document.getElementById("questionMetaLine").innerHTML = `
+        <span class="status-pill ${questionStatusClass(section, qid)}">${questionStatusText(section, qid)}</span>
+        <span class="chip neutral">${question.marks} mark${question.marks === 1 ? "" : "s"}</span>
+        <span class="chip neutral">${escapeHtml(QUESTION_TYPE_LABELS[question.type] || question.type)}</span>
+        ${skillChip}
+      `;
+      document.getElementById("questionPane").innerHTML = `<div class="question-card"><div class="question-top"><strong>Question ${ui.session.currentQuestionIndex + 1} of ${section.questionIds.length}</strong></div><div class="question-stem"><p>${escapeHtml(question.stem)}</p></div>${renderInputForQuestion(question, response, disabled)}</div>`;
+      const actions = [];
+      if (ui.session.mode === "test" && !ui.session.marked) {
+        actions.push(`<button class="ghost" id="prevQuestionBtn" ${ui.session.currentQuestionIndex === 0 && ui.session.currentSectionIndex === 0 ? "disabled" : ""}>Previous</button>`);
+        actions.push(`<button class="secondary" id="saveNextBtn">${(ui.session.currentQuestionIndex === section.questionIds.length - 1 && ui.session.currentSectionIndex === ui.session.sections.length - 1) ? "Save response" : "Save and next"}</button>`);
+        actions.push(`<button class="warn" id="markPaperBtn">Mark paper now</button>`);
+      } else if (ui.session.delayedFeedback && !ui.session.marked) {
+        actions.push(`<button class="ghost" id="prevQuestionBtn" ${ui.session.currentQuestionIndex === 0 ? "disabled" : ""}>Previous</button>`);
+        actions.push(`<button class="secondary" id="saveNextBtn">${ui.session.currentQuestionIndex === section.questionIds.length - 1 ? "Save response" : "Save and next"}</button>`);
+        actions.push(`<button class="warn" id="markSectionBtn">Mark this section</button>`);
+      } else if (result) {
+        actions.push(`<button class="ghost" id="prevQuestionBtn" ${ui.session.currentQuestionIndex === 0 ? "disabled" : ""}>Previous</button>`);
+        actions.push(`<button class="secondary" id="nextQuestionBtn" ${ui.session.currentQuestionIndex === section.questionIds.length - 1 ? "disabled" : ""}>Next question</button>`);
+        if (aiEnabled()) {
+          actions.push(`<button class="good" id="aiExplainBtn">AI explain this</button>`);
+          if (question.type === "open" || question.type === "evidenceShort") actions.push(`<button class="good" id="aiMarkBtn">AI second opinion</button>`);
+        }
+      } else if (section.firstWrong[qid] && (section.support[qid] || 0) < 2) {
+        actions.push(`<button class="primary" id="submitAnswerBtn">Submit again</button>`);
+        actions.push(`<button class="warn" id="strongerHelpBtn">Show stronger help</button>`);
+        actions.push(`<button class="secondary" id="revealAnswerBtn">Reveal answer</button>`);
+        actions.push(`<button class="ghost" id="prevQuestionBtn" ${ui.session.currentQuestionIndex === 0 ? "disabled" : ""}>Previous</button>`);
+      } else {
+        actions.push(`<button class="primary" id="submitAnswerBtn">Submit answer</button>`);
+        actions.push(`<button class="ghost" id="prevQuestionBtn" ${ui.session.currentQuestionIndex === 0 ? "disabled" : ""}>Previous</button>`);
+        actions.push(`<button class="ghost" id="nextQuestionBtn" ${ui.session.currentQuestionIndex === section.questionIds.length - 1 ? "disabled" : ""}>Next question</button>`);
+      }
+      document.getElementById("questionActions").innerHTML = actions.join("");
+      if (result) document.getElementById("feedbackArea").innerHTML = feedbackHtml(question, result, true, section, qid);
+      else if (section.firstWrong[qid]) document.getElementById("feedbackArea").innerHTML = feedbackHtml(question, section.firstWrong[qid], false, section, qid);
+      else document.getElementById("feedbackArea").innerHTML = "";
+    }
+
+    function renderListQuestions() {
+      const section = currentSection();
+      if (!section) return;
+      document.getElementById("questionMetaLine").innerHTML = `<span class="status-pill status-saved">${ui.session.marked || section.questionIds.every(qid => !!section.results[qid]) ? "Marked section" : "Answer whole section"}</span><span class="chip neutral">${section.questionIds.length} questions</span>`;
+      document.getElementById("questionPane").innerHTML = section.questionIds.map((qid, idx) => {
+        const question = getQuestion(qid);
+        const response = section.responses[qid] || {};
+        const result = section.results[qid];
+        return `<div class="question-card"><div class="question-top"><strong>Question ${idx+1}</strong><span class="chip neutral">${question.marks} mark${question.marks === 1 ? "" : "s"}</span></div><div class="question-stem"><p>${escapeHtml(question.stem)}</p></div>${renderInputForQuestion(question, response, !!result)}${result ? feedbackHtml(question, result, true, section, qid) : ""}</div>`;
+      }).join("");
+      const actions = [];
+      if (ui.session.mode === "test" && !ui.session.marked) actions.push(`<button class="warn" id="markPaperBtn">Mark paper now</button>`);
+      else if (!ui.session.marked) actions.push(`<button class="warn" id="markSectionBtn">${ui.session.delayedFeedback ? "Mark this section" : "Mark answered questions"}</button>`);
+      if (aiEnabled() && ui.session.marked) actions.push(`<button class="good" id="aiExplainBtn">AI section summary</button>`);
+      document.getElementById("questionActions").innerHTML = actions.join("");
+      document.getElementById("feedbackArea").innerHTML = "";
+    }
+
+    function renderPracticeWorkspace() {
+      renderPassage();
+      renderQuestionNav();
+      if (!ui.session) return;
+      if (ui.session.viewMode === "one") renderSingleQuestion();
+      else renderListQuestions();
+      renderSessionMeta();
+    }
+
+    function collectResponseForQuestion(question) {
+      if (!question) return {};
+      if (question.type === "mcq") {
+        const checked = document.querySelector(`input[name="q_${question.id}_mcq"]:checked`);
+        return { answer: checked ? checked.value : "" };
+      }
+      if (question.type === "multiSelect") {
+        const selected = Array.from(document.querySelectorAll(`input[name="q_${question.id}_ms"]:checked`)).map(el => el.value);
+        return { answer: selected };
+      }
+      if (question.type === "short") {
+        const el = document.getElementById(`q_${question.id}_answer`);
+        return { answer: el ? el.value : "" };
+      }
+      if (question.type === "evidenceShort") {
+        const answerEl = document.getElementById(`q_${question.id}_answer`);
+        const evidenceEl = document.getElementById(`q_${question.id}_evidence`);
+        return { answer: answerEl ? answerEl.value : "", evidence: evidenceEl ? evidenceEl.value : "" };
+      }
+      if (question.type === "open") {
+        const el = document.getElementById(`q_${question.id}_answer`);
+        return { answer: el ? el.value : "" };
+      }
+      if (question.type === "match") {
+        const map = {};
+        (question.prompts || []).forEach((_, idx) => { const el = document.getElementById(`q_${question.id}_m_${idx}`); map[idx] = el ? el.value : ""; });
+        return { map };
+      }
+      if (question.type === "order") {
+        const order = {};
+        (question.items || []).forEach((_, idx) => { const el = document.getElementById(`q_${question.id}_o_${idx}`); order[idx] = el ? el.value : ""; });
+        return { order };
+      }
+      return {};
+    }
+    function saveCurrentDraft() {
+      if (!ui.session) return;
+      const section = currentSection();
+      if (!section) return;
+      if (ui.session.viewMode === "one") {
+        const qid = currentQuestionId();
+        const question = getQuestion(qid);
+        section.responses[qid] = collectResponseForQuestion(question);
+      } else {
+        section.questionIds.forEach(qid => { const question = getQuestion(qid); section.responses[qid] = collectResponseForQuestion(question); });
+      }
+    }
+
+    function finaliseQuestion(section, qid, result) {
+      const questionRef = getQuestionRef(qid);
+      section.results[qid] = result;
+      const response = section.responses[qid] || {};
+      const attempts = section.attempts[qid] || 1;
+      const supportLevel = section.support[qid] || 0;
+      const startedAt = section.startedAtByQuestion[qid] || ui.session.startedAt;
+      const durationSec = Math.round((nowMs() - startedAt) / 1000);
+      applyQuestionUpdate(questionRef, result, attempts, supportLevel, response, ui.session.mode, durationSec);
+      if (section.firstWrong[qid]) delete section.firstWrong[qid];
+      saveState();
+    }
+
+    function submitCurrentQuestion() {
+      if (!ui.session || ui.session.viewMode !== "one") return;
+      const section = currentSection();
+      const qid = currentQuestionId();
+      const question = getQuestion(qid);
+      section.responses[qid] = collectResponseForQuestion(question);
+      section.attempts[qid] = (section.attempts[qid] || 0) + 1;
+      const result = evaluateQuestion(question, section.responses[qid]);
+      const supportLevel = section.support[qid] || 0;
+      const attempts = section.attempts[qid];
+      if (result.correct || attempts >= 2 || supportLevel >= 1) finaliseQuestion(section, qid, result);
+      else section.firstWrong[qid] = result;
+      renderPracticeWorkspace();
+      renderAnalytics();
+      renderHeader();
+    }
+    function showStrongerHelp() {
+      if (!ui.session || ui.session.viewMode !== "one") return;
+      const section = currentSection();
+      const qid = currentQuestionId();
+      section.support[qid] = Math.max(1, section.support[qid] || 0);
+      renderPracticeWorkspace();
+    }
+    function revealAnswerNow() {
+      if (!ui.session || ui.session.viewMode !== "one") return;
+      const section = currentSection();
+      const qid = currentQuestionId();
+      const question = getQuestion(qid);
+      section.responses[qid] = collectResponseForQuestion(question);
+      section.attempts[qid] = Math.max(1, section.attempts[qid] || 1);
+      section.support[qid] = 2;
+      const result = evaluateQuestion(question, section.responses[qid]);
+      finaliseQuestion(section, qid, result);
+      renderPracticeWorkspace();
+      renderAnalytics();
+      renderHeader();
+    }
+    function nextQuestion() {
+      if (!ui.session) return;
+      saveCurrentDraft();
+      const section = currentSection();
+      if (ui.session.currentQuestionIndex < section.questionIds.length - 1) ui.session.currentQuestionIndex += 1;
+      else if (ui.session.currentSectionIndex < ui.session.sections.length - 1) { ui.session.currentSectionIndex += 1; ui.session.currentQuestionIndex = 0; }
+      renderPracticeWorkspace();
+    }
+    function prevQuestion() {
+      if (!ui.session) return;
+      saveCurrentDraft();
+      if (ui.session.currentQuestionIndex > 0) ui.session.currentQuestionIndex -= 1;
+      else if (ui.session.currentSectionIndex > 0) {
+        ui.session.currentSectionIndex -= 1;
+        const prevSec = currentSection();
+        ui.session.currentQuestionIndex = prevSec.questionIds.length - 1;
+      }
+      renderPracticeWorkspace();
+    }
+    function jumpToQuestion(index) { if (!ui.session) return; saveCurrentDraft(); ui.session.currentQuestionIndex = Number(index); renderPracticeWorkspace(); }
+    function jumpToSection(index) { if (!ui.session) return; saveCurrentDraft(); ui.session.currentSectionIndex = Number(index); ui.session.currentQuestionIndex = 0; renderPracticeWorkspace(); }
+
+    function markCurrentSection() {
+      if (!ui.session) return;
+      saveCurrentDraft();
+      const section = currentSection();
+      section.questionIds.forEach(qid => {
+        if (section.results[qid]) return;
+        const question = getQuestion(qid);
+        section.attempts[qid] = Math.max(1, section.attempts[qid] || 1);
+        const result = evaluateQuestion(question, section.responses[qid] || {});
+        finaliseQuestion(section, qid, result);
+      });
+      ui.session.marked = ui.session.sections.every(sec => sec.questionIds.every(id => !!sec.results[id]));
+      renderPracticeWorkspace();
+      renderAnalytics();
+      renderHeader();
+      maybeRecordSessionCompletion();
+    }
+    function markWholeSession(auto = false) {
+      if (!ui.session) return;
+      if (ui.session.viewMode === "one") saveCurrentDraft();
+      ui.session.sections.forEach(section => {
+        section.questionIds.forEach(qid => {
+          if (section.results[qid]) return;
+          const question = getQuestion(qid);
+          section.attempts[qid] = Math.max(1, section.attempts[qid] || 1);
+          const result = evaluateQuestion(question, section.responses[qid] || {});
+          finaliseQuestion(section, qid, result);
+        });
+      });
+      ui.session.marked = true;
+      maybeRecordSessionCompletion(auto);
+      renderPracticeWorkspace();
+      renderAnalytics();
+      renderHeader();
+    }
+    function maybeRecordSessionCompletion(auto = false) {
+      if (!ui.session) return;
+      const totalQ = ui.session.sections.reduce((sum, sec) => sum + sec.questionIds.length, 0);
+      if (markedCount(ui.session) < totalQ || ui.session.logged) return;
+      ui.session.logged = true;
+      recordSessionSummary({
+        mode: ui.session.mode,
+        totalQuestions: totalQ,
+        score: currentScore(ui.session),
+        maxScore: totalAvailableMarks(ui.session),
+        independencePct: independencePct(ui.session),
+        autoFinished: !!auto
+      });
+      saveState();
+    }
+
+    async function explainCurrentWithAI() {
+      if (!aiEnabled() || !ui.session || ui.session.viewMode !== "one") return;
+      const qid = currentQuestionId();
+      const question = getQuestion(qid);
+      const section = currentSection();
+      const result = section.results[qid];
+      const passage = getPassageForCurrentSection();
+      if (!result) return;
+      const target = document.getElementById("feedbackArea");
+      target.insertAdjacentHTML("beforeend", `<div class="feedback warn"><h3>AI explanation</h3><p>Generating explanation…</p></div>`);
+      try {
+        const system = "You are an excellent KS2 English reading tutor for England. Explain clearly, concisely, and only after the child has attempted the question.";
+        const user = `Passage title: ${passage.title}\nPassage:\n${passage.blocks.join("\n\n")}\n\nQuestion:\n${question.stem}\n\nLearner response:\n${JSON.stringify(section.responses[qid] || {})}\n\nDeterministic mark:\n${JSON.stringify({ score: result.score, maxScore: result.maxScore, modelAnswer: result.modelAnswer, misconception: result.misconception })}\n\nWrite:\n1) one short explanation of what the best answer needed,\n2) one sentence on the most likely weakness,\n3) one brief thing to remember next time.`;
+        const text = await callAI(system, user, 0.2);
+        target.insertAdjacentHTML("beforeend", `<div class="feedback good"><h3>AI explanation</h3><p>${nl2br(text)}</p></div>`);
+      } catch (err) {
+        target.insertAdjacentHTML("beforeend", `<div class="feedback bad"><h3>AI explanation failed</h3><p>${escapeHtml(err.message)}.</p></div>`);
+      }
+    }
+    async function aiSecondOpinion() {
+      if (!aiEnabled() || !ui.session || ui.session.viewMode !== "one") return;
+      const qid = currentQuestionId();
+      const question = getQuestion(qid);
+      const section = currentSection();
+      const result = section.results[qid];
+      const passage = getPassageForCurrentSection();
+      if (!result) return;
+      const target = document.getElementById("feedbackArea");
+      target.insertAdjacentHTML("beforeend", `<div class="feedback warn"><h3>AI second opinion</h3><p>Checking the written answer…</p></div>`);
+      try {
+        const system = "You are marking a KS2 England reading response. Be conservative, text-based, and brief. Return JSON only.";
+        const user = `Passage:\n${passage.blocks.join("\n\n")}\n\nQuestion:\n${question.stem}\n\nMark allocation:\n${question.marks}\n\nLearner response:\n${JSON.stringify(section.responses[qid] || {})}\n\nModel answer / deterministic guidance:\n${question.modelAnswer}\n${question.explanation}\n\nReturn JSON only:\n{"score": number, "comment": "short comment", "what_to_improve": "short note"}`;
+        const raw = await callAI(system, user, 0.2);
+        const data = extractJsonBlock(raw);
+        if (!data) throw new Error("Could not parse JSON from the AI response.");
+        target.insertAdjacentHTML("beforeend", `<div class="feedback good"><h3>AI second opinion</h3><p><strong>AI score:</strong> ${escapeHtml(String(data.score))}/${question.marks}</p><p>${escapeHtml(data.comment || "")}</p><p><strong>Improve:</strong> ${escapeHtml(data.what_to_improve || "")}</p></div>`);
+      } catch (err) {
+        target.insertAdjacentHTML("beforeend", `<div class="feedback bad"><h3>AI second opinion failed</h3><p>${escapeHtml(err.message)}.</p></div>`);
+      }
+    }
+    async function aiSectionSummary() {
+      if (!aiEnabled() || !ui.session) return;
+      const passage = getPassageForCurrentSection();
+      const section = currentSection();
+      const target = document.getElementById("feedbackArea");
+      target.innerHTML = `<div class="feedback warn"><h3>AI section summary</h3><p>Generating summary…</p></div>`;
+      try {
+        const summaryData = section.questionIds.map(qid => {
+          const q = getQuestion(qid);
+          const r = section.results[qid];
+          return { stem:q.stem, skill:q.skill, score:r?.score || 0, maxScore:q.marks };
+        });
+        const system = "You write concise section summaries for parents or older pupils after a KS2 reading section.";
+        const user = `Passage: ${passage.title}\nGenre: ${passage.genre}\nQuestion outcomes:\n${JSON.stringify(summaryData)}\n\nWrite one short paragraph on what went well and what to tighten next time.`;
+        const text = await callAI(system, user, 0.2);
+        target.innerHTML = `<div class="feedback good"><h3>AI section summary</h3><p>${nl2br(text)}</p></div>`;
+      } catch (err) {
+        target.innerHTML = `<div class="feedback bad"><h3>AI section summary failed</h3><p>${escapeHtml(err.message)}.</p></div>`;
+      }
+    }
+
+    function standardiseAiPassage(data) {
+      const required = data && data.title && data.genre && data.blocks && data.questions;
+      if (!required) throw new Error("The AI response missed required fields.");
+      const allowedTypes = new Set(["mcq","short","evidenceShort","open"]);
+      const passageId = "ai_" + uid();
+      const passage = { id: passageId, title: String(data.title), genre: ["fiction","non-fiction","poetry"].includes(String(data.genre)) ? String(data.genre) : "fiction", difficulty: clamp(Number(data.difficulty || 3), 1, 5), isLong: !!data.isLong, blocks: Array.isArray(data.blocks) ? data.blocks.map(String) : [String(data.blocks)], questions: [] };
+      (data.questions || []).forEach((q, idx) => {
+        if (!allowedTypes.has(q.type)) return;
+        const question = {
+          id: `${passageId}_q${idx+1}`,
+          type: q.type,
+          skill: SKILLS[q.skill] ? q.skill : "2b",
+          marks: clamp(Number(q.marks || 1), 1, 4),
+          stem: String(q.stem || "Question"),
+          modelAnswer: String(q.modelAnswer || ""),
+          explanation: String(q.explanation || ""),
+          hint: String(q.hint || MINIMAL_HINTS[q.skill] || "")
+        };
+        if (q.type === "mcq") { question.options = (q.options || []).map(String).slice(0, 4); question.correct = Number(q.correct || 0); }
+        else if (q.type === "short") question.check = q.check || { containsAny: [String(q.answer || "")] };
+        else if (q.type === "evidenceShort") { question.answerCheck = q.answerCheck || { containsAny: [String(q.answer || "")] }; question.evidenceCheck = q.evidenceCheck || { containsAny: (q.evidenceSnippets || []).map(String) }; question.answerMarks = 1; question.evidenceMarks = Math.max(1, question.marks - 1); }
+        else if (q.type === "open") question.rubric = Array.isArray(q.rubric) ? q.rubric : [{ label:"Main point", check:q.check || { containsAny:[String(q.answer || "")] } }];
+        passage.questions.push(question);
+      });
+      if (!passage.questions.length) throw new Error("The AI passage had no usable questions.");
+      return passage;
+    }
+
+    async function aiFreshPracticeSet() {
+      if (!aiEnabled()) { alert("AI is not configured."); return; }
+      const skillFilter = document.getElementById("skillSelect").value || weakSkillIds()[0] || "2d";
+      const genreFilter = document.getElementById("genreSelect").value || "fiction";
+      const difficulty = Number(document.getElementById("difficultySelect").value || 3);
+      try {
+        const system = "You generate original KS2 reading practice for England. Return valid JSON only. Do not copy copyrighted SATs passages.";
+        const user = `Create one original passage and 4 or 5 reading questions for KS2 England.\nConstraints:\n- genre: ${genreFilter}\n- target skill to emphasise: ${skillFilter} (${SKILLS[skillFilter] ? SKILLS[skillFilter].name : ""})\n- difficulty: ${difficulty}\n- age-appropriate, unseen, original, not copyrighted\n- questions may use only these types: mcq, short, evidenceShort, open\n- questions should still be markable with simple rule-based checks\n\nReturn JSON only in this schema:\n{\n  "title": "string",\n  "genre": "fiction or non-fiction or poetry",\n  "difficulty": ${difficulty},\n  "isLong": false,\n  "blocks": ["paragraph or stanza 1", "paragraph or stanza 2"],\n  "questions": [\n    {\n      "type": "mcq", "skill": "2a-2h", "marks": 1, "stem": "question", "options": ["a","b","c","d"], "correct": 0,\n      "modelAnswer": "string", "explanation": "string", "hint": "string"\n    }\n  ]\n}`;
+        const raw = await callAI(system, user, 0.35);
+        const parsed = extractJsonBlock(raw);
+        if (!parsed) throw new Error("Could not parse JSON from the AI response.");
+        const passage = standardiseAiPassage(parsed);
+        state.customPassages[passage.id] = passage;
+        saveState();
+        ui.session = {
+          id: uid(), mode: "core", strict: false,
+          delayedFeedback: document.getElementById("viewModeSelect").value === "list",
+          viewMode: document.getElementById("viewModeSelect").value || "one",
+          startedAt: nowMs(), marked: false, currentSectionIndex: 0, currentQuestionIndex: 0,
+          sections: [{ passageId: passage.id, questionIds: passage.questions.map(q => q.id), responses: {}, results: {}, attempts: {}, support: {}, firstWrong: {}, startedAtByQuestion: {} }]
+        };
+        renderPracticeWorkspace(); renderHeader(); renderAnalytics();
+      } catch (err) { alert(`AI generation failed: ${err.message}`); }
+    }
+
+    function buildRuleBasedParentSummary() {
+      const learner = currentLearner();
+      const total = learner.events.length;
+      const correct = learner.events.filter(e => e.correct).length;
+      const acc = total ? Math.round((correct / total) * 100) : 0;
+      const independent = total ? Math.round((learner.events.filter(e => e.correct && e.supportLevel === 0 && e.attempts === 1).length / total) * 100) : 0;
+      const weak = weakSkillIds().slice(0, 3).map(id => SKILLS[id].name);
+      const topIssues = Object.entries(learner.misconceptions).sort((a,b) => b[1].count - a[1].count).slice(0,2).map(([id]) => MISCONCEPTIONS[id] || id);
+      let text = `${learner.name} has completed ${total} logged question${total === 1 ? "" : "s"} with overall accuracy around ${acc}%. `;
+      text += `Independent accuracy is about ${independent}%, so you can see how often the answer was secure without much support. `;
+      if (weak.length) text += `The main areas to tighten are ${weak.join(", ")}. `;
+      if (topIssues.length) text += `The most common slip patterns are ${topIssues.join(" and ")}. `;
+      text += `Best next move: keep core reading of full passages in the loop, then use Smart review and Evidence hunt to recycle the weaker domains.`;
+      return text;
+    }
+    async function buildAiParentSummary() {
+      const learner = currentLearner();
+      const events = learner.events.slice(-40);
+      const weak = weakSkillIds().slice(0, 5).map(id => SKILLS[id].name);
+      const misc = Object.entries(learner.misconceptions).sort((a,b) => b[1].count - a[1].count).slice(0,5).map(([id, obj]) => ({ label: MISCONCEPTIONS[id] || id, count: obj.count }));
+      const system = "You write concise, practical parent summaries for KS2 English reading practice in England. Use plain UK English. Keep it to one short paragraph and three next-step bullet points.";
+      const user = `Learner: ${learner.name}\nWeak skills: ${JSON.stringify(weak)}\nRecent misconception counts: ${JSON.stringify(misc)}\nRecent events: ${JSON.stringify(events.map(e => ({ skill:e.skill, genre:e.genre, qType:e.qType, correct:e.correct, score:e.score, maxScore:e.maxScore, supportLevel:e.supportLevel })))}\nWrite a brief parent summary focused on what the child is starting to do well, what still needs work, and what to do next week.`;
+      return callAI(system, user, 0.2);
+    }
+
+    function renderAnalytics() {
+      const learner = currentLearner();
+      const total = learner.events.length;
+      const correct = learner.events.filter(e => e.correct).length;
+      const accuracy = total ? Math.round((correct / total) * 100) : 0;
+      const independent = total ? Math.round((learner.events.filter(e => e.correct && e.supportLevel === 0 && e.attempts === 1).length / total) * 100) : 0;
+      document.getElementById("anaTotalQuestions").textContent = total;
+      document.getElementById("anaAccuracy").textContent = `${accuracy}%`;
+      document.getElementById("anaIndependent").textContent = `${independent}%`;
+      document.getElementById("anaDue").textContent = learnerDueCount();
+      document.getElementById("parentSummary").textContent = buildRuleBasedParentSummary();
+
+      const reviewDue = learner.retryQueue.filter(x => x.dueAt <= nowMs()).slice(0, 10);
+      document.getElementById("reviewQueueList").innerHTML = !reviewDue.length
+        ? "<p class='subtle'>Nothing urgent in the review queue.</p>"
+        : reviewDue.map(entry => {
+            const passage = getPassageMap()[entry.passageId];
+            const q = getQuestion(entry.questionId);
+            return `<div class="review-card" style="margin-bottom:10px;"><strong>${escapeHtml(passage ? passage.title : entry.passageId)}</strong><div class="tiny">${escapeHtml(SKILLS[entry.skillId]?.name || entry.skillId)} · ${escapeHtml(QUESTION_TYPE_LABELS[q?.type] || "")}</div><div class="tiny">${escapeHtml(entry.reason)} · due now</div></div>`;
+          }).join("");
+
+      document.getElementById("skillAnalytics").innerHTML = Object.entries(SKILLS).map(([id, skill]) => {
+        const node = learner.skills[id] || defaultNode();
+        const strength = Math.round((node.strength || 0) * 100);
+        const status = statusFromNode(node);
+        return `<div class="skill-row"><div><strong>${escapeHtml(skill.name)}</strong><div class="tiny">${escapeHtml(skill.domain)}</div></div><div class="bar"><span style="width:${strength}%"></span></div><div>${strength}%</div><div class="status-${status}">${humanStatus(status)}</div></div>`;
+      }).join("");
+
+      const genreStats = ["fiction","non-fiction","poetry"].map(genre => {
+        const ev = learner.events.filter(e => e.genre === genre);
+        const acc = ev.length ? Math.round((ev.filter(e => e.correct).length / ev.length) * 100) : 0;
+        return { genre, count: ev.length, acc };
+      });
+      document.getElementById("genreAnalytics").innerHTML = `<h3 style="margin-bottom:8px;">By passage type</h3>${
+        genreStats.map(row => `<div class="skill-row"><div><strong>${escapeHtml(row.genre)}</strong></div><div class="bar"><span style="width:${row.acc}%"></span></div><div>${row.acc}%</div><div>${row.count} q</div></div>`).join("")
+      }`;
+      const typeStats = Object.keys(QUESTION_TYPE_LABELS).map(type => {
+        const ev = learner.events.filter(e => e.qType === type);
+        const acc = ev.length ? Math.round((ev.filter(e => e.correct).length / ev.length) * 100) : 0;
+        return { type, count: ev.length, acc };
+      });
+      document.getElementById("typeAnalytics").innerHTML = `<h3 style="margin-bottom:8px;">By question type</h3>${
+        typeStats.map(row => `<div class="skill-row"><div><strong>${escapeHtml(QUESTION_TYPE_LABELS[row.type])}</strong></div><div class="bar"><span style="width:${row.acc}%"></span></div><div>${row.acc}%</div><div>${row.count} q</div></div>`).join("")
+      }`;
+
+      const recent = getRecentEvents(18);
+      document.getElementById("recentActivity").innerHTML = !recent.length
+        ? "<p class='subtle'>No activity yet.</p>"
+        : recent.map(e => `<details><summary>${e.correct ? "Correct" : "Review"} - ${escapeHtml(e.title)} - ${escapeHtml(new Date(e.timestamp).toLocaleString("en-GB"))}</summary><div class="tiny" style="margin-top:8px;">${escapeHtml(SKILLS[e.skill]?.name || e.skill)} · ${escapeHtml(QUESTION_TYPE_LABELS[e.qType] || e.qType)} · ${e.score}/${e.maxScore} · support ${e.supportLevel}</div></details>`).join("");
+      document.getElementById("aiParentSummaryBtn").disabled = !aiEnabled();
+    }
+
+    function saveReadingSettings() {
+      const learner = currentLearner();
+      learner.settings.scaffoldMode = document.getElementById("scaffoldModeSelect").value === "yes";
+      learner.settings.showParagraphNumbers = document.getElementById("showParagraphNumbersSelect").value === "yes";
+      learner.settings.enableTTS = document.getElementById("enableTtsSelect").value === "yes";
+      learner.settings.speechRate = clamp(Number(document.getElementById("speechRateInput").value || 1), 0.6, 1.4);
+      saveState();
+      renderPracticeWorkspace();
+    }
+    function saveAiSettings() {
+      const ai = state.globalSettings.ai;
+      ai.provider = document.getElementById("aiProviderSelect").value;
+      ai.model = document.getElementById("aiModelInput").value.trim();
+      setAIKey(document.getElementById("aiKeyInput").value.trim(), document.getElementById("rememberAiKey").value === "yes");
+      saveState();
+      alert("AI settings saved.");
+      renderAnalytics();
+    }
+    async function testAiConnection() {
+      try {
+        const text = await callAI("Reply with only: connection ok", "connection ok", 0);
+        alert(`AI response: ${text.slice(0, 120)}`);
+      } catch (err) { alert(`AI test failed: ${err.message}`); }
+    }
+
+    function exportJson(filename, data) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+    function loadStateFromObject(obj) {
+      const parsed = JSON.parse(JSON.stringify(obj));
+      if (!parsed.learners || !Object.keys(parsed.learners).length) return defaultAppState();
+      parsed.version = APP_VERSION;
+      parsed.customPassages = parsed.customPassages || {};
+      if (!parsed.globalSettings) parsed.globalSettings = { ai:{ provider:"off", model:"", rememberKey:false, storedKey:"" } };
+      if (!parsed.globalSettings.ai) parsed.globalSettings.ai = { provider:"off", model:"", rememberKey:false, storedKey:"" };
+      for (const learnerId of Object.keys(parsed.learners)) parsed.learners[learnerId] = normaliseLearner(parsed.learners[learnerId]);
+      if (!parsed.currentLearnerId || !parsed.learners[parsed.currentLearnerId]) parsed.currentLearnerId = Object.keys(parsed.learners)[0];
+      return parsed;
+    }
+    function importJsonData(parsed) {
+      if (parsed.learners && parsed.currentLearnerId) {
+        state = loadStateFromObject(parsed); saveState(); initialiseUiAfterStateChange(); alert("Imported full app data."); return;
+      }
+      if (parsed.id && parsed.name && parsed.skills !== undefined) {
+        const learner = normaliseLearner(parsed);
+        learner.id = learner.id || uid();
+        state.learners[learner.id] = learner;
+        state.currentLearnerId = learner.id;
+        saveState(); initialiseUiAfterStateChange(); alert("Imported learner profile."); return;
+      }
+      throw new Error("JSON format not recognised.");
+    }
+    function createLearner() {
+      const name = document.getElementById("newLearnerName").value.trim();
+      if (!name) { alert("Enter a learner name first."); return; }
+      const learner = makeLearner(name);
+      state.learners[learner.id] = learner; state.currentLearnerId = learner.id;
+      document.getElementById("newLearnerName").value = "";
+      saveState(); initialiseUiAfterStateChange();
+    }
+    function renameCurrentLearner() {
+      const learner = currentLearner();
+      const next = prompt("Rename learner", learner.name);
+      if (!next) return;
+      learner.name = next.trim() || learner.name;
+      saveState(); initialiseUiAfterStateChange();
+    }
+    function deleteCurrentLearner() {
+      if (Object.keys(state.learners).length <= 1) { alert("Keep at least one learner profile."); return; }
+      const learner = currentLearner();
+      if (!confirm(`Delete ${learner.name}? This cannot be undone.`)) return;
+      delete state.learners[learner.id];
+      state.currentLearnerId = Object.keys(state.learners)[0];
+      saveState(); initialiseUiAfterStateChange();
+    }
+    function resetCurrentLearner() {
+      const learner = currentLearner();
+      if (!confirm(`Reset all progress for ${learner.name}?`)) return;
+      const fresh = makeLearner(learner.name); fresh.id = learner.id;
+      state.learners[learner.id] = fresh;
+      saveState(); initialiseUiAfterStateChange();
+    }
+    function resetAllData() {
+      if (!confirm("Reset all app data?")) return;
+      state = defaultAppState();
+      sessionStorage.removeItem(SESSION_AI_KEY);
+      saveState(); initialiseUiAfterStateChange();
+    }
+
+    function initialiseUiAfterStateChange() {
+      ui.session = null;
+      renderHeader(); renderSkillSelect(); renderSettings(); renderProfiles(); renderAnalytics(); renderSessionMeta();
+      document.getElementById("passageTitle").textContent = "Choose a mode and start.";
+      document.getElementById("passageMeta").innerHTML = "";
+      document.getElementById("passageBody").innerHTML = `<p class="subtle">The full passage will appear here.</p>`;
+      document.getElementById("sectionNav").classList.add("hidden");
+      document.getElementById("questionMetaLine").innerHTML = `<span class="status-pill status-blank">Ready</span>`;
+      document.getElementById("questionNav").classList.add("hidden");
+      document.getElementById("questionPane").innerHTML = `<div class="question-card"><p>Use one-question mode for tighter effort-feedback cycles, or full-list mode to answer a whole section before marking.</p></div>`;
+      document.getElementById("questionActions").innerHTML = "";
+      document.getElementById("feedbackArea").innerHTML = "";
+      document.getElementById("readAloudBtn").classList.toggle("hidden", !currentLearner().settings.enableTTS);
+    }
+
+    async function handleAiParentSummary() {
+      if (!aiEnabled()) { alert("AI is not configured."); return; }
+      const target = document.getElementById("parentSummary");
+      const old = target.textContent;
+      target.textContent = "Generating AI parent summary…";
+      try { const text = await buildAiParentSummary(); target.innerHTML = nl2br(text); }
+      catch (err) { target.textContent = old; alert(`AI summary failed: ${err.message}`); }
+    }
+    function readPassageAloud() {
+      if (!currentLearner().settings.enableTTS) return;
+      const synth = window.speechSynthesis;
+      if (!synth) { alert("This browser does not support speech synthesis."); return; }
+      const passage = getPassageForCurrentSection();
+      if (!passage) return;
+      synth.cancel();
+      const utter = new SpeechSynthesisUtterance(passage.blocks.join("\n\n"));
+      utter.rate = clamp(Number(currentLearner().settings.speechRate || 1), 0.6, 1.4);
+      utter.lang = "en-GB";
+      synth.speak(utter);
+    }
+
+    function bindEvents() {
+      document.querySelectorAll("#tabButtons button").forEach(btn => btn.addEventListener("click", () => { ui.activeTab = btn.dataset.tab; renderTabs(); if (ui.activeTab === "analytics") renderAnalytics(); }));
+      document.getElementById("currentLearnerSelect").addEventListener("change", e => { state.currentLearnerId = e.target.value; saveState(); initialiseUiAfterStateChange(); });
+      document.getElementById("modeSelect").addEventListener("change", () => { document.getElementById("modeNote").textContent = modeDescription(document.getElementById("modeSelect").value); });
+      document.getElementById("startSessionBtn").addEventListener("click", startSession);
+      document.getElementById("aiFreshSetBtn").addEventListener("click", aiFreshPracticeSet);
+      document.getElementById("readAloudBtn").addEventListener("click", readPassageAloud);
+
+      document.getElementById("sectionNav").addEventListener("click", e => { const btn = e.target.closest("button[data-section-index]"); if (btn) jumpToSection(btn.dataset.sectionIndex); });
+      document.getElementById("questionNav").addEventListener("click", e => { const btn = e.target.closest("button[data-question-index]"); if (btn) jumpToQuestion(btn.dataset.questionIndex); });
+      document.getElementById("questionActions").addEventListener("click", e => {
+        const id = e.target.id;
+        if (!id) return;
+        if (id === "submitAnswerBtn") submitCurrentQuestion();
+        else if (id === "strongerHelpBtn") showStrongerHelp();
+        else if (id === "revealAnswerBtn") revealAnswerNow();
+        else if (id === "nextQuestionBtn" || id === "saveNextBtn") nextQuestion();
+        else if (id === "prevQuestionBtn") prevQuestion();
+        else if (id === "markSectionBtn") markCurrentSection();
+        else if (id === "markPaperBtn") markWholeSession(false);
+        else if (id === "aiExplainBtn") { if (ui.session.viewMode === "one") explainCurrentWithAI(); else aiSectionSummary(); }
+        else if (id === "aiMarkBtn") aiSecondOpinion();
+      });
+
+      document.getElementById("scaffoldModeSelect").addEventListener("change", saveReadingSettings);
+      document.getElementById("showParagraphNumbersSelect").addEventListener("change", saveReadingSettings);
+      document.getElementById("enableTtsSelect").addEventListener("change", saveReadingSettings);
+      document.getElementById("speechRateInput").addEventListener("change", saveReadingSettings);
+
+      document.getElementById("saveAiSettingsBtn").addEventListener("click", saveAiSettings);
+      document.getElementById("testAiBtn").addEventListener("click", testAiConnection);
+      document.getElementById("aiParentSummaryBtn").addEventListener("click", handleAiParentSummary);
+
+      document.getElementById("createLearnerBtn").addEventListener("click", createLearner);
+      document.getElementById("renameLearnerBtn").addEventListener("click", renameCurrentLearner);
+      document.getElementById("deleteLearnerBtn").addEventListener("click", deleteCurrentLearner);
+      document.getElementById("resetLearnerBtn").addEventListener("click", resetCurrentLearner);
+      document.getElementById("resetAllBtn").addEventListener("click", resetAllData);
+      document.getElementById("exportCurrentBtn").addEventListener("click", () => { exportJson(`${currentLearner().name.replace(/\s+/g, "_").toLowerCase()}_ks2_reading.json`, currentLearner()); });
+      document.getElementById("exportAllBtn").addEventListener("click", () => { exportJson("ks2_reading_app_data.json", state); });
+      document.getElementById("importBtn").addEventListener("click", () => document.getElementById("importFileInput").click());
+      document.getElementById("importFileInput").addEventListener("change", async e => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        try { const text = await file.text(); const parsed = JSON.parse(text); importJsonData(parsed); e.target.value = ""; }
+        catch (err) { alert(`Import failed: ${err.message}`); }
+      });
+    }
+
+    function initialise() {
+      renderHeader();
+      renderTabs();
+      renderSkillSelect();
+      renderSettings();
+      renderProfiles();
+      renderAnalytics();
+      renderSessionMeta();
+      document.getElementById("modeNote").textContent = modeDescription(document.getElementById("modeSelect").value);
+      bindEvents();
+      if (ui.timerInterval) clearInterval(ui.timerInterval);
+      ui.timerInterval = setInterval(maybeTimerTick, 1000);
+      document.getElementById("readAloudBtn").classList.toggle("hidden", !currentLearner().settings.enableTTS);
+    }
+
+    initialise();
+  </script>
+</body>
+</html>

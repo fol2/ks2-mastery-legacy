@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KS2 Grammar Mastery</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --ink:#1f2937;
+      --muted:#5b6575;
+      --line:#d7deea;
+      --accent:#2563eb;
+      --accent-2:#0f766e;
+      --good:#166534;
+      --warn:#b45309;
+      --bad:#b91c1c;
+      --soft:#eef4ff;
+      --soft-2:#ecfeff;
+      --shadow:0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius:16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: Inter, Arial, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f7f9fd 0%, #eef3fb 100%);
+      color:var(--ink);
+      line-height:1.45;
+    }
+    button, input, select, textarea{
+      font: inherit;
+    }
+    .app{
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    header.app-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      padding: 18px 20px;
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom:16px;
+    }
+    .title-wrap h1{
+      margin:0 0 6px;
+      font-size: clamp(1.4rem, 2.8vw, 2.15rem);
+      line-height:1.1;
+    }
+    .title-wrap p{
+      margin:0;
+      color:var(--muted);
+      max-width:900px;
+    }
+    .header-right{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+      justify-content:flex-end;
+      min-width:280px;
+    }
+    .header-right .mini{
+      min-width: 160px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      background: var(--soft);
+      border:1px solid #cfe0ff;
+      color:#1d4ed8;
+      font-weight:600;
+      white-space:nowrap;
+    }
+    nav.tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:16px;
+    }
+    nav.tabs button{
+      border:none;
+      border-radius:999px;
+      padding:10px 15px;
+      background:#dfe8f8;
+      color:#234;
+      cursor:pointer;
+      font-weight:600;
+    }
+    nav.tabs button.active{
+      background: var(--accent);
+      color:#fff;
+    }
+
+    .tab-panel{ display:none; }
+    .tab-panel.active{ display:block; }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+    .grid.two{
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .grid.three{
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .panel{
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .panel h2, .panel h3{
+      margin:0 0 10px;
+      line-height:1.2;
+    }
+    .panel h2{ font-size:1.2rem; }
+    .panel h3{ font-size:1rem; color:#0f172a; }
+    .subtle{
+      color:var(--muted);
+      font-size:0.95rem;
+    }
+
+    .control-row, .wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:flex-end;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:160px;
+      flex:1 1 170px;
+    }
+    .field.tight{ min-width: 120px; flex:0 1 150px; }
+    label{
+      font-weight:600;
+      color:#334155;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    select,
+    textarea{
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid #bfd0e7;
+      background:#fff;
+      color:var(--ink);
+    }
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+    .mini input, .mini select{
+      padding:9px 10px;
+      border-radius:10px;
+    }
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+    button.primary,
+    button.secondary,
+    button.ghost,
+    button.warn,
+    button.good{
+      border:none;
+      border-radius:12px;
+      padding:11px 14px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    button.primary{ background:var(--accent); color:#fff; }
+    button.secondary{ background:#dbeafe; color:#1d4ed8; }
+    button.good{ background:#dcfce7; color:#166534; }
+    button.warn{ background:#ffedd5; color:#b45309; }
+    button.ghost{
+      background:#edf2f7;
+      color:#334155;
+    }
+    button:disabled{
+      opacity:0.55;
+      cursor:not-allowed;
+    }
+
+    .stats-row{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:10px;
+    }
+    .stat{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+    }
+    .stat .label{
+      color:var(--muted);
+      font-size:0.9rem;
+      margin-bottom:6px;
+    }
+    .stat .value{
+      font-size:1.4rem;
+      font-weight:800;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 11px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#3730a3;
+      border:1px solid #c7d2fe;
+      font-size:0.9rem;
+      font-weight:600;
+    }
+    .chip.good{ background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+    .chip.warn{ background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
+    .chip.bad{ background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+    .chip.neutral{ background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+
+    .question-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      background:linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    }
+    .question-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .question-stem{
+      font-size:1.08rem;
+      margin-bottom:16px;
+    }
+    .question-stem p{
+      margin:0 0 10px;
+    }
+    .question-stem strong{
+      color:#0f172a;
+    }
+    .question-visual{
+      margin: 10px 0 16px;
+      overflow-x:auto;
+    }
+    .response-area{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+    .answer-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap:10px;
+    }
+    .answer-box{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+    }
+    .answer-box legend{
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .option-row{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      padding:8px 0;
+    }
+    .option-row input{
+      margin-top:2px;
+    }
+    .working-box textarea{
+      min-height:130px;
+    }
+    .feedback{
+      border-radius:16px;
+      padding:14px;
+      margin-top:16px;
+      border:1px solid var(--line);
+    }
+    .feedback.good{
+      background:#f0fdf4;
+      border-color:#bbf7d0;
+    }
+    .feedback.warn{
+      background:#fff7ed;
+      border-color:#fed7aa;
+    }
+    .feedback.bad{
+      background:#fef2f2;
+      border-color:#fecaca;
+    }
+    .feedback h3{
+      margin:0 0 8px;
+    }
+    .worked{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      background:#ffffff;
+      border:1px dashed #bfd0e7;
+    }
+    .worked ol{
+      margin: 8px 0 0 20px;
+      padding:0;
+    }
+    .worked li{
+      margin-bottom:6px;
+    }
+    .scaffold{
+      border:1px dashed #8ec5ff;
+      background:#f0f8ff;
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:14px;
+    }
+    .example-card{
+      border:1px solid #bfe1ff;
+      background: linear-gradient(180deg, #eff7ff 0%, #ffffff 100%);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+    .example-card h4{
+      margin:0 0 8px;
+      font-size:1rem;
+    }
+    .tiny{
+      font-size:0.88rem;
+      color:var(--muted);
+    }
+    table.clean{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      background:#fff;
+    }
+    table.clean th, table.clean td{
+      border:1px solid #dbe5f3;
+      padding:10px 12px;
+      text-align:left;
+      vertical-align:middle;
+    }
+    table.clean th{
+      background:#eff6ff;
+    }
+    .skill-row{
+      display:grid;
+      grid-template-columns: 210px 1fr 90px 105px;
+      gap:10px;
+      align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid #edf2f7;
+    }
+    .skill-row:last-child{ border-bottom:none; }
+    .bar{
+      width:100%;
+      height:12px;
+      background:#e9eef7;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid #dce4f2;
+    }
+    .bar > span{
+      display:block;
+      height:100%;
+      background:linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+      border-radius:999px;
+    }
+    .status-new{ color:#475569; font-weight:700; }
+    .status-learning{ color:#1d4ed8; font-weight:700; }
+    .status-due{ color:#b45309; font-weight:700; }
+    .status-weak{ color:#b91c1c; font-weight:700; }
+    .status-secured{ color:#166534; font-weight:700; }
+
+    .mini-paper-nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .mini-paper-nav button{
+      min-width:42px;
+      border:none;
+      border-radius:10px;
+      padding:9px 12px;
+      cursor:pointer;
+      font-weight:700;
+      background:#e5eefc;
+      color:#234;
+    }
+    .mini-paper-nav button.current{
+      background:var(--accent);
+      color:#fff;
+    }
+    .mini-paper-nav button.done{
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .chart-wrap{
+      padding:10px;
+      background:#fff;
+      border-radius:16px;
+      border:1px solid #dbe5f3;
+    }
+
+    .callout{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid #bfdbfe;
+      background:#eff6ff;
+    }
+    .callout.warn{
+      border-color:#fed7aa;
+      background:#fff7ed;
+    }
+    .callout.good{
+      border-color:#bbf7d0;
+      background:#f0fdf4;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .profile-card{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fbfdff;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:0.92rem;
+    }
+    .hidden{
+      display:none !important;
+    }
+    details{
+      border:1px solid #dce5f2;
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fbfdff;
+    }
+    details + details{
+      margin-top:10px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:700;
+    }
+    .footer-note{
+      color:var(--muted);
+      font-size:0.9rem;
+      margin-top:12px;
+    }
+    .pill-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:6px;
+    }
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #dce5f2;
+      background:#fff;
+      font-size:0.86rem;
+    }
+    .review-card{
+      border:1px solid #dce5f2;
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+    }
+
+    .choice-list{
+      display:grid;
+      gap:10px;
+    }
+    .choice-list label{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid #dce5f2;
+      background:#fff;
+      border-radius:12px;
+      cursor:pointer;
+    }
+    .choice-list input{ margin-top:3px; }
+    .token-grid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .token-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 10px;
+      border:1px solid #dce5f2;
+      border-radius:999px;
+      background:#fff;
+    }
+    .teach-card{
+      border:1px solid #bfdbfe;
+      background:linear-gradient(180deg,#eff6ff 0%,#ffffff 100%);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+    .teach-card ul{ margin:8px 0 0 18px; }
+    .contrast-card{
+      border:1px dashed #bfd0e7;
+      background:#ffffff;
+      border-radius:14px;
+      padding:12px;
+      margin-top:12px;
+    }
+    .mini-note{
+      font-size:0.88rem;
+      color:var(--muted);
+    }
+    .bucket-list .pill{
+      display:block;
+      margin:0 0 8px;
+    }
+
+    @media (max-width: 1040px){
+      .grid.two, .grid.three, .split{
+        grid-template-columns: 1fr;
+      }
+      .stats-row{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .skill-row{
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px){
+      .app{ padding:12px; }
+      header.app-header{ padding:16px; }
+      .stats-row{
+        grid-template-columns: 1fr;
+      }
+      nav.tabs button{
+        flex:1 1 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="title-wrap">
+        <h1>KS2 Grammar Mastery</h1>
+        <p>Daily practice for England KS2 English grammar, built for durable mastery: mixed retrieval, contrastive sentence work, genuine first attempts, quick corrective feedback, spaced return, and strict KS2 GPS-style practice when you want it.</p>
+      </div>
+      <div class="header-right">
+        <div class="field mini">
+          <label for="currentLearnerSelect">Learner</label>
+          <select id="currentLearnerSelect"></select>
+        </div>
+        <div class="badge" id="dueBadge">0 due</div>
+        <div class="badge" id="streakBadge">0-day streak</div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabButtons">
+      <button class="active" data-tab="practice">Practice</button>
+      <button data-tab="analytics">Analytics</button>
+      <button data-tab="profiles">Profiles &amp; Data</button>
+      <button data-tab="settings">Settings</button>
+      <button data-tab="method">Method</button>
+    </nav>
+
+    <section class="tab-panel active" id="tab-practice">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Practice setup</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="modeSelect">Mode</label>
+              <select id="modeSelect">
+                <option value="learn">Learn a concept</option>
+                <option value="smart">Smart mixed review</option>
+                <option value="trouble">Weak concepts drill</option>
+                <option value="surgery">Sentence surgery</option>
+                <option value="builder">Sentence builder / transformation</option>
+                <option value="worked">Worked examples</option>
+                <option value="faded">Faded guidance</option>
+                <option value="satsset">KS2-style test mode</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="skillSelect">Concept focus</label>
+              <select id="skillSelect"></select>
+            </div>
+            <div class="field">
+              <label for="goalSelect">Session goal</label>
+              <select id="goalSelect">
+                <option value="10m">10 minutes</option>
+                <option value="15q">15 questions</option>
+                <option value="due">Clear due items</option>
+              </select>
+            </div>
+            <div class="field tight" id="setSizeField">
+              <label for="setSizeSelect">Mini-set size</label>
+              <select id="setSizeSelect">
+                <option value="8">8 questions</option>
+                <option value="12">12 questions</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="startSessionBtn">Start / refresh session</button>
+            <button class="secondary" id="nextQuestionBtn">Next question</button>
+            <button class="ghost" id="readAloudBtn">Read aloud</button>
+            <button class="ghost hidden" id="finishSetBtn">Finish mini-set</button>
+          </div>
+          <p class="footer-note" id="modeNote"></p>
+        </div>
+
+        <div class="panel">
+          <h2>Session view</h2>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="label">Answered</div>
+              <div class="value" id="sessionAnswered">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Correct</div>
+              <div class="value" id="sessionCorrect">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Goal progress</div>
+              <div class="value" id="sessionGoalProgress">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Timer</div>
+              <div class="value" id="sessionTimer">--:--</div>
+            </div>
+          </div>
+          <div class="chips" style="margin-top:12px;" id="sessionChips"></div>
+          <div class="mini-paper-nav hidden" id="miniPaperNav"></div>
+          <p class="footer-note" id="sessionSummary">No active session yet.</p>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="question-card" id="questionCard">
+          <div class="question-meta" id="questionMeta">
+            <span class="chip neutral">Ready</span>
+          </div>
+          <div class="question-stem" id="questionStem">
+            <p>Choose a mode and start a session. Smart mixed review uses weighted interleaving with spaced return, weak-concept repair, and quick recycling of recent mistakes.</p>
+          </div>
+          <div class="question-visual" id="questionVisual"></div>
+          <div class="response-area" id="responseArea"></div>
+          <div class="actions" id="questionActions">
+            <button class="primary hidden" id="submitAnswerBtn">Submit answer</button>
+            <button class="warn hidden" id="retryBtn">Retry this question</button>
+            <button class="secondary hidden" id="showWorkedBtn">Show worked solution</button>
+            <button class="secondary hidden" id="useFadedBtn">Use a partly worked version</button>
+            <button class="good hidden" id="aiExplainBtn">AI explain this</button>
+            <button class="good hidden" id="aiVariantBtn">AI similar problem</button>
+          </div>
+          <div id="feedbackArea"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-analytics">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Overview</h2>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="label">Total questions</div>
+              <div class="value" id="anaTotalQuestions">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Accuracy</div>
+              <div class="value" id="anaAccuracy">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Due now</div>
+              <div class="value" id="anaDue">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Secured concepts</div>
+              <div class="value" id="anaSecured">0</div>
+            </div>
+          </div>
+          <div class="callout" style="margin-top:14px;">
+            <strong>Parent / teacher summary</strong>
+            <div id="parentSummary" style="margin-top:8px;"></div>
+          </div>
+          <div class="actions">
+            <button class="good" id="aiParentSummaryBtn">AI parent summary</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Misconceptions seen most often</h2>
+          <div id="misconceptionList"></div>
+          <div class="footer-note">The app tracks likely reasons for errors, not just right or wrong, so drills can target the actual grammar confusion.</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Concept strength</h2>
+        <div id="skillAnalytics"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Accuracy by question type</h2>
+        <div id="questionTypeAnalytics"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Due, secured and untouched</h2>
+        <div class="grid three">
+          <div>
+            <h3>Due for review</h3>
+            <div id="dueConceptList"></div>
+          </div>
+          <div>
+            <h3>Recently secured</h3>
+            <div id="securedConceptList"></div>
+          </div>
+          <div>
+            <h3>Never studied</h3>
+            <div id="neverStudiedList"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Recent activity</h2>
+        <div id="recentActivity"></div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-profiles">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Learner profiles</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="newLearnerName">New learner name</label>
+              <input type="text" id="newLearnerName" placeholder="e.g. Ava" />
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="createLearnerBtn">Create learner</button>
+            <button class="ghost" id="renameLearnerBtn">Rename current learner</button>
+            <button class="warn" id="deleteLearnerBtn">Delete current learner</button>
+          </div>
+          <div id="learnerList" style="margin-top:14px;"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Import / export / reset</h2>
+          <p class="subtle">Progress lives in your browser via localStorage. Export regularly if you care about keeping the data.</p>
+          <div class="actions">
+            <button class="secondary" id="exportCurrentBtn">Export current learner JSON</button>
+            <button class="secondary" id="exportAllBtn">Export all app data JSON</button>
+            <button class="ghost" id="importBtn">Import JSON</button>
+            <button class="warn" id="resetLearnerBtn">Reset current learner progress</button>
+            <button class="warn" id="resetAllBtn">Reset all app data</button>
+          </div>
+          <input type="file" id="importFileInput" accept=".json,application/json" class="hidden" />
+          <div class="callout warn" style="margin-top:14px;">
+            Reset removes progress but keeps the app file itself. Export first if you may want the data later.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-settings">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Practice settings</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="allowTeachingItems">Teaching items in Smart Review</label>
+              <select id="allowTeachingItems">
+                <option value="yes">Yes - allow worked / faded items when needed</option>
+                <option value="no">No - keep Smart Review fully independent</option>
+              </select>
+            </div>
+            <div class="field tight">
+              <label for="speechRateInput">Read-aloud speed</label>
+              <input type="number" min="0.6" max="1.4" step="0.1" id="speechRateInput" />
+            </div>
+            <div class="field">
+              <label for="showDomainBeforeAnswer">Show broad domain before answer</label>
+              <select id="showDomainBeforeAnswer">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="footer-note">Strict test mode never shows early hints or worked support before marking.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Optional AI</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="aiProviderSelect">Provider</label>
+              <select id="aiProviderSelect">
+                <option value="off">AI off</option>
+                <option value="openai">OpenAI</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="anthropic">Anthropic</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aiModelInput">Model name</label>
+              <input type="text" id="aiModelInput" placeholder="Enter model name" />
+            </div>
+          </div>
+          <div class="control-row" style="margin-top:8px;">
+            <div class="field">
+              <label for="aiKeyInput">API key</label>
+              <input type="password" id="aiKeyInput" placeholder="Stored in session by default" />
+            </div>
+            <div class="field tight">
+              <label for="rememberAiKey">Remember key locally</label>
+              <select id="rememberAiKey">
+                <option value="no">No - session only</option>
+                <option value="yes">Yes - localStorage</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="good" id="saveAiSettingsBtn">Save AI settings</button>
+            <button class="ghost" id="testAiBtn">Test AI connection</button>
+          </div>
+          <div class="callout warn" style="margin-top:14px;">
+            In a single local HTML file, any direct API key use is client-side. Session-only storage is the safer default. Some providers may also reject direct browser requests or hit CORS restrictions. The app still works fully without AI, and the provider adapter is isolated so you can later swap in a tiny proxy if needed.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-method">
+      <div class="panel">
+        <h2>How this app is designed</h2>
+        <p>This tool is built around the real job of KS2 grammar mastery: recognise what a sentence is doing, discriminate between closely related grammar ideas, correct errors, manipulate clauses and phrases, and apply that knowledge under KS2 GPS-style conditions.</p>
+        <div class="split">
+          <div>
+            <h3>Question status</h3>
+            <div class="pill-list">
+              <span class="pill"><strong>New</strong>: barely seen yet</span>
+              <span class="pill"><strong>Learning</strong>: still building</span>
+              <span class="pill"><strong>Due</strong>: ready for spaced review</span>
+              <span class="pill"><strong>Weak</strong>: repeated difficulty</span>
+              <span class="pill"><strong>Secured</strong>: strong and spaced out</span>
+            </div>
+          </div>
+          <div>
+            <h3>Practice loop</h3>
+            <div class="pill-list">
+              <span class="pill">Mixed retrieval first</span>
+              <span class="pill">No answer leakage before attempt</span>
+              <span class="pill">Contrastive examples after attempt</span>
+              <span class="pill">Worked support only when needed</span>
+              <span class="pill">Fast mistake recycle + later spaced return</span>
+            </div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:16px;">
+          Assumption used in this version: the app targets the highest-value KS2 grammar content for England, with a strong upper-KS2 / SATs emphasis, while still covering the main grammar ideas that matter for durable curriculum mastery.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+/* SCRIPT_PLACEHOLDER */
+</script>
+</body>
+</html>

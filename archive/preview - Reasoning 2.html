@@ -1,0 +1,4121 @@
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KS2 Maths Reasoning Mastery</title>
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --ink:#1f2937;
+      --muted:#5b6575;
+      --line:#d7deea;
+      --accent:#2563eb;
+      --accent-2:#0f766e;
+      --good:#166534;
+      --warn:#b45309;
+      --bad:#b91c1c;
+      --soft:#eef4ff;
+      --soft-2:#ecfeff;
+      --shadow:0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius:16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: Inter, Arial, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f7f9fd 0%, #eef3fb 100%);
+      color:var(--ink);
+      line-height:1.45;
+    }
+    button, input, select, textarea{
+      font: inherit;
+    }
+    .app{
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    header.app-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      padding: 18px 20px;
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom:16px;
+    }
+    .title-wrap h1{
+      margin:0 0 6px;
+      font-size: clamp(1.4rem, 2.8vw, 2.15rem);
+      line-height:1.1;
+    }
+    .title-wrap p{
+      margin:0;
+      color:var(--muted);
+      max-width:900px;
+    }
+    .header-right{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+      justify-content:flex-end;
+      min-width:280px;
+    }
+    .header-right .mini{
+      min-width: 160px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      background: var(--soft);
+      border:1px solid #cfe0ff;
+      color:#1d4ed8;
+      font-weight:600;
+      white-space:nowrap;
+    }
+    nav.tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:16px;
+    }
+    nav.tabs button{
+      border:none;
+      border-radius:999px;
+      padding:10px 15px;
+      background:#dfe8f8;
+      color:#234;
+      cursor:pointer;
+      font-weight:600;
+    }
+    nav.tabs button.active{
+      background: var(--accent);
+      color:#fff;
+    }
+
+    .tab-panel{ display:none; }
+    .tab-panel.active{ display:block; }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+    .grid.two{
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .grid.three{
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .panel{
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .panel h2, .panel h3{
+      margin:0 0 10px;
+      line-height:1.2;
+    }
+    .panel h2{ font-size:1.2rem; }
+    .panel h3{ font-size:1rem; color:#0f172a; }
+    .subtle{
+      color:var(--muted);
+      font-size:0.95rem;
+    }
+
+    .control-row, .wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:flex-end;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:160px;
+      flex:1 1 170px;
+    }
+    .field.tight{ min-width: 120px; flex:0 1 150px; }
+    label{
+      font-weight:600;
+      color:#334155;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    select,
+    textarea{
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid #bfd0e7;
+      background:#fff;
+      color:var(--ink);
+    }
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+    .mini input, .mini select{
+      padding:9px 10px;
+      border-radius:10px;
+    }
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+    button.primary,
+    button.secondary,
+    button.ghost,
+    button.warn,
+    button.good{
+      border:none;
+      border-radius:12px;
+      padding:11px 14px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    button.primary{ background:var(--accent); color:#fff; }
+    button.secondary{ background:#dbeafe; color:#1d4ed8; }
+    button.good{ background:#dcfce7; color:#166534; }
+    button.warn{ background:#ffedd5; color:#b45309; }
+    button.ghost{
+      background:#edf2f7;
+      color:#334155;
+    }
+    button:disabled{
+      opacity:0.55;
+      cursor:not-allowed;
+    }
+
+    .stats-row{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:10px;
+    }
+    .stat{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+    }
+    .stat .label{
+      color:var(--muted);
+      font-size:0.9rem;
+      margin-bottom:6px;
+    }
+    .stat .value{
+      font-size:1.4rem;
+      font-weight:800;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 11px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#3730a3;
+      border:1px solid #c7d2fe;
+      font-size:0.9rem;
+      font-weight:600;
+    }
+    .chip.good{ background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+    .chip.warn{ background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
+    .chip.bad{ background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+    .chip.neutral{ background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+
+    .question-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      background:linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    }
+    .question-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .question-stem{
+      font-size:1.08rem;
+      margin-bottom:16px;
+    }
+    .question-stem p{
+      margin:0 0 10px;
+    }
+    .question-stem strong{
+      color:#0f172a;
+    }
+    .question-visual{
+      margin: 10px 0 16px;
+      overflow-x:auto;
+    }
+    .response-area{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+    .answer-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap:10px;
+    }
+    .answer-box{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+    }
+    .answer-box legend{
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .option-row{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      padding:8px 0;
+    }
+    .option-row input{
+      margin-top:2px;
+    }
+    .working-box textarea{
+      min-height:130px;
+    }
+    .feedback{
+      border-radius:16px;
+      padding:14px;
+      margin-top:16px;
+      border:1px solid var(--line);
+    }
+    .feedback.good{
+      background:#f0fdf4;
+      border-color:#bbf7d0;
+    }
+    .feedback.warn{
+      background:#fff7ed;
+      border-color:#fed7aa;
+    }
+    .feedback.bad{
+      background:#fef2f2;
+      border-color:#fecaca;
+    }
+    .feedback h3{
+      margin:0 0 8px;
+    }
+    .worked{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      background:#ffffff;
+      border:1px dashed #bfd0e7;
+    }
+    .worked ol{
+      margin: 8px 0 0 20px;
+      padding:0;
+    }
+    .worked li{
+      margin-bottom:6px;
+    }
+    .scaffold{
+      border:1px dashed #8ec5ff;
+      background:#f0f8ff;
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:14px;
+    }
+    .example-card{
+      border:1px solid #bfe1ff;
+      background: linear-gradient(180deg, #eff7ff 0%, #ffffff 100%);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+    .example-card h4{
+      margin:0 0 8px;
+      font-size:1rem;
+    }
+    .tiny{
+      font-size:0.88rem;
+      color:var(--muted);
+    }
+    table.clean{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      background:#fff;
+    }
+    table.clean th, table.clean td{
+      border:1px solid #dbe5f3;
+      padding:10px 12px;
+      text-align:left;
+      vertical-align:middle;
+    }
+    table.clean th{
+      background:#eff6ff;
+    }
+    .skill-row{
+      display:grid;
+      grid-template-columns: 210px 1fr 90px 105px;
+      gap:10px;
+      align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid #edf2f7;
+    }
+    .skill-row:last-child{ border-bottom:none; }
+    .bar{
+      width:100%;
+      height:12px;
+      background:#e9eef7;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid #dce4f2;
+    }
+    .bar > span{
+      display:block;
+      height:100%;
+      background:linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+      border-radius:999px;
+    }
+    .status-new{ color:#475569; font-weight:700; }
+    .status-learning{ color:#1d4ed8; font-weight:700; }
+    .status-due{ color:#b45309; font-weight:700; }
+    .status-weak{ color:#b91c1c; font-weight:700; }
+    .status-secured{ color:#166534; font-weight:700; }
+
+    .mini-paper-nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .mini-paper-nav button{
+      min-width:42px;
+      border:none;
+      border-radius:10px;
+      padding:9px 12px;
+      cursor:pointer;
+      font-weight:700;
+      background:#e5eefc;
+      color:#234;
+    }
+    .mini-paper-nav button.current{
+      background:var(--accent);
+      color:#fff;
+    }
+    .mini-paper-nav button.done{
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .chart-wrap{
+      padding:10px;
+      background:#fff;
+      border-radius:16px;
+      border:1px solid #dbe5f3;
+    }
+
+    .callout{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid #bfdbfe;
+      background:#eff6ff;
+    }
+    .callout.warn{
+      border-color:#fed7aa;
+      background:#fff7ed;
+    }
+    .callout.good{
+      border-color:#bbf7d0;
+      background:#f0fdf4;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .profile-card{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fbfdff;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:0.92rem;
+    }
+    .hidden{
+      display:none !important;
+    }
+    details{
+      border:1px solid #dce5f2;
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fbfdff;
+    }
+    details + details{
+      margin-top:10px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:700;
+    }
+    .footer-note{
+      color:var(--muted);
+      font-size:0.9rem;
+      margin-top:12px;
+    }
+    .pill-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:6px;
+    }
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #dce5f2;
+      background:#fff;
+      font-size:0.86rem;
+    }
+    .review-card{
+      border:1px solid #dce5f2;
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+    }
+
+    @media (max-width: 1040px){
+      .grid.two, .grid.three, .split{
+        grid-template-columns: 1fr;
+      }
+      .stats-row{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .skill-row{
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px){
+      .app{ padding:12px; }
+      header.app-header{ padding:16px; }
+      .stats-row{
+        grid-template-columns: 1fr;
+      }
+      nav.tabs button{
+        flex:1 1 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="title-wrap">
+        <h1>KS2 Maths Reasoning Mastery</h1>
+        <p>Daily practice for England KS2 maths reasoning, built for durable mastery: mixed retrieval, genuine first attempts, quick corrective feedback, spaced return, and strict SATs-style practice when you want it.</p>
+      </div>
+      <div class="header-right">
+        <div class="field mini">
+          <label for="currentLearnerSelect">Learner</label>
+          <select id="currentLearnerSelect"></select>
+        </div>
+        <div class="badge" id="dueBadge">0 due</div>
+        <div class="badge" id="streakBadge">0-day streak</div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabButtons">
+      <button class="active" data-tab="practice">Practice</button>
+      <button data-tab="analytics">Analytics</button>
+      <button data-tab="profiles">Profiles &amp; Data</button>
+      <button data-tab="settings">Settings</button>
+      <button data-tab="method">Method</button>
+    </nav>
+
+    <section class="tab-panel active" id="tab-practice">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Practice setup</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="modeSelect">Mode</label>
+              <select id="modeSelect">
+                <option value="smart">Smart Review</option>
+                <option value="skill">Skill Practice</option>
+                <option value="trouble">Trouble Drill</option>
+                <option value="worked">Worked Examples</option>
+                <option value="faded">Faded Guidance</option>
+                <option value="sats">SATs Single</option>
+                <option value="satsset">SATs Mini-Set</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="skillSelect">Skill focus</label>
+              <select id="skillSelect"></select>
+            </div>
+            <div class="field">
+              <label for="goalSelect">Session goal</label>
+              <select id="goalSelect">
+                <option value="10m">10 minutes</option>
+                <option value="15q">15 questions</option>
+                <option value="due">Clear due items</option>
+              </select>
+            </div>
+            <div class="field tight" id="setSizeField">
+              <label for="setSizeSelect">Mini-set size</label>
+              <select id="setSizeSelect">
+                <option value="8">8 questions</option>
+                <option value="12">12 questions</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="startSessionBtn">Start / refresh session</button>
+            <button class="secondary" id="nextQuestionBtn">Next question</button>
+            <button class="ghost" id="readAloudBtn">Read aloud</button>
+            <button class="ghost hidden" id="finishSetBtn">Finish mini-set</button>
+          </div>
+          <p class="footer-note" id="modeNote"></p>
+        </div>
+
+        <div class="panel">
+          <h2>Session view</h2>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="label">Answered</div>
+              <div class="value" id="sessionAnswered">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Correct</div>
+              <div class="value" id="sessionCorrect">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Goal progress</div>
+              <div class="value" id="sessionGoalProgress">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Timer</div>
+              <div class="value" id="sessionTimer">--:--</div>
+            </div>
+          </div>
+          <div class="chips" style="margin-top:12px;" id="sessionChips"></div>
+          <div class="mini-paper-nav hidden" id="miniPaperNav"></div>
+          <p class="footer-note" id="sessionSummary">No active session yet.</p>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="question-card" id="questionCard">
+          <div class="question-meta" id="questionMeta">
+            <span class="chip neutral">Ready</span>
+          </div>
+          <div class="question-stem" id="questionStem">
+            <p>Choose a mode and start a session. Smart Review uses weighted mixed practice with spaced return, weak-spot review, and quick recycling of recent mistakes.</p>
+          </div>
+          <div class="question-visual" id="questionVisual"></div>
+          <div class="response-area" id="responseArea"></div>
+          <div class="actions" id="questionActions">
+            <button class="primary hidden" id="submitAnswerBtn">Submit answer</button>
+            <button class="warn hidden" id="retryBtn">Retry this question</button>
+            <button class="secondary hidden" id="showWorkedBtn">Show worked solution</button>
+            <button class="secondary hidden" id="useFadedBtn">Use a partly worked version</button>
+            <button class="good hidden" id="aiExplainBtn">AI explain this</button>
+            <button class="good hidden" id="aiVariantBtn">AI similar problem</button>
+          </div>
+          <div id="feedbackArea"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-analytics">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Overview</h2>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="label">Total questions</div>
+              <div class="value" id="anaTotalQuestions">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Accuracy</div>
+              <div class="value" id="anaAccuracy">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Due now</div>
+              <div class="value" id="anaDue">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Secured skills</div>
+              <div class="value" id="anaSecured">0</div>
+            </div>
+          </div>
+          <div class="callout" style="margin-top:14px;">
+            <strong>Parent / teacher summary</strong>
+            <div id="parentSummary" style="margin-top:8px;"></div>
+          </div>
+          <div class="actions">
+            <button class="good" id="aiParentSummaryBtn">AI parent summary</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Misconceptions seen most often</h2>
+          <div id="misconceptionList"></div>
+          <div class="footer-note">The app tracks likely reasons for errors, not just right or wrong, so trouble drills can target the actual weakness.</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Skill strength</h2>
+        <div id="skillAnalytics"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Question family strength</h2>
+        <div id="templateAnalytics"></div>
+        <div class="footer-note">Question family strength tracks recurring template types separately from broader skill strength, so you can spot patterns such as “fractions of amounts” being weak even if fractions overall are improving.</div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Recent activity</h2>
+        <div id="recentActivity"></div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-profiles">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Learner profiles</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="newLearnerName">New learner name</label>
+              <input type="text" id="newLearnerName" placeholder="e.g. Ava" />
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="createLearnerBtn">Create learner</button>
+            <button class="ghost" id="renameLearnerBtn">Rename current learner</button>
+            <button class="warn" id="deleteLearnerBtn">Delete current learner</button>
+          </div>
+          <div id="learnerList" style="margin-top:14px;"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Import / export / reset</h2>
+          <p class="subtle">Progress lives in your browser via localStorage. Export regularly if you care about keeping the data.</p>
+          <div class="actions">
+            <button class="secondary" id="exportCurrentBtn">Export current learner JSON</button>
+            <button class="secondary" id="exportAllBtn">Export all app data JSON</button>
+            <button class="ghost" id="importBtn">Import JSON</button>
+            <button class="warn" id="resetLearnerBtn">Reset current learner progress</button>
+            <button class="warn" id="resetAllBtn">Reset all app data</button>
+          </div>
+          <input type="file" id="importFileInput" accept=".json,application/json" class="hidden" />
+          <div class="callout warn" style="margin-top:14px;">
+            Reset removes progress but keeps the app file itself. Export first if you may want the data later.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-settings">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Practice settings</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="allowTeachingItems">Teaching items in Smart Review</label>
+              <select id="allowTeachingItems">
+                <option value="yes">Yes - allow worked / faded items when needed</option>
+                <option value="no">No - keep Smart Review fully independent</option>
+              </select>
+            </div>
+            <div class="field tight">
+              <label for="speechRateInput">Read-aloud speed</label>
+              <input type="number" min="0.6" max="1.4" step="0.1" id="speechRateInput" />
+            </div>
+            <div class="field">
+              <label for="showDomainBeforeAnswer">Show broad domain before answer</label>
+              <select id="showDomainBeforeAnswer">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="footer-note">Strict SATs modes never show early hints or worked support before marking.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Optional AI</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="aiProviderSelect">Provider</label>
+              <select id="aiProviderSelect">
+                <option value="off">AI off</option>
+                <option value="openai">OpenAI</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="anthropic">Anthropic</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aiModelInput">Model name</label>
+              <input type="text" id="aiModelInput" placeholder="Enter model name" />
+            </div>
+          </div>
+          <div class="control-row" style="margin-top:8px;">
+            <div class="field">
+              <label for="aiKeyInput">API key</label>
+              <input type="password" id="aiKeyInput" placeholder="Stored in session by default" />
+            </div>
+            <div class="field tight">
+              <label for="rememberAiKey">Remember key locally</label>
+              <select id="rememberAiKey">
+                <option value="no">No - session only</option>
+                <option value="yes">Yes - localStorage</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="good" id="saveAiSettingsBtn">Save AI settings</button>
+            <button class="ghost" id="testAiBtn">Test AI connection</button>
+          </div>
+          <div class="callout warn" style="margin-top:14px;">
+            In a single local HTML file, any direct API key use is client-side. Session-only storage is the safer default. Some providers may also reject direct browser requests or hit CORS restrictions. The app still works fully without AI, and the provider adapter is isolated so you can later swap in a tiny proxy if needed.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-method">
+      <div class="panel">
+        <h2>How this app is designed</h2>
+        <p>This tool is built around the real job of KS2 maths reasoning: read the question carefully, spot the underlying structure, choose the right operation or representation, carry the steps accurately, organise working, and check whether the answer makes sense.</p>
+        <div class="split">
+          <div>
+            <h3>Question status</h3>
+            <div class="pill-list">
+              <span class="pill"><strong>New</strong>: barely seen yet</span>
+              <span class="pill"><strong>Learning</strong>: still building</span>
+              <span class="pill"><strong>Due</strong>: ready for spaced review</span>
+              <span class="pill"><strong>Weak</strong>: repeated difficulty</span>
+              <span class="pill"><strong>Secured</strong>: strong and spaced out</span>
+            </div>
+          </div>
+          <div>
+            <h3>Practice loop</h3>
+            <div class="pill-list">
+              <span class="pill">Mixed retrieval first</span>
+              <span class="pill">No answer leakage before attempt</span>
+              <span class="pill">Minimal corrective feedback first</span>
+              <span class="pill">Worked support only when needed</span>
+              <span class="pill">Fast mistake recycle + later spaced return</span>
+            </div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:16px;">
+          Assumption used in this version: the app targets the highest-value KS2 reasoning content for England, with a strong upper-KS2 / SATs emphasis, while still covering the main reasoning structures that matter for durable curriculum mastery.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "ks2_reasoning_mastery_v1";
+    const SESSION_AI_KEY = "ks2_reasoning_ai_session_key";
+    const APP_VERSION = 1;
+
+    // Common misconception tags used for diagnostic feedback and analytics.
+    const MISCONCEPTIONS = {
+      operation_choice: "Chose the wrong operation structure",
+      place_value_slip: "Place value / rounding slip",
+      skipped_step: "Skipped a needed step",
+      unit_confusion: "Unit conversion confusion",
+      misread_question: "Misread what was being asked",
+      estimation_failure: "Reasonableness / rounding-up problem",
+      fraction_misconception: "Fraction structure misconception",
+      fraction_denominator_error: "Changed the denominator incorrectly",
+      area_perimeter_confusion: "Mixed up area and perimeter",
+      data_misread: "Read the table / chart / scale incorrectly",
+      inverse_error: "Inverse operations in the wrong order",
+      scaling_confusion: "Used additive thinking instead of scaling",
+      angle_total_confusion: "Used the wrong angle total",
+      exhaustive_search: "Did not find all valid numbers"
+    };
+
+    const MINIMAL_HINTS = {
+      operation_choice: "Check what one group represents before you calculate.",
+      place_value_slip: "Focus on the value of the digit, not just the digit itself.",
+      skipped_step: "There is an intermediate value you need first.",
+      unit_confusion: "Convert to the same unit before you compare or combine.",
+      misread_question: "Read the final sentence again. What exactly is it asking for?",
+      estimation_failure: "Estimate first. Should the final amount round up or down?",
+      fraction_misconception: "Find one equal part first, then build the number of parts you need.",
+      fraction_denominator_error: "When the parts are the same size, the denominator usually stays the same.",
+      area_perimeter_confusion: "Perimeter is around the edge. Area covers the inside.",
+      data_misread: "Check the scale or the row / column labels carefully.",
+      inverse_error: "Undo the operations in reverse order.",
+      scaling_confusion: "Think multiplicatively: by what factor has the quantity changed?",
+      angle_total_confusion: "Check whether the angles should add to 180° or 360°.",
+      exhaustive_search: "Split the possibilities into cases so you do not miss any."
+    };
+
+    // Curriculum-facing skill map. Keep this separate from logic so it is easy to extend.
+    const SKILLS = {
+      pv_rounding: { domain:"Number and place value", name:"Rounding and place value reasoning" },
+      pv_compare: { domain:"Number and place value", name:"Comparing and organising numbers" },
+      add_sub_multistep: { domain:"Calculation", name:"Multi-step addition and subtraction reasoning" },
+      mul_div_structure: { domain:"Calculation", name:"Multiplication / division structure in contexts" },
+      inverse_missing: { domain:"Calculation", name:"Missing number and inverse reasoning" },
+      fractions_quantity: { domain:"Fractions, decimals and percentages", name:"Fractions of quantities" },
+      fractions_compare: { domain:"Fractions, decimals and percentages", name:"Comparing fractions" },
+      fdp_equiv: { domain:"Fractions, decimals and percentages", name:"Fraction / decimal / percentage links" },
+      percent_number: { domain:"Fractions, decimals and percentages", name:"Percentages of quantities" },
+      ratio_scale: { domain:"Ratio and proportion", name:"Scaling and multiplicative comparison" },
+      unit_conversion: { domain:"Measure", name:"Unit conversion in word problems" },
+      time_elapsed: { domain:"Measure", name:"Elapsed time reasoning" },
+      perimeter_area: { domain:"Geometry and measure", name:"Perimeter and area reasoning" },
+      geometry_angles: { domain:"Geometry", name:"Angle reasoning" },
+      statistics_reading: { domain:"Statistics", name:"Reading tables, charts and scales" },
+      reasonableness: { domain:"Reasoning and checking", name:"Estimation and reasonableness checks" },
+      error_analysis: { domain:"Reasoning and checking", name:"Explaining and correcting mistakes" }
+    };
+
+    function uid() {
+      return "id_" + Math.random().toString(36).slice(2, 10) + "_" + Date.now().toString(36);
+    }
+
+    function clamp(n, min, max) {
+      return Math.min(max, Math.max(min, n));
+    }
+
+    function randInt(rng, min, max) {
+      return Math.floor(rng() * (max - min + 1)) + min;
+    }
+
+    function pick(rng, arr) {
+      return arr[randInt(rng, 0, arr.length - 1)];
+    }
+
+    function shuffle(rng, arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function mulberry32(seed) {
+      let t = seed >>> 0;
+      return function() {
+        t += 0x6D2B79F5;
+        let r = Math.imul(t ^ (t >>> 15), 1 | t);
+        r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+        return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function nowMs() {
+      return Date.now();
+    }
+
+    function isoNow() {
+      return new Date().toISOString();
+    }
+
+    function formatDateTime(ts) {
+      if (!ts) return "—";
+      return new Date(ts).toLocaleString("en-GB", {
+        year:"numeric", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit"
+      });
+    }
+
+    function todayKey(ts = Date.now()) {
+      const d = new Date(ts);
+      return [d.getFullYear(), String(d.getMonth()+1).padStart(2, "0"), String(d.getDate()).padStart(2, "0")].join("-");
+    }
+
+    function diffDays(aKey, bKey) {
+      const a = new Date(aKey + "T00:00:00");
+      const b = new Date(bKey + "T00:00:00");
+      return Math.round((b - a) / 86400000);
+    }
+
+    function average(nums) {
+      return nums.length ? nums.reduce((a,b)=>a+b,0) / nums.length : 0;
+    }
+
+    function gcd(a, b) {
+      a = Math.abs(a); b = Math.abs(b);
+      while (b) [a, b] = [b, a % b];
+      return a || 1;
+    }
+
+    function simplifyFraction(n, d) {
+      const g = gcd(n, d);
+      return { n: n / g, d: d / g };
+    }
+
+    function fractionToText(n, d) {
+      return `${n}/${d}`;
+    }
+
+    function formatNumber(n) {
+      return Number(n).toLocaleString("en-GB");
+    }
+
+    function formatMoney(n) {
+      return "£" + Number(n).toFixed(2);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function nl2br(str) {
+      return escapeHtml(str).replace(/\n/g, "<br>");
+    }
+
+    function asList(items) {
+      return "<ol>" + items.map(x => `<li>${escapeHtml(x)}</li>`).join("") + "</ol>";
+    }
+
+    function cleanNumText(value) {
+      return String(value || "").trim().replace(/,/g, "").replace(/£/g, "").replace(/\s+/g, "");
+    }
+
+    function parseNumberInput(value) {
+      const s = cleanNumText(value);
+      if (s === "") return null;
+      if (/^-?\d+(\.\d+)?$/.test(s)) return Number(s);
+      return null;
+    }
+
+    function parseFractionOrNumber(value) {
+      const s = String(value || "").trim().replace(/\s+/g, "");
+      if (!s) return null;
+      if (/^-?\d+\/-?\d+$/.test(s)) {
+        const [a,b] = s.split("/").map(Number);
+        if (b === 0) return null;
+        return a / b;
+      }
+      const num = parseNumberInput(s);
+      return num;
+    }
+
+    function equalNumeric(a, b, tol = 1e-9) {
+      return Math.abs(a - b) <= tol;
+    }
+
+    function parseClockTime(text) {
+      const raw = String(text || "").trim();
+      if (!raw) return null;
+      const s = raw.replace(/\./g, ":");
+      if (/^\d{3,4}$/.test(s)) {
+        const hours = s.length === 3 ? Number(s.slice(0,1)) : Number(s.slice(0,2));
+        const mins = Number(s.slice(-2));
+        if (hours >= 0 && hours < 24 && mins >= 0 && mins < 60) return hours * 60 + mins;
+      }
+      const m = s.match(/^(\d{1,2})[:h](\d{2})$/i);
+      if (m) {
+        const hours = Number(m[1]);
+        const mins = Number(m[2]);
+        if (hours >= 0 && hours < 24 && mins >= 0 && mins < 60) return hours * 60 + mins;
+      }
+      return null;
+    }
+
+    function minutesToClock(totalMinutes) {
+      let mins = ((totalMinutes % (24*60)) + (24*60)) % (24*60);
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    }
+
+    function roundToPlace(n, place) {
+      return Math.round(n / place) * place;
+    }
+
+    function parseCommaNumberList(text) {
+      return String(text || "")
+        .split(/[,\n;]/)
+        .map(x => x.trim())
+        .filter(Boolean)
+        .map(x => parseNumberInput(x))
+        .filter(x => x !== null);
+    }
+
+    function parseSymbol(text) {
+      return String(text || "").trim();
+    }
+
+    function statusFromNode(node) {
+      const now = Date.now();
+      if (!node || !node.attempts) return "new";
+      if ((node.strength || 0) < 0.42 || (node.wrong || 0) > (node.correct || 0) + 1) return "weak";
+      if ((node.dueAt || 0) <= now) return "due";
+      if ((node.strength || 0) >= 0.82 && (node.intervalDays || 0) >= 7 && (node.correctStreak || 0) >= 3) return "secured";
+      return "learning";
+    }
+
+    function humanStatus(status) {
+      return ({
+        new:"New",
+        learning:"Learning",
+        due:"Due",
+        weak:"Weak",
+        secured:"Secured"
+      })[status] || status;
+    }
+
+    function defaultNode() {
+      return {
+        attempts: 0,
+        correct: 0,
+        wrong: 0,
+        strength: 0.25,
+        intervalDays: 0,
+        dueAt: 0,
+        lastSeenAt: null,
+        lastWrongAt: null,
+        correctStreak: 0
+      };
+    }
+
+    function makeLearner(name) {
+      return {
+        id: uid(),
+        name: name || "Learner",
+        createdAt: isoNow(),
+        settings: {
+          allowTeachingItems: true,
+          speechRate: 1,
+          showDomainBeforeAnswer: true
+        },
+        skills: {},
+        templates: {},
+        items: {},
+        misconceptions: {},
+        retryQueue: [],
+        events: [],
+        sessions: [],
+        lastPracticeDay: null,
+        streakDays: 0
+      };
+    }
+
+    function defaultAppState() {
+      const learner = makeLearner("Learner 1");
+      return {
+        version: APP_VERSION,
+        currentLearnerId: learner.id,
+        learners: { [learner.id]: learner },
+        globalSettings: {
+          ai: {
+            provider: "off",
+            model: "",
+            rememberKey: false,
+            storedKey: ""
+          }
+        }
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultAppState();
+        const parsed = JSON.parse(raw);
+        if (!parsed.learners || !Object.keys(parsed.learners).length) return defaultAppState();
+        parsed.version = APP_VERSION;
+        if (!parsed.globalSettings) parsed.globalSettings = { ai: { provider:"off", model:"", rememberKey:false, storedKey:"" } };
+        if (!parsed.globalSettings.ai) parsed.globalSettings.ai = { provider:"off", model:"", rememberKey:false, storedKey:"" };
+        for (const learnerId of Object.keys(parsed.learners)) {
+          parsed.learners[learnerId] = normaliseLearner(parsed.learners[learnerId]);
+        }
+        if (!parsed.currentLearnerId || !parsed.learners[parsed.currentLearnerId]) {
+          parsed.currentLearnerId = Object.keys(parsed.learners)[0];
+        }
+        return parsed;
+      } catch (err) {
+        console.error(err);
+        return defaultAppState();
+      }
+    }
+
+    function normaliseLearner(learner) {
+      const clean = Object.assign(makeLearner(learner.name || "Learner"), learner);
+      clean.settings = Object.assign({
+        allowTeachingItems: true,
+        speechRate: 1,
+        showDomainBeforeAnswer: true
+      }, learner.settings || {});
+      clean.skills = learner.skills || {};
+      clean.templates = learner.templates || {};
+      clean.items = learner.items || {};
+      clean.misconceptions = learner.misconceptions || {};
+      clean.retryQueue = (learner.retryQueue || []).filter(x => x && x.templateId);
+      clean.events = (learner.events || []).slice(-700);
+      clean.sessions = (learner.sessions || []).slice(-100);
+      if (!clean.lastPracticeDay) clean.lastPracticeDay = null;
+      if (!Number.isFinite(clean.streakDays)) clean.streakDays = 0;
+      return clean;
+    }
+
+    let state = loadState();
+
+    const ui = {
+      activeTab: "practice",
+      session: null,
+      currentPack: null,
+      satsSet: null,
+      timerInterval: null
+    };
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function currentLearner() {
+      return state.learners[state.currentLearnerId];
+    }
+
+    function ensureSkillNode(skillId) {
+      const learner = currentLearner();
+      if (!learner.skills[skillId]) learner.skills[skillId] = defaultNode();
+      return learner.skills[skillId];
+    }
+
+    function ensureTemplateNode(templateId) {
+      const learner = currentLearner();
+      if (!learner.templates[templateId]) learner.templates[templateId] = defaultNode();
+      return learner.templates[templateId];
+    }
+
+    function ensureItemNode(itemId) {
+      const learner = currentLearner();
+      if (!learner.items[itemId]) learner.items[itemId] = defaultNode();
+      return learner.items[itemId];
+    }
+
+    function learnerDueCount() {
+      const learner = currentLearner();
+      const now = nowMs();
+      let count = learner.retryQueue.filter(x => x.dueAt <= now).length;
+      for (const skillId of Object.keys(SKILLS)) {
+        const node = learner.skills[skillId];
+        if (node && node.attempts && (node.dueAt || 0) <= now) count += 1;
+      }
+      return count;
+    }
+
+    function updateStreak() {
+      const learner = currentLearner();
+      const today = todayKey();
+      if (!learner.lastPracticeDay) {
+        learner.lastPracticeDay = today;
+        learner.streakDays = 1;
+        return;
+      }
+      if (learner.lastPracticeDay === today) return;
+      const gap = diffDays(learner.lastPracticeDay, today);
+      learner.streakDays = gap === 1 ? learner.streakDays + 1 : 1;
+      learner.lastPracticeDay = today;
+    }
+
+    function bumpMisconception(tag) {
+      if (!tag) return;
+      const learner = currentLearner();
+      if (!learner.misconceptions[tag]) learner.misconceptions[tag] = { count:0, lastSeenAt:null };
+      learner.misconceptions[tag].count += 1;
+      learner.misconceptions[tag].lastSeenAt = isoNow();
+    }
+
+    function recordEvent(event) {
+      const learner = currentLearner();
+      learner.events.push(event);
+      if (learner.events.length > 700) learner.events = learner.events.slice(-700);
+    }
+
+    function recordSessionSummary(extra) {
+      const learner = currentLearner();
+      learner.sessions.push(Object.assign({ createdAt: isoNow() }, extra || {}));
+      if (learner.sessions.length > 100) learner.sessions = learner.sessions.slice(-100);
+    }
+
+    function outcomeQuality(result, pack) {
+      const attempts = pack.attempts || 1;
+      const support = pack.supportLevel || 0;
+      if (result.correct) {
+        if (support >= 2) return 3;
+        if (support === 1) return attempts === 1 ? 3.4 : 3;
+        if (attempts === 1) return 5;
+        if (attempts === 2) return 3.6;
+        return 3.2;
+      }
+      if (result.score > 0) return 1.5;
+      return 0;
+    }
+
+    function updateNodeFromQuality(node, quality) {
+      node.attempts += 1;
+      node.lastSeenAt = isoNow();
+      const now = nowMs();
+      if (quality >= 4.8) {
+        node.correct += 1;
+        node.correctStreak += 1;
+        node.strength = clamp(node.strength + 0.13, 0.05, 0.99);
+        node.intervalDays = node.intervalDays ? Math.min(45, node.intervalDays * 2) : 1;
+        node.dueAt = now + node.intervalDays * 86400000;
+      } else if (quality >= 4) {
+        node.correct += 1;
+        node.correctStreak += 1;
+        node.strength = clamp(node.strength + 0.09, 0.05, 0.98);
+        node.intervalDays = node.intervalDays ? Math.min(28, node.intervalDays * 1.7) : 1;
+        node.dueAt = now + node.intervalDays * 86400000;
+      } else if (quality >= 3) {
+        node.correct += 1;
+        node.correctStreak = Math.max(1, node.correctStreak);
+        node.strength = clamp(node.strength + 0.04, 0.05, 0.95);
+        node.intervalDays = node.intervalDays ? Math.max(0.25, node.intervalDays * 0.9) : 0.25;
+        node.dueAt = now + Math.max(6 * 3600000, node.intervalDays * 86400000);
+      } else {
+        node.wrong += 1;
+        node.correctStreak = 0;
+        node.strength = clamp(node.strength - (quality > 0 ? 0.08 : 0.15), 0.02, 0.95);
+        node.intervalDays = Math.max(0.04, (node.intervalDays || 0.2) * 0.45);
+        node.dueAt = now + (quality > 0 ? 20 : 12) * 60000;
+        node.lastWrongAt = isoNow();
+      }
+    }
+
+    function enqueueRetry(pack, result) {
+      const learner = currentLearner();
+      const dueAt = nowMs() + (result.correct ? 6 * 3600000 : 15 * 60000);
+      learner.retryQueue.push({
+        templateId: pack.templateId,
+        seed: pack.active.seed,
+        dueAt,
+        skillIds: pack.skillIds.slice(),
+        reason: result.correct ? "supported-or-shaky" : "recent-miss"
+      });
+      learner.retryQueue = learner.retryQueue
+        .sort((a,b) => a.dueAt - b.dueAt)
+        .slice(0, 300);
+    }
+
+    function applyLearningUpdate(pack, result, responseSnapshot) {
+      const quality = outcomeQuality(result, pack);
+      const learner = currentLearner();
+      updateStreak();
+      for (const skillId of pack.skillIds) {
+        updateNodeFromQuality(ensureSkillNode(skillId), quality);
+      }
+      updateNodeFromQuality(ensureTemplateNode(pack.templateId), quality);
+      updateNodeFromQuality(ensureItemNode(pack.active.itemId), quality);
+      if (result.misconception) bumpMisconception(result.misconception);
+      if (!result.correct || quality < 4) enqueueRetry(pack, result);
+
+      recordEvent({
+        timestamp: isoNow(),
+        templateId: pack.templateId,
+        itemId: pack.active.itemId,
+        promptType: pack.presentation,
+        mode: ui.session ? ui.session.mode : (ui.satsSet ? "satsset" : "single"),
+        skillIds: pack.skillIds,
+        score: result.score,
+        maxScore: result.maxScore,
+        correct: result.correct,
+        attempts: pack.attempts,
+        supportLevel: pack.supportLevel || 0,
+        misconception: result.misconception || null,
+        response: responseSnapshot,
+        durationSec: Math.round((nowMs() - pack.startedAt) / 1000)
+      });
+
+      saveState();
+    }
+
+    function getRecentEvents(limit = 20) {
+      return currentLearner().events.slice(-limit).reverse();
+    }
+
+    function recentSkillPenalty(skillIds) {
+      const recent = getRecentEvents(6);
+      const recentSkills = recent.flatMap(e => e.skillIds || []);
+      let repeats = 0;
+      for (const id of skillIds) if (recentSkills.includes(id)) repeats += 1;
+      return repeats;
+    }
+
+    function weakSkillIds() {
+      const learner = currentLearner();
+      return Object.keys(SKILLS).sort((a,b) => {
+        const A = learner.skills[a] || defaultNode();
+        const B = learner.skills[b] || defaultNode();
+        const scoreA = (1 - A.strength) + ((A.wrong || 0) / Math.max(1, A.attempts));
+        const scoreB = (1 - B.strength) + ((B.wrong || 0) / Math.max(1, B.attempts));
+        return scoreB - scoreA;
+      });
+    }
+
+    function getAIKey() {
+      const ai = state.globalSettings.ai || {};
+      if (ai.rememberKey) return ai.storedKey || "";
+      return sessionStorage.getItem(SESSION_AI_KEY) || "";
+    }
+
+    function setAIKey(value, remember) {
+      const ai = state.globalSettings.ai;
+      ai.rememberKey = !!remember;
+      if (remember) {
+        ai.storedKey = value || "";
+        sessionStorage.removeItem(SESSION_AI_KEY);
+      } else {
+        ai.storedKey = "";
+        if (value) sessionStorage.setItem(SESSION_AI_KEY, value);
+        else sessionStorage.removeItem(SESSION_AI_KEY);
+      }
+      saveState();
+    }
+
+    function aiEnabled() {
+      const ai = state.globalSettings.ai || {};
+      return ai.provider && ai.provider !== "off" && ai.model && getAIKey();
+    }
+
+    function mkResult({correct, score, maxScore, misconception, feedbackShort, feedbackLong, answerText, minimalHint}) {
+      return {
+        correct: !!correct,
+        score,
+        maxScore,
+        misconception: misconception || null,
+        feedbackShort: feedbackShort || "",
+        feedbackLong: feedbackLong || "",
+        answerText: answerText || "",
+        minimalHint: minimalHint || MINIMAL_HINTS[misconception] || "Check the structure and units carefully."
+      };
+    }
+
+    function rectangleSvg(widthLabel, heightLabel) {
+      return `
+      <svg width="320" height="170" viewBox="0 0 320 170" role="img" aria-label="Rectangle diagram">
+        <rect x="60" y="35" width="200" height="100" fill="#eff6ff" stroke="#2563eb" stroke-width="3" rx="8" />
+        <text x="160" y="28" text-anchor="middle" font-size="18" fill="#1f2937">${escapeHtml(widthLabel)}</text>
+        <text x="35" y="90" text-anchor="middle" font-size="18" fill="#1f2937" transform="rotate(-90, 35, 90)">${escapeHtml(heightLabel)}</text>
+      </svg>`;
+    }
+
+    function tableHtml(headers, rows) {
+      return `
+      <table class="clean">
+        <thead><tr>${headers.map(h => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead>
+        <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
+      </table>`;
+    }
+
+    function barChartSvg(values, labels, yStep, title) {
+      const maxV = Math.max(...values);
+      const top = Math.ceil(maxV / yStep) * yStep;
+      const width = 430;
+      const height = 250;
+      const left = 48;
+      const bottom = 38;
+      const chartW = 330;
+      const chartH = 170;
+      const barW = 48;
+      const gap = 26;
+      let grid = "";
+      for (let y = 0; y <= top; y += yStep) {
+        const py = 20 + chartH - (y / top) * chartH;
+        grid += `<line x1="${left}" y1="${py}" x2="${left+chartW}" y2="${py}" stroke="#dbe5f3" />`;
+        grid += `<text x="${left-10}" y="${py+4}" text-anchor="end" font-size="12" fill="#475569">${y}</text>`;
+      }
+      let bars = "";
+      values.forEach((v, i) => {
+        const x = left + 20 + i * (barW + gap);
+        const h = (v / top) * chartH;
+        const y = 20 + chartH - h;
+        bars += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="8" fill="#60a5fa" stroke="#2563eb" />`;
+        bars += `<text x="${x + barW/2}" y="${20 + chartH + 18}" text-anchor="middle" font-size="12" fill="#1f2937">${escapeHtml(labels[i])}</text>`;
+      });
+      return `
+      <div class="chart-wrap">
+        <div class="tiny" style="margin-bottom:6px;">${escapeHtml(title)}</div>
+        <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(title)}">
+          ${grid}
+          <line x1="${left}" y1="${20 + chartH}" x2="${left+chartW}" y2="${20 + chartH}" stroke="#94a3b8" stroke-width="2" />
+          <line x1="${left}" y1="${20}" x2="${left}" y2="${20 + chartH}" stroke="#94a3b8" stroke-width="2" />
+          ${bars}
+        </svg>
+      </div>`;
+    }
+
+    function anglePointSvg(a, b) {
+      return `
+      <svg width="280" height="220" viewBox="0 0 280 220" role="img" aria-label="Angles around a point diagram">
+        <line x1="140" y1="110" x2="240" y2="70" stroke="#2563eb" stroke-width="3" />
+        <line x1="140" y1="110" x2="230" y2="165" stroke="#2563eb" stroke-width="3" />
+        <line x1="140" y1="110" x2="75" y2="190" stroke="#2563eb" stroke-width="3" />
+        <line x1="140" y1="110" x2="70" y2="40" stroke="#2563eb" stroke-width="3" />
+        <circle cx="140" cy="110" r="4" fill="#1f2937" />
+        <text x="190" y="86" font-size="17" fill="#1f2937">${a}°</text>
+        <text x="178" y="146" font-size="17" fill="#1f2937">${b}°</text>
+        <text x="93" y="70" font-size="15" fill="#475569">90°</text>
+        <text x="90" y="150" font-size="18" fill="#1f2937">?</text>
+        <text x="16" y="18" font-size="12" fill="#64748b">Not to scale</text>
+      </svg>`;
+    }
+
+    function makeBaseQuestion(template, seed, data) {
+      return Object.assign({
+        templateId: template.id,
+        templateLabel: template.label,
+        domain: template.domain,
+        skillIds: template.skillIds.slice(),
+        seed,
+        itemId: `${template.id}:${seed}`,
+        marks: 1,
+        visualHtml: "",
+        reflectionPrompt: "",
+        checkLine: ""
+      }, data || {});
+    }
+
+    function makeIndependentPack(template, seed) {
+      const q = template.generator(seed);
+      return {
+        templateId: template.id,
+        templateLabel: template.label,
+        domain: template.domain,
+        skillIds: template.skillIds.slice(),
+        presentation: "independent",
+        active: q,
+        marks: q.marks,
+        attempts: 0,
+        supportLevel: 0,
+        startedAt: nowMs(),
+        workedShown: false,
+        firstWrongResult: null
+      };
+    }
+
+    function makeWorkedPack(template, seedA, seedB) {
+      const example = template.generator(seedA);
+      const target = template.generator(seedB);
+      return {
+        templateId: template.id,
+        templateLabel: template.label,
+        domain: template.domain,
+        skillIds: template.skillIds.slice(),
+        presentation: "worked",
+        example,
+        active: target,
+        marks: target.marks,
+        attempts: 0,
+        supportLevel: 2,
+        startedAt: nowMs(),
+        workedShown: true,
+        firstWrongResult: null
+      };
+    }
+
+    function makeFadedPack(template, seed) {
+      const q = template.generator(seed);
+      return {
+        templateId: template.id,
+        templateLabel: template.label,
+        domain: template.domain,
+        skillIds: template.skillIds.slice(),
+        presentation: "faded",
+        active: q,
+        marks: q.marks,
+        attempts: 0,
+        supportLevel: 1,
+        startedAt: nowMs(),
+        workedShown: false,
+        firstWrongResult: null
+      };
+    }
+
+    // Question templates. Each template generates fresh parameterised items and provides deterministic marking.
+    const TEMPLATES = [
+      {
+        id: "pv_rounding_context",
+        label: "Rounding in context",
+        domain: "Number and place value",
+        skillIds: ["pv_rounding", "reasonableness"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const place = pick(rng, [10, 100, 1000]);
+          const n = randInt(rng, 1200, 9850);
+          const rounded = roundToPlace(n, place);
+          const contexts = [
+            `A school counted <strong>${formatNumber(n)}</strong> raffle tickets.`,
+            `A zoo had <strong>${formatNumber(n)}</strong> visitors last month.`,
+            `A charity collected <strong>${formatNumber(n)}</strong> coins.`
+          ];
+          const stem = `
+            <p>${pick(rng, contexts)}</p>
+            <p>Rounded to the nearest <strong>${formatNumber(place)}</strong>, what is that number?</p>`;
+          const solutionLines = [
+            `Find the digit just to the right of the ${formatNumber(place)} place.`,
+            `That tells you whether to round down or round up.`,
+            `${formatNumber(n)} rounds to ${formatNumber(rounded)}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 1,
+            stemHtml: stem,
+            solutionLines,
+            checkLine: `A rounded answer should be a multiple of ${formatNumber(place)}.`,
+            reflectionPrompt: "Which digit did you need to look at to decide whether to round up or down?",
+            inputSpec: { type:"number", label:"Rounded number" },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === null) return mkResult({ correct:false, score:0, maxScore:1, misconception:"misread_question", feedbackShort:"Enter a number." });
+              if (ans === rounded) return mkResult({
+                correct:true, score:1, maxScore:1,
+                feedbackShort:"Correct.",
+                feedbackLong:`${formatNumber(n)} rounds to ${formatNumber(rounded)}.`,
+                answerText: formatNumber(rounded)
+              });
+              const misconception = ans === n ? "place_value_slip" : "place_value_slip";
+              return mkResult({
+                correct:false, score:0, maxScore:1,
+                misconception,
+                feedbackShort:"Not quite.",
+                feedbackLong:`The correct rounded number is ${formatNumber(rounded)}.`,
+                answerText: formatNumber(rounded)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "rounding_all_possible_numbers",
+        label: "All possible numbers",
+        domain: "Number and place value",
+        skillIds: ["pv_rounding", "pv_compare", "reasonableness"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const target = pick(rng, [4,5,6,7]);
+          const lowChoices = [0,1,2,3,4].filter(x => x !== target && x !== target - 1);
+          const highChoices = [5,6,7,8,9].filter(x => x !== target && x !== target - 1);
+          const low = pick(rng, lowChoices);
+          const high = pick(rng, highChoices);
+          const digits = shuffle(rng, [target - 1, target, low, high]);
+          const targetValue = target * 1000;
+          const allPerms = [];
+          function permute(arr, start=0) {
+            if (start === arr.length) {
+              allPerms.push(Number(arr.join("")));
+              return;
+            }
+            for (let i = start; i < arr.length; i++) {
+              [arr[start], arr[i]] = [arr[i], arr[start]];
+              permute(arr, start+1);
+              [arr[start], arr[i]] = [arr[i], arr[start]];
+            }
+          }
+          permute(digits.slice());
+          const valid = [...new Set(allPerms.filter(n => roundToPlace(n, 1000) === targetValue))].sort((a,b) => a-b);
+          const stem = `
+            <p>Use the digits <strong>${digits.join(", ")}</strong> once each.</p>
+            <p>Write <strong>all</strong> the 4-digit numbers that round to <strong>${formatNumber(targetValue)}</strong> to the nearest 1,000.</p>
+            <p class="tiny">Separate your answers with commas.</p>`;
+          const solutionLines = [
+            `Split the problem into cases.`,
+            `Case 1: numbers starting with ${target-1} must have a hundreds digit of 5 or more. That gives two possibilities.`,
+            `Case 2: numbers starting with ${target} must have a hundreds digit of 4 or less. That gives two more possibilities.`,
+            `The complete set is ${valid.map(formatNumber).join(", ")}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: { type:"text", label:"All possible numbers" },
+            evaluate: (resp) => {
+              const list = parseCommaNumberList(resp.answer);
+              const unique = [...new Set(list)].sort((a,b)=>a-b);
+              const correctCount = unique.filter(x => valid.includes(x)).length;
+              const exact = unique.length === valid.length && unique.every((v, i) => v === valid[i]);
+              if (exact) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`The full set is ${valid.map(formatNumber).join(", ")}.`,
+                answerText: valid.map(formatNumber).join(", ")
+              });
+              if (correctCount > 0) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"exhaustive_search",
+                  feedbackShort:"You found some valid numbers but not the full set.",
+                  feedbackLong:`The complete set is ${valid.map(formatNumber).join(", ")}.`,
+                  answerText: valid.map(formatNumber).join(", "),
+                  minimalHint: "Split the possibilities into clear cases so you do not miss any."
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"place_value_slip",
+                feedbackShort:"Not quite.",
+                feedbackLong:`The complete set is ${valid.map(formatNumber).join(", ")}.`,
+                answerText: valid.map(formatNumber).join(", ")
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "missing_number_ladder",
+        label: "Missing number table",
+        domain: "Number and place value",
+        skillIds: ["pv_compare", "inverse_missing"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const start = randInt(rng, 1200, 8900);
+          const plus100 = start + 100;
+          const plus1000 = start + 1000;
+          const slots = [
+            { key:"start", label:"Number", value:start },
+            { key:"plus100", label:"+100", value:plus100 },
+            { key:"plus1000", label:"+1,000", value:plus1000 }
+          ];
+          const blanks = shuffle(rng, slots).slice(0, 2);
+          const blankKeys = new Set(blanks.map(b => b.key));
+          const rows = [[
+            blankKeys.has("start") ? "?" : formatNumber(start),
+            blankKeys.has("plus100") ? "?" : formatNumber(plus100),
+            blankKeys.has("plus1000") ? "?" : formatNumber(plus1000)
+          ]];
+          const headers = ["Number", "+100", "+1,000"];
+          const solutionLines = [
+            `Use the known number to work out the missing values.`,
+            `${formatNumber(start)} + 100 = ${formatNumber(plus100)}.`,
+            `${formatNumber(start)} + 1,000 = ${formatNumber(plus1000)}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: `<p>Complete the table.</p>`,
+            visualHtml: tableHtml(headers, rows),
+            solutionLines,
+            inputSpec: {
+              type:"multi",
+              fields: blanks.map(b => ({ key:b.key, label:b.label, kind:"number" }))
+            },
+            evaluate: (resp) => {
+              let score = 0;
+              for (const b of blanks) {
+                const ans = parseNumberInput(resp[b.key]);
+                if (ans === b.value) score += 1;
+              }
+              const correct = score === blanks.length;
+              const answerText = blanks.map(b => `${b.label}: ${formatNumber(b.value)}`).join("; ");
+              if (correct) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:answerText,
+                answerText
+              });
+              return mkResult({
+                correct:false, score, maxScore:2,
+                misconception:"place_value_slip",
+                feedbackShort: score ? "One part is right, but not both." : "Not quite.",
+                feedbackLong:answerText,
+                answerText
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "sharing_groups",
+        label: "Sharing and regrouping",
+        domain: "Calculation",
+        skillIds: ["mul_div_structure", "add_sub_multistep"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const boxes = randInt(rng, 4, 9);
+          const perBox = randInt(rng, 18, 45);
+          const total = boxes * perBox;
+          const groupBoxes = randInt(rng, 2, boxes - 1);
+          const contexts = [
+            ["pencils", "boxes", "year group"],
+            ["stickers", "packs", "class"],
+            ["cakes", "trays", "club"]
+          ];
+          const [item, container, group] = pick(rng, contexts);
+          const answer = perBox * groupBoxes;
+          const stem = `
+            <p><strong>${formatNumber(total)}</strong> ${item} are packed equally into <strong>${boxes}</strong> ${container}.</p>
+            <p>One ${group} gets <strong>${groupBoxes}</strong> ${container}. How many ${item} does it get?</p>`;
+          const solutionLines = [
+            `First find one ${container}: ${formatNumber(total)} ÷ ${boxes} = ${perBox}.`,
+            `Then multiply by the number of ${container}: ${perBox} × ${groupBoxes} = ${answer}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            reflectionPrompt: "Why does division come before multiplication here?",
+            inputSpec: { type:"number", label:`Number of ${item}` },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === null) return mkResult({ correct:false, score:0, maxScore:2, misconception:"misread_question", feedbackShort:"Enter a number." });
+              if (ans === answer) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`The ${group} gets ${formatNumber(answer)} ${item}.`,
+                answerText: formatNumber(answer)
+              });
+              if (ans === perBox) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"skipped_step",
+                  feedbackShort:"You found how many are in one container, but the question asks for more than one container.",
+                  feedbackLong:`The ${group} gets ${formatNumber(answer)} ${item}.`,
+                  answerText: formatNumber(answer)
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"operation_choice",
+                feedbackShort:"Not quite.",
+                feedbackLong:`The ${group} gets ${formatNumber(answer)} ${item}.`,
+                answerText: formatNumber(answer)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "mass_limit",
+        label: "Mass and load limit",
+        domain: "Calculation",
+        skillIds: ["mul_div_structure", "add_sub_multistep", "reasonableness"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const empty = randInt(rng, 90, 180);
+          const boxes = randInt(rng, 4, 8);
+          const boxMass = randInt(rng, 14, 32);
+          const totalMass = empty + boxes * boxMass;
+          const maxLoad = totalMass + randInt(rng, -25, 40);
+          const safe = totalMass <= maxLoad;
+          const difference = Math.abs(totalMass - maxLoad);
+          const stem = `
+            <p>An empty trolley weighs <strong>${empty} kg</strong>.</p>
+            <p>It carries <strong>${boxes}</strong> boxes. Each box weighs <strong>${boxMass} kg</strong>.</p>
+            <p>The maximum safe total mass is <strong>${maxLoad} kg</strong>.</p>
+            <p>Is the trolley safe? If yes, how many kilograms spare does it have? If no, how many kilograms over the limit is it?</p>`;
+          const solutionLines = [
+            `Mass of boxes: ${boxes} × ${boxMass} = ${boxes * boxMass} kg.`,
+            `Total mass: ${empty} + ${boxes * boxMass} = ${totalMass} kg.`,
+            safe
+              ? `Since ${totalMass} kg is less than or equal to ${maxLoad} kg, it is safe with ${difference} kg spare.`
+              : `Since ${totalMass} kg is more than ${maxLoad} kg, it is not safe and is ${difference} kg over the limit.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: {
+              type:"multi",
+              fields: [
+                { key:"safe", label:"Safe?", kind:"select", options:[["yes","Yes"],["no","No"]] },
+                { key:"difference", label:"Kilograms spare / over", kind:"number" }
+              ]
+            },
+            evaluate: (resp) => {
+              const safeAns = String(resp.safe || "");
+              const diffAns = parseNumberInput(resp.difference);
+              let score = 0;
+              if (safeAns === (safe ? "yes" : "no")) score += 1;
+              if (diffAns === difference) score += 1;
+              if (score === 2) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`Total mass = ${totalMass} kg, so the trolley is ${safe ? "safe with " + difference + " kg spare" : difference + " kg over the limit"}.`,
+                answerText: `${safe ? "Yes" : "No"}; ${difference} kg`
+              });
+              if (diffAns === boxes * boxMass || diffAns === totalMass) {
+                return mkResult({
+                  correct:false, score:score, maxScore:2,
+                  misconception:"skipped_step",
+                  feedbackShort:"Part of the calculation is there, but you have not compared it correctly with the limit.",
+                  feedbackLong:`Total mass = ${totalMass} kg, so the trolley is ${safe ? "safe with " + difference + " kg spare" : difference + " kg over the limit"}.`,
+                  answerText: `${safe ? "Yes" : "No"}; ${difference} kg`
+                });
+              }
+              return mkResult({
+                correct:false, score:score, maxScore:2,
+                misconception:"reasonableness",
+                feedbackShort:"Not quite.",
+                feedbackLong:`Total mass = ${totalMass} kg, so the trolley is ${safe ? "safe with " + difference + " kg spare" : difference + " kg over the limit"}.`,
+                answerText: `${safe ? "Yes" : "No"}; ${difference} kg`
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "fraction_of_amount_leftover",
+        label: "Fraction of an amount, then leftover",
+        domain: "Fractions",
+        skillIds: ["fractions_quantity", "add_sub_multistep"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const den = pick(rng, [3,4,5,8,10]);
+          const num = randInt(rng, 1, den - 1);
+          const quantity = den * randInt(rng, 6, 18);
+          const part = quantity / den;
+          const selected = part * num;
+          const leftover = quantity - selected;
+          const contexts = [
+            ["books", "story books"],
+            ["stickers", "star stickers"],
+            ["marbles", "red marbles"]
+          ];
+          const [item, focus] = pick(rng, contexts);
+          const stem = `
+            <p><strong>${fractionToText(num, den)}</strong> of <strong>${quantity}</strong> ${item} are ${focus}.</p>
+            <p>How many are <strong>not</strong> ${focus}?</p>`;
+          const solutionLines = [
+            `Find one part: ${quantity} ÷ ${den} = ${part}.`,
+            `Find ${num} parts: ${part} × ${num} = ${selected}.`,
+            `The number not ${focus} is ${quantity} - ${selected} = ${leftover}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: { type:"number", label:`Number not ${focus}` },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === null) return mkResult({ correct:false, score:0, maxScore:2, misconception:"misread_question", feedbackShort:"Enter a number." });
+              if (ans === leftover) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`${leftover} are not ${focus}.`,
+                answerText: String(leftover)
+              });
+              if (ans === selected || ans === part) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception: ans === selected ? "skipped_step" : "fraction_misconception",
+                  feedbackShort:"You have found part of the structure, but not the final answer asked for.",
+                  feedbackLong:`${leftover} are not ${focus}.`,
+                  answerText: String(leftover)
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"fraction_misconception",
+                feedbackShort:"Not quite.",
+                feedbackLong:`${leftover} are not ${focus}.`,
+                answerText: String(leftover)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "fraction_compare",
+        label: "Comparing fractions",
+        domain: "Fractions",
+        skillIds: ["fractions_compare"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const pairs = [
+            [5,8,2,3],[3,4,5,6],[4,5,7,10],[3,8,1,4],[5,6,7,8],[2,5,3,10],[3,5,2,3]
+          ];
+          let [a,b,c,d] = pick(rng, pairs);
+          if (randInt(rng, 0, 4) === 0) {
+            [a,b,c,d] = [2,4,1,2];
+          }
+          const left = a / b;
+          const right = c / d;
+          const symbol = equalNumeric(left, right) ? "=" : (left > right ? ">" : "<");
+          const stem = `
+            <p>Write <strong>&lt;</strong>, <strong>&gt;</strong> or <strong>=</strong> to make this statement true.</p>
+            <p style="font-size:1.35rem;"><strong>${fractionToText(a,b)} □ ${fractionToText(c,d)}</strong></p>`;
+          const solutionLines = [
+            `Compare the fractions by using a common denominator or by thinking about benchmark fractions such as one half or one whole.`,
+            `${fractionToText(a,b)} ${symbol} ${fractionToText(c,d)}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 1,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: { type:"text", label:"Symbol", placeholder:"<, > or =" },
+            evaluate: (resp) => {
+              const ans = parseSymbol(resp.answer);
+              if (ans === symbol) return mkResult({
+                correct:true, score:1, maxScore:1,
+                feedbackShort:"Correct.",
+                feedbackLong:`${fractionToText(a,b)} ${symbol} ${fractionToText(c,d)}.`,
+                answerText: symbol
+              });
+              return mkResult({
+                correct:false, score:0, maxScore:1,
+                misconception:"fraction_misconception",
+                feedbackShort:"Not quite.",
+                feedbackLong:`${fractionToText(a,b)} ${symbol} ${fractionToText(c,d)}.`,
+                answerText: symbol
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "percent_of_amount_leftover",
+        label: "Percentage of an amount, then leftover",
+        domain: "Fractions, decimals and percentages",
+        skillIds: ["percent_number", "fdp_equiv", "add_sub_multistep"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const pct = pick(rng, [10,20,25,50,75]);
+          const quantity = pct === 25 || pct === 75 ? randInt(rng, 8, 24) * 4 : randInt(rng, 9, 30) * (100 / gcd(100, pct));
+          const chosen = quantity * pct / 100;
+          const leftover = quantity - chosen;
+          const contexts = [
+            ["pupils", "school dinner"],
+            ["plants", "flowered"],
+            ["books", "borrowed"]
+          ];
+          const [item, focus] = pick(rng, contexts);
+          const stem = `
+            <p><strong>${pct}%</strong> of <strong>${quantity}</strong> ${item} have been ${focus}.</p>
+            <p>How many have <strong>not</strong> been ${focus}?</p>`;
+          const solutionLines = [
+            `Find ${pct}% of ${quantity}.`,
+            `${pct}% of ${quantity} = ${chosen}.`,
+            `Then subtract: ${quantity} - ${chosen} = ${leftover}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: { type:"number", label:`Number not ${focus}` },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === leftover) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`${leftover} have not been ${focus}.`,
+                answerText: String(leftover)
+              });
+              if (ans === chosen) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"skipped_step",
+                  feedbackShort:"You found the percentage part, but not the leftover asked for.",
+                  feedbackLong:`${leftover} have not been ${focus}.`,
+                  answerText: String(leftover)
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"fraction_misconception",
+                feedbackShort:"Not quite.",
+                feedbackLong:`${leftover} have not been ${focus}.`,
+                answerText: String(leftover)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "ratio_scale",
+        label: "Scaling in a ratio-style context",
+        domain: "Ratio and proportion",
+        skillIds: ["ratio_scale", "mul_div_structure"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const a = pick(rng, [2,3,4]);
+          const b = pick(rng, [3,4,5,6].filter(x => x !== a));
+          const factor = randInt(rng, 2, 6);
+          const known = a * factor;
+          const other = b * factor;
+          const total = known + other;
+          const contexts = [
+            ["blue tiles", "yellow tiles", "pattern"],
+            ["red beads", "silver beads", "bracelet"],
+            ["cups of juice", "cups of water", "mix"]
+          ];
+          const [xName, yName, product] = pick(rng, contexts);
+          const stem = `
+            <p>For every <strong>${a}</strong> ${xName}, there are <strong>${b}</strong> ${yName} in a ${product}.</p>
+            <p>A ${product} uses <strong>${known}</strong> ${xName}. How many pieces are needed <strong>altogether</strong>?</p>`;
+          const solutionLines = [
+            `The number of ${xName} has been multiplied by ${factor}.`,
+            `So the number of ${yName} is ${b} × ${factor} = ${other}.`,
+            `Altogether: ${known} + ${other} = ${total}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: { type:"number", label:"Total needed" },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === total) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`${total} are needed altogether.`,
+                answerText: String(total)
+              });
+              if (ans === other) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"skipped_step",
+                  feedbackShort:"You found the missing amount, but the question asked for the total altogether.",
+                  feedbackLong:`${total} are needed altogether.`,
+                  answerText: String(total)
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"scaling_confusion",
+                feedbackShort:"Not quite.",
+                feedbackLong:`${total} are needed altogether.`,
+                answerText: String(total)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "unit_conversion_ribbon",
+        label: "Unit conversion before comparing",
+        domain: "Measure",
+        skillIds: ["unit_conversion", "add_sub_multistep"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const m = randInt(rng, 2, 6);
+          const cm = pick(rng, [5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95]);
+          const first = m * 100 + cm;
+          const second = randInt(rng, 70, first - 20);
+          const diff = first - second;
+          const stem = `
+            <p>One ribbon is <strong>${m} m ${cm} cm</strong> long.</p>
+            <p>Another ribbon is <strong>${second} cm</strong> long.</p>
+            <p>How much longer is the first ribbon? Give your answer in <strong>cm</strong>.</p>`;
+          const solutionLines = [
+            `Convert the first ribbon to centimetres: ${m} m ${cm} cm = ${first} cm.`,
+            `Subtract: ${first} - ${second} = ${diff} cm.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: { type:"number", label:"Difference in cm" },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === diff) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`The difference is ${diff} cm.`,
+                answerText: String(diff)
+              });
+              if (ans === first || ans === second) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"skipped_step",
+                  feedbackShort:"You have one important number, but you still need to compare the two lengths.",
+                  feedbackLong:`The difference is ${diff} cm.`,
+                  answerText: String(diff)
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"unit_confusion",
+                feedbackShort:"Not quite.",
+                feedbackLong:`The difference is ${diff} cm.`,
+                answerText: String(diff)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "time_elapsed",
+        label: "Elapsed time with a stop",
+        domain: "Measure",
+        skillIds: ["time_elapsed", "add_sub_multistep"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const startHour = randInt(rng, 8, 16);
+          const startMin = pick(rng, [0,5,10,15,20,25,30,35,40,45,50,55]);
+          const journeyHours = randInt(rng, 0, 2);
+          const journeyMins = pick(rng, [15,20,25,30,35,40,45,50,55]);
+          const stop = pick(rng, [10,15,20,25]);
+          const start = startHour * 60 + startMin;
+          const totalTravel = journeyHours * 60 + journeyMins + stop;
+          const finish = start + totalTravel;
+          const withoutStop = start + journeyHours * 60 + journeyMins;
+          const stem = `
+            <p>A coach leaves at <strong>${minutesToClock(start)}</strong>.</p>
+            <p>The journey takes <strong>${journeyHours ? journeyHours + " hour " : ""}${journeyMins} minutes</strong>.</p>
+            <p>There is a <strong>${stop}-minute</strong> stop on the way.</p>
+            <p>What time does the coach arrive?</p>`;
+          const solutionLines = [
+            `Total time = journey time + stop = ${journeyHours ? journeyHours + " hour " : ""}${journeyMins} minutes + ${stop} minutes = ${Math.floor(totalTravel/60)} hour ${totalTravel%60} minutes.`,
+            `Start at ${minutesToClock(start)} and add ${Math.floor(totalTravel/60)} hour ${totalTravel%60} minutes.`,
+            `Arrival time = ${minutesToClock(finish)}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: { type:"text", label:"Arrival time", placeholder:"e.g. 11:05" },
+            evaluate: (resp) => {
+              const ans = parseClockTime(resp.answer);
+              if (ans === finish % (24*60)) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`The coach arrives at ${minutesToClock(finish)}.`,
+                answerText: minutesToClock(finish)
+              });
+              if (ans === withoutStop % (24*60)) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"skipped_step",
+                  feedbackShort:"You added the journey time but forgot the stop.",
+                  feedbackLong:`The coach arrives at ${minutesToClock(finish)}.`,
+                  answerText: minutesToClock(finish)
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"misread_question",
+                feedbackShort:"Not quite.",
+                feedbackLong:`The coach arrives at ${minutesToClock(finish)}.`,
+                answerText: minutesToClock(finish)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "inverse_equation",
+        label: "Missing number with inverse reasoning",
+        domain: "Calculation",
+        skillIds: ["inverse_missing"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const mult = randInt(rng, 3, 9);
+          const answer = randInt(rng, 4, 18);
+          const add = randInt(rng, 8, 35);
+          const total = answer * mult + add;
+          const stem = `
+            <p>Find the missing number.</p>
+            <p style="font-size:1.35rem;"><strong>□ × ${mult} + ${add} = ${total}</strong></p>`;
+          const solutionLines = [
+            `Undo the +${add} first: ${total} - ${add} = ${answer * mult}.`,
+            `Then undo the ×${mult}: ${answer * mult} ÷ ${mult} = ${answer}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: { type:"number", label:"Missing number" },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === answer) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`The missing number is ${answer}.`,
+                answerText: String(answer)
+              });
+              if (ans === total - add || ans === total / mult) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"inverse_error",
+                  feedbackShort:"You have undone one step, but not in the full reverse order.",
+                  feedbackLong:`The missing number is ${answer}.`,
+                  answerText: String(answer)
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"inverse_error",
+                feedbackShort:"Not quite.",
+                feedbackLong:`The missing number is ${answer}.`,
+                answerText: String(answer)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "perimeter_to_area",
+        label: "Perimeter to area",
+        domain: "Geometry and measure",
+        skillIds: ["perimeter_area", "inverse_missing"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const width = randInt(rng, 7, 19);
+          const height = randInt(rng, 4, 15);
+          const perimeter = 2 * (width + height);
+          const area = width * height;
+          const shownSide = randInt(rng, 0, 1) === 0 ? width : height;
+          const hiddenSide = shownSide === width ? height : width;
+          const stem = `
+            <p>A rectangle has perimeter <strong>${perimeter} cm</strong>.</p>
+            <p>One side is <strong>${shownSide} cm</strong>.</p>
+            <p>What is the <strong>area</strong> of the rectangle?</p>`;
+          const solutionLines = [
+            `Perimeter of a rectangle is 2 lengths + 2 widths.`,
+            `Remove the known pair: ${perimeter} - ${shownSide * 2} = ${perimeter - shownSide * 2}.`,
+            `Divide by 2 to find the other side: ${(perimeter - shownSide * 2)} ÷ 2 = ${hiddenSide}.`,
+            `Area = ${shownSide} × ${hiddenSide} = ${area} cm².`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            visualHtml: rectangleSvg(`${shownSide} cm`, "? cm"),
+            solutionLines,
+            inputSpec: { type:"number", label:"Area in cm²" },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === area) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`The area is ${area} cm².`,
+                answerText: `${area} cm²`
+              });
+              if (ans === perimeter || ans === hiddenSide) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"area_perimeter_confusion",
+                  feedbackShort:"You found a related value, but the question asked for area.",
+                  feedbackLong:`The area is ${area} cm².`,
+                  answerText: `${area} cm²`
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"area_perimeter_confusion",
+                feedbackShort:"Not quite.",
+                feedbackLong:`The area is ${area} cm².`,
+                answerText: `${area} cm²`
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "area_error_analysis",
+        label: "Error analysis: area or perimeter?",
+        domain: "Geometry and measure",
+        skillIds: ["perimeter_area", "error_analysis"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const l = randInt(rng, 5, 12);
+          const w = randInt(rng, 3, 9);
+          const perimeter = 2*l + 2*w;
+          const area = l*w;
+          const stem = `
+            <p>A pupil says:</p>
+            <div class="callout">“A rectangle is <strong>${l} cm</strong> by <strong>${w} cm</strong>. Its area is <strong>${perimeter} cm²</strong> because ${l} + ${w} + ${l} + ${w} = ${perimeter}.”</div>
+            <p>Which mistake has the pupil made, and what is the correct area?</p>`;
+          const solutionLines = [
+            `The pupil has calculated the perimeter, not the area.`,
+            `Area of a rectangle = length × width.`,
+            `${l} × ${w} = ${area} cm².`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            inputSpec: {
+              type:"multi",
+              fields: [
+                {
+                  key:"reason", label:"Mistake", kind:"radio",
+                  options: [
+                    ["perimeter", "They used perimeter instead of area."],
+                    ["multiply", "They multiplied when they should have added."],
+                    ["units", "They used the wrong units only."]
+                  ]
+                },
+                { key:"area", label:"Correct area", kind:"number" }
+              ]
+            },
+            solutionLines,
+            evaluate: (resp) => {
+              let score = 0;
+              if (resp.reason === "perimeter") score += 1;
+              if (parseNumberInput(resp.area) === area) score += 1;
+              return mkResult({
+                correct: score === 2,
+                score,
+                maxScore:2,
+                misconception: score === 2 ? null : "area_perimeter_confusion",
+                feedbackShort: score === 2 ? "Correct." : (score ? "One part is right." : "Not quite."),
+                feedbackLong:`The pupil calculated perimeter. The correct area is ${area} cm².`,
+                answerText:`Perimeter instead of area; ${area} cm²`
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "geometry_angles",
+        label: "Angles around a point",
+        domain: "Geometry",
+        skillIds: ["geometry_angles"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const a = pick(rng, [35,40,45,55,60,65,70,75]);
+          const b = pick(rng, [50,60,65,75,80,95,110].filter(x => x + a + 90 < 330));
+          const missing = 360 - 90 - a - b;
+          const stem = `
+            <p>Angles around a point add to <strong>360°</strong>.</p>
+            <p>Two of the angles are <strong>${a}°</strong> and <strong>${b}°</strong>. Another angle is a right angle.</p>
+            <p>What is the missing angle?</p>`;
+          const solutionLines = [
+            `Known angles: ${a}° + ${b}° + 90° = ${a+b+90}°.`,
+            `Missing angle = 360° - ${a+b+90}° = ${missing}°.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            visualHtml: anglePointSvg(a, b),
+            solutionLines,
+            inputSpec: { type:"number", label:"Missing angle in degrees" },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === missing) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`The missing angle is ${missing}°.`,
+                answerText: `${missing}°`
+              });
+              if (ans === 180 - a - b || ans === 180 - (a+b+90)) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"angle_total_confusion",
+                  feedbackShort:"You used the wrong total. These angles are around a point, not on a straight line.",
+                  feedbackLong:`The missing angle is ${missing}°.`,
+                  answerText: `${missing}°`
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"angle_total_confusion",
+                feedbackShort:"Not quite.",
+                feedbackLong:`The missing angle is ${missing}°.`,
+                answerText: `${missing}°`
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "statistics_bar_chart",
+        label: "Reading a bar chart",
+        domain: "Statistics",
+        skillIds: ["statistics_reading", "add_sub_multistep"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const labels = ["Mon", "Tue", "Wed", "Thu"];
+          const values = labels.map(() => pick(rng, [10,15,20,25,30,35,40,45,50]));
+          const answer = values[1] + values[3] - values[0];
+          const stem = `
+            <p>The bar chart shows how many books were read on four days.</p>
+            <p>How many more books were read on <strong>Tuesday and Thursday altogether</strong> than on <strong>Monday</strong>?</p>`;
+          const solutionLines = [
+            `Tuesday and Thursday altogether: ${values[1]} + ${values[3]} = ${values[1] + values[3]}.`,
+            `Compare with Monday: ${values[1] + values[3]} - ${values[0]} = ${answer}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            visualHtml: barChartSvg(values, labels, 5, "Books read"),
+            solutionLines,
+            inputSpec: { type:"number", label:"Difference" },
+            evaluate: (resp) => {
+              const ans = parseNumberInput(resp.answer);
+              if (ans === answer) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`The difference is ${answer}.`,
+                answerText: String(answer)
+              });
+              if (ans === values[1] + values[3]) {
+                return mkResult({
+                  correct:false, score:1, maxScore:2,
+                  misconception:"skipped_step",
+                  feedbackShort:"You found the Tuesday-and-Thursday total, but you still needed to compare it with Monday.",
+                  feedbackLong:`The difference is ${answer}.`,
+                  answerText: String(answer)
+                });
+              }
+              return mkResult({
+                correct:false, score:0, maxScore:2,
+                misconception:"data_misread",
+                feedbackShort:"Not quite.",
+                feedbackLong:`The difference is ${answer}.`,
+                answerText: String(answer)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "estimation_packs",
+        label: "Reasonableness and rounding up",
+        domain: "Reasoning and checking",
+        skillIds: ["reasonableness", "mul_div_structure"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const packSize = pick(rng, [12,20,24,30,40]);
+          const basePacks = randInt(rng, 5, 11);
+          const remainder = randInt(rng, 1, packSize - 1);
+          const needed = basePacks * packSize + remainder;
+          const stem = `
+            <p>A school needs <strong>${needed}</strong> glue sticks.</p>
+            <p>They are sold in packs of <strong>${packSize}</strong>.</p>
+            <p>Ben says <strong>${basePacks}</strong> packs are enough because ${basePacks} × ${packSize} = ${basePacks * packSize}.</p>
+            <p>Is Ben correct? How many packs are needed?</p>`;
+          const solutionLines = [
+            `Using ${basePacks} packs gives only ${basePacks * packSize}, which is not enough.`,
+            `You need one more full pack because there is a remainder.`,
+            `The number of packs needed is ${basePacks + 1}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: {
+              type:"multi",
+              fields: [
+                { key:"right", label:"Is Ben correct?", kind:"select", options:[["yes","Yes"],["no","No"]] },
+                { key:"packs", label:"Packs needed", kind:"number" }
+              ]
+            },
+            evaluate: (resp) => {
+              let score = 0;
+              if (resp.right === "no") score += 1;
+              if (parseNumberInput(resp.packs) === basePacks + 1) score += 1;
+              if (score === 2) return mkResult({
+                correct:true, score:2, maxScore:2,
+                feedbackShort:"Correct.",
+                feedbackLong:`Ben is not correct. ${basePacks + 1} packs are needed.`,
+                answerText:`No; ${basePacks + 1}`
+              });
+              if (parseNumberInput(resp.packs) === basePacks) {
+                return mkResult({
+                  correct:false, score:score, maxScore:2,
+                  misconception:"estimation_failure",
+                  feedbackShort:"The remainder means you must round up, not down.",
+                  feedbackLong:`Ben is not correct. ${basePacks + 1} packs are needed.`,
+                  answerText:`No; ${basePacks + 1}`
+                });
+              }
+              return mkResult({
+                correct:false, score:score, maxScore:2,
+                misconception:"estimation_failure",
+                feedbackShort:"Not quite.",
+                feedbackLong:`Ben is not correct. ${basePacks + 1} packs are needed.`,
+                answerText:`No; ${basePacks + 1}`
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "fraction_error_analysis",
+        label: "Error analysis: adding fractions",
+        domain: "Fractions",
+        skillIds: ["fractions_quantity", "error_analysis"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const den = pick(rng, [3,4,5,8,10]);
+          const a = pick(rng, [1,2]);
+          const b = pick(rng, [1,2].filter(x => x + a < den));
+          const wrongN = a + b;
+          const wrongD = den + den;
+          const correct = simplifyFraction(a + b, den);
+          const stem = `
+            <p>A pupil says:</p>
+            <div class="callout">“${fractionToText(a, den)} + ${fractionToText(b, den)} = ${fractionToText(wrongN, wrongD)}”</div>
+            <p>Which mistake has the pupil made, and what is the correct answer?</p>`;
+          const solutionLines = [
+            `The fractions already have the same denominator, so the denominator stays ${den}.`,
+            `Add the numerators only: ${a} + ${b} = ${a+b}.`,
+            `So the correct answer is ${fractionToText(a+b, den)}${correct.n !== (a+b) || correct.d !== den ? `, which simplifies to ${fractionToText(correct.n, correct.d)}` : ""}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: {
+              type:"multi",
+              fields: [
+                {
+                  key:"reason", label:"Mistake", kind:"radio",
+                  options: [
+                    ["den", "They added the denominators even though the part size stayed the same."],
+                    ["num", "They should have multiplied the numerators."],
+                    ["none", "There is no mistake."]
+                  ]
+                },
+                { key:"fraction", label:"Correct fraction", kind:"text", placeholder:`e.g. ${fractionToText(correct.n, correct.d)}` }
+              ]
+            },
+            evaluate: (resp) => {
+              let score = 0;
+              if (resp.reason === "den") score += 1;
+              const fractionAns = parseFractionOrNumber(resp.fraction);
+              if (fractionAns !== null && equalNumeric(fractionAns, correct.n / correct.d)) score += 1;
+              return mkResult({
+                correct: score === 2,
+                score,
+                maxScore:2,
+                misconception: score === 2 ? null : "fraction_denominator_error",
+                feedbackShort: score === 2 ? "Correct." : (score ? "One part is right." : "Not quite."),
+                feedbackLong:`The denominator stays ${den}, so the correct answer is ${fractionToText(a+b, den)}${correct.n !== (a+b) || correct.d !== den ? `, which simplifies to ${fractionToText(correct.n, correct.d)}` : ""}.`,
+                answerText: fractionToText(correct.n, correct.d)
+              });
+            }
+          });
+        }
+      },
+
+      {
+        id: "strategy_choice_boxes",
+        label: "Choose the best plan",
+        domain: "Calculation",
+        skillIds: ["mul_div_structure", "error_analysis"],
+        satsFriendly: true,
+        generator(seed) {
+          const rng = mulberry32(seed);
+          const boxes = randInt(rng, 5, 9);
+          const perBox = randInt(rng, 12, 28);
+          const total = boxes * perBox;
+          const chosenBoxes = randInt(rng, 2, boxes - 1);
+          const answer = chosenBoxes * perBox;
+          const contexts = [
+            ["apples", "boxes", "Maya"],
+            ["stickers", "packs", "Ravi"],
+            ["biscuits", "tins", "Ava"]
+          ];
+          const [item, container, name] = pick(rng, contexts);
+          const stem = `
+            <p><strong>${total}</strong> ${item} are packed equally into <strong>${boxes}</strong> ${container}.</p>
+            <p>${name} buys <strong>${chosenBoxes}</strong> ${container}.</p>
+            <p>Which plan will work, and how many ${item} does ${name} buy?</p>`;
+          const solutionLines = [
+            `A useful plan is to find one ${container} first, then multiply by ${chosenBoxes}.`,
+            `${total} ÷ ${boxes} = ${perBox}.`,
+            `${perBox} × ${chosenBoxes} = ${answer}.`
+          ];
+          return makeBaseQuestion(this, seed, {
+            marks: 2,
+            stemHtml: stem,
+            solutionLines,
+            inputSpec: {
+              type:"multi",
+              fields: [
+                {
+                  key:"plan", label:"Best plan", kind:"radio",
+                  options: [
+                    ["a", `${total} ÷ ${boxes}, then × ${chosenBoxes}`],
+                    ["b", `${total} × ${boxes}, then ÷ ${chosenBoxes}`],
+                    ["c", `${total} ÷ ${chosenBoxes}, then × ${boxes}`]
+                  ]
+                },
+                { key:"amount", label:`How many ${item}?`, kind:"number" }
+              ]
+            },
+            evaluate: (resp) => {
+              let score = 0;
+              if (resp.plan === "a") score += 1;
+              if (parseNumberInput(resp.amount) === answer) score += 1;
+              return mkResult({
+                correct: score === 2,
+                score,
+                maxScore:2,
+                misconception: score === 2 ? null : "operation_choice",
+                feedbackShort: score === 2 ? "Correct." : (score ? "One part is right." : "Not quite."),
+                feedbackLong:`The best plan is ${total} ÷ ${boxes}, then × ${chosenBoxes}. ${name} buys ${answer} ${item}.`,
+                answerText: `${total} ÷ ${boxes}, then × ${chosenBoxes}; ${answer}`
+              });
+            }
+          });
+        }
+      }
+    ];
+
+    const TEMPLATE_MAP = Object.fromEntries(TEMPLATES.map(t => [t.id, t]));
+
+    function modeDescription(mode) {
+      return ({
+        smart: "Smart Review mixes due items, weak spots, and spaced return. If you choose a skill, Smart Review biases towards it without becoming a boring fixed drill. It may inject worked or faded items for very weak or brand-new skills unless you switch that off in Settings.",
+        skill: "Skill Practice focuses on one chosen skill while still varying templates and difficulty.",
+        trouble: "Trouble Drill targets the weakest and most recently missed areas first.",
+        worked: "Worked Examples show a solved example first, then a very similar problem.",
+        faded: "Faded Guidance gives part of the solution structure but leaves the final thinking to the learner.",
+        sats: "SATs Single gives one strict SATs-style item with no early hints.",
+        satsset: "SATs Mini-Set creates a timed mini paper with no feedback until the end, using an approximate KS2 reasoning-style balance with number and calculation weighted more heavily than spatial and data items."
+      })[mode] || "";
+    }
+
+    function templateArea(template) {
+      const domains = template.skillIds.map(id => (SKILLS[id] && SKILLS[id].domain) || template.domain || "");
+      const joined = domains.join(" | ");
+      if (/Measure|Geometry|Statistics/.test(joined)) return "spatial";
+      return "number";
+    }
+
+    function chooseTemplateForMode(mode, focusSkillId, pool) {
+      const learner = currentLearner();
+      const recent = getRecentEvents(8);
+      const recentTemplateIds = recent.map(e => e.templateId);
+      const weakSet = new Set(weakSkillIds().slice(0, 5));
+      const dueNow = nowMs();
+      const basePool = (pool && pool.length ? pool : TEMPLATES).slice();
+      const hardFocusModes = new Set(["skill", "worked", "faded", "trouble"]);
+
+      let candidates = basePool.filter(t => {
+        if (focusSkillId && hardFocusModes.has(mode)) return t.skillIds.includes(focusSkillId);
+        return true;
+      });
+
+      if (mode === "trouble") {
+        candidates = candidates.filter(t => t.skillIds.some(id => weakSet.has(id)) || (!focusSkillId && t.skillIds.some(id => weakSet.has(id))));
+        if (!candidates.length) {
+          candidates = basePool.filter(t => !focusSkillId || t.skillIds.includes(focusSkillId));
+        }
+      }
+
+      if (!candidates.length) candidates = basePool.slice();
+
+      const weighted = [];
+      for (const template of candidates) {
+        const skillNodes = template.skillIds.map(id => learner.skills[id] || defaultNode());
+        const avgStrength = average(skillNodes.map(n => n.strength || 0.25));
+        const dueSkills = skillNodes.filter(n => n.attempts && (n.dueAt || 0) <= dueNow).length;
+        const tplNode = learner.templates[template.id] || defaultNode();
+        let weight = 1;
+        weight += (1 - avgStrength) * 4;
+        weight += dueSkills * 2.3;
+        weight += (1 - (tplNode.strength || 0.25)) * 2;
+        if (skillNodes.some(n => n.lastWrongAt && (Date.now() - new Date(n.lastWrongAt).getTime()) < 3 * 86400000)) {
+          weight += 2;
+        }
+        const statusBoost = template.skillIds.map(id => statusFromNode(learner.skills[id] || defaultNode()));
+        if (statusBoost.includes("new")) weight += 0.8;
+        if (statusBoost.includes("weak")) weight += 1.8;
+        if (statusBoost.includes("due")) weight += 1.4;
+        const repeatPenalty = recentTemplateIds.filter(x => x === template.id).length;
+        if (repeatPenalty) weight *= Math.pow(0.55, repeatPenalty);
+        const skillRepeatPenalty = recentSkillPenalty(template.skillIds);
+        if (skillRepeatPenalty >= 2) weight *= 0.72;
+        if (mode === "sats" || mode === "satsset") {
+          weight *= template.satsFriendly ? 1.15 : 0.85;
+          weight *= templateArea(template) === "number" ? 1.08 : 0.98;
+        }
+        if (focusSkillId && template.skillIds.includes(focusSkillId)) {
+          weight *= mode === "smart" ? 1.45 : 2.2;
+        }
+        weight = Math.max(0.05, weight);
+        weighted.push([template, weight]);
+      }
+
+      let total = weighted.reduce((sum, x) => sum + x[1], 0);
+      let roll = Math.random() * total;
+      for (const [template, weight] of weighted) {
+        roll -= weight;
+        if (roll <= 0) return template;
+      }
+      return weighted[weighted.length - 1][0];
+    }
+
+    function buildStrictSatsSet(size, focusSkillId) {
+      const satsTemplates = TEMPLATES.filter(t => t.satsFriendly);
+      const numberPool = satsTemplates.filter(t => templateArea(t) === "number");
+      const spatialPool = satsTemplates.filter(t => templateArea(t) === "spatial");
+      const targetNumberCount = clamp(Math.round(size * 0.75), 1, size - 1);
+      const targetSpatialCount = size - targetNumberCount;
+      const packs = [];
+
+      for (let i = 0; i < targetNumberCount; i++) {
+        const template = chooseTemplateForMode("satsset", focusSkillId, numberPool.length ? numberPool : satsTemplates);
+        packs.push(makeIndependentPack(template, Math.floor(Math.random() * 1e9)));
+      }
+      for (let i = 0; i < targetSpatialCount; i++) {
+        const template = chooseTemplateForMode("satsset", focusSkillId, spatialPool.length ? spatialPool : satsTemplates);
+        packs.push(makeIndependentPack(template, Math.floor(Math.random() * 1e9)));
+      }
+
+      return shuffle(Math.random, packs).map(pack => ({
+        pack,
+        response: {},
+        working: "",
+        marked: null
+      }));
+    }
+
+    function takeDueRetryEntry(filterSkillId) {
+      const learner = currentLearner();
+      const now = nowMs();
+      const dueItems = learner.retryQueue.filter(entry => entry.dueAt <= now && (!filterSkillId || entry.skillIds.includes(filterSkillId)));
+      if (!dueItems.length) return null;
+      dueItems.sort((a,b) => a.dueAt - b.dueAt);
+      const entry = dueItems[0];
+      const index = learner.retryQueue.indexOf(entry);
+      if (index >= 0) learner.retryQueue.splice(index, 1);
+      return entry;
+    }
+
+    function buildPack(mode, focusSkillId) {
+      const learner = currentLearner();
+      let retryEntry = null;
+      if (mode !== "worked" && mode !== "faded" && mode !== "satsset") {
+        retryEntry = takeDueRetryEntry(mode === "skill" ? focusSkillId : null);
+      }
+      if (retryEntry) {
+        const template = TEMPLATE_MAP[retryEntry.templateId];
+        if (template) return makeIndependentPack(template, retryEntry.seed);
+      }
+
+      const template = chooseTemplateForMode(mode, focusSkillId);
+      const seedA = Math.floor(Math.random() * 1e9);
+      const seedB = Math.floor(Math.random() * 1e9);
+
+      if (mode === "worked") return makeWorkedPack(template, seedA, seedB);
+      if (mode === "faded") return makeFadedPack(template, seedA);
+      if (mode === "skill") {
+        const skillNodes = template.skillIds.map(id => learner.skills[id] || defaultNode());
+        const weak = skillNodes.some(n => statusFromNode(n) === "weak" || statusFromNode(n) === "new");
+        if (learner.settings.allowTeachingItems && weak && Math.random() < 0.28) {
+          return Math.random() < 0.5 ? makeWorkedPack(template, seedA, seedB) : makeFadedPack(template, seedA);
+        }
+        return makeIndependentPack(template, seedA);
+      }
+      if (mode === "smart") {
+        const skillNodes = template.skillIds.map(id => learner.skills[id] || defaultNode());
+        const weak = skillNodes.some(n => statusFromNode(n) === "weak" || statusFromNode(n) === "new");
+        if (learner.settings.allowTeachingItems && weak) {
+          const roll = Math.random();
+          if (roll < 0.18) return makeWorkedPack(template, seedA, seedB);
+          if (roll < 0.33) return makeFadedPack(template, seedA);
+        }
+        return makeIndependentPack(template, seedA);
+      }
+      if (mode === "trouble") {
+        const roll = Math.random();
+        if (roll < 0.2) return makeWorkedPack(template, seedA, seedB);
+        if (roll < 0.4) return makeFadedPack(template, seedA);
+        return makeIndependentPack(template, seedA);
+      }
+      return makeIndependentPack(template, seedA);
+    }
+
+    function startSession() {
+      const mode = document.getElementById("modeSelect").value;
+      const goal = document.getElementById("goalSelect").value;
+      const focusSkillId = document.getElementById("skillSelect").value || "";
+      if (mode === "satsset") {
+        startMiniSet();
+        return;
+      }
+      ui.satsSet = null;
+      ui.session = {
+        mode,
+        goal,
+        focusSkillId,
+        startedAt: nowMs(),
+        answered: 0,
+        correct: 0,
+        dueStart: learnerDueCount(),
+        targetQuestions: goal === "15q" ? 15 : 0
+      };
+      renderSessionMeta();
+      loadNextQuestion();
+    }
+
+    function loadNextQuestion() {
+      const mode = ui.session ? ui.session.mode : document.getElementById("modeSelect").value;
+      const focusSkillId = ui.session ? ui.session.focusSkillId : document.getElementById("skillSelect").value;
+      ui.currentPack = buildPack(mode, focusSkillId);
+      renderCurrentPack();
+      renderSessionMeta();
+    }
+
+    function startMiniSet() {
+      const size = Number(document.getElementById("setSizeSelect").value || 8);
+      const focusSkillId = document.getElementById("skillSelect").value || "";
+      const questions = buildStrictSatsSet(size, focusSkillId);
+      ui.session = null;
+      ui.currentPack = null;
+      ui.satsSet = {
+        startedAt: nowMs(),
+        timeLimitMs: size === 12 ? 30 * 60000 : 20 * 60000,
+        index: 0,
+        questions,
+        finished: false
+      };
+      renderMiniSet();
+      renderSessionMeta();
+    }
+
+    function miniSetCurrent() {
+      return ui.satsSet ? ui.satsSet.questions[ui.satsSet.index] : null;
+    }
+
+    function saveCurrentMiniSetResponse() {
+      if (!ui.satsSet || ui.satsSet.finished) return;
+      const current = miniSetCurrent();
+      if (!current) return;
+      current.response = collectCurrentResponse();
+      const workingEl = document.getElementById("workingInput");
+      current.working = workingEl ? workingEl.value : "";
+    }
+
+    function finishMiniSet(auto = false) {
+      if (!ui.satsSet || ui.satsSet.finished) return;
+      saveCurrentMiniSetResponse();
+      let totalScore = 0;
+      let totalMarks = 0;
+      let correctCount = 0;
+      for (const entry of ui.satsSet.questions) {
+        const result = entry.pack.active.evaluate(entry.response || {});
+        entry.marked = result;
+        totalScore += result.score;
+        totalMarks += result.maxScore;
+        if (result.correct) correctCount += 1;
+        entry.pack.attempts = 1;
+        applyLearningUpdate(entry.pack, result, entry.response);
+      }
+      ui.satsSet.finished = true;
+      recordSessionSummary({
+        mode: "satsset",
+        totalQuestions: ui.satsSet.questions.length,
+        correct: correctCount,
+        score: totalScore,
+        maxScore: totalMarks,
+        autoFinished: !!auto
+      });
+      saveState();
+      renderMiniSetResults(totalScore, totalMarks, correctCount, auto);
+      renderAnalytics();
+      renderHeader();
+      renderSessionMeta();
+    }
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function renderHeader() {
+      const learner = currentLearner();
+      const select = $("currentLearnerSelect");
+      select.innerHTML = Object.values(state.learners)
+        .map(l => `<option value="${l.id}" ${l.id === state.currentLearnerId ? "selected" : ""}>${escapeHtml(l.name)}</option>`)
+        .join("");
+      $("dueBadge").textContent = `${learnerDueCount()} due`;
+      $("streakBadge").textContent = `${learner.streakDays || 0}-day streak`;
+    }
+
+    function renderTabs() {
+      document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.remove("active"));
+      document.querySelectorAll("#tabButtons button").forEach(btn => btn.classList.remove("active"));
+      document.querySelector(`#tab-${ui.activeTab}`).classList.add("active");
+      document.querySelector(`#tabButtons button[data-tab="${ui.activeTab}"]`).classList.add("active");
+    }
+
+    function renderSkillSelect() {
+      const options = [`<option value="">Mixed</option>`].concat(
+        Object.entries(SKILLS).map(([id, skill]) => `<option value="${id}">${escapeHtml(skill.name)}</option>`)
+      );
+      $("skillSelect").innerHTML = options.join("");
+    }
+
+    function renderSettings() {
+      const learner = currentLearner();
+      $("allowTeachingItems").value = learner.settings.allowTeachingItems ? "yes" : "no";
+      $("speechRateInput").value = learner.settings.speechRate || 1;
+      $("showDomainBeforeAnswer").value = learner.settings.showDomainBeforeAnswer ? "yes" : "no";
+
+      const ai = state.globalSettings.ai;
+      $("aiProviderSelect").value = ai.provider || "off";
+      $("aiModelInput").value = ai.model || "";
+      $("rememberAiKey").value = ai.rememberKey ? "yes" : "no";
+      $("aiKeyInput").value = getAIKey();
+    }
+
+    function renderProfiles() {
+      const learnerCards = Object.values(state.learners).map(l => {
+        const count = l.events ? l.events.length : 0;
+        const current = l.id === state.currentLearnerId;
+        return `
+          <div class="profile-card">
+            <div class="wrap" style="justify-content:space-between; align-items:center;">
+              <div>
+                <strong>${escapeHtml(l.name)}</strong>
+                <div class="tiny">${count} logged questions</div>
+              </div>
+              <div class="chip ${current ? "good" : "neutral"}">${current ? "Current" : "Saved profile"}</div>
+            </div>
+          </div>`;
+      }).join("");
+      $("learnerList").innerHTML = learnerCards || "<p class='subtle'>No learners yet.</p>";
+    }
+
+    function getQuestionMetaChips(pack) {
+      const chips = [];
+      const learner = currentLearner();
+      const skillStatuses = pack.skillIds.map(id => statusFromNode(learner.skills[id] || defaultNode()));
+      const primaryStatus = skillStatuses.includes("weak") ? "weak"
+        : skillStatuses.includes("due") ? "due"
+        : skillStatuses.includes("new") ? "new"
+        : skillStatuses.includes("learning") ? "learning"
+        : "secured";
+
+      chips.push(`<span class="chip ${primaryStatus === "weak" ? "bad" : primaryStatus === "due" ? "warn" : primaryStatus === "secured" ? "good" : "neutral"}">${humanStatus(primaryStatus)}</span>`);
+      chips.push(`<span class="chip neutral">${escapeHtml(pack.presentation === "worked" ? "Worked example" : pack.presentation === "faded" ? "Faded guidance" : "Independent attempt")}</span>`);
+      chips.push(`<span class="chip neutral">${pack.active.marks} mark${pack.active.marks === 1 ? "" : "s"}</span>`);
+      if (currentLearner().settings.showDomainBeforeAnswer && pack.presentation !== "worked") {
+        chips.push(`<span class="chip neutral">${escapeHtml(pack.domain)}</span>`);
+      }
+      return chips.join("");
+    }
+
+    function renderInputSpec(inputSpec, response = {}) {
+      if (!inputSpec) return "";
+      if (inputSpec.type === "number") {
+        return `
+          <div class="answer-box">
+            <label for="answerInput">${escapeHtml(inputSpec.label || "Answer")}</label>
+            <input id="answerInput" type="text" inputmode="numeric" placeholder="${escapeHtml(inputSpec.placeholder || "")}" value="${escapeHtml(response.answer || "")}" />
+          </div>`;
+      }
+      if (inputSpec.type === "text") {
+        return `
+          <div class="answer-box">
+            <label for="answerInput">${escapeHtml(inputSpec.label || "Answer")}</label>
+            <input id="answerInput" type="text" placeholder="${escapeHtml(inputSpec.placeholder || "")}" value="${escapeHtml(response.answer || "")}" />
+          </div>`;
+      }
+      if (inputSpec.type === "multi") {
+        return `
+          <div class="answer-grid">
+            ${inputSpec.fields.map(field => renderOneField(field, response[field.key])).join("")}
+          </div>`;
+      }
+      return "";
+    }
+
+    function renderOneField(field, value) {
+      if (field.kind === "number") {
+        return `
+          <div class="answer-box">
+            <label for="field_${field.key}">${escapeHtml(field.label)}</label>
+            <input id="field_${field.key}" data-key="${field.key}" type="text" inputmode="numeric" value="${escapeHtml(value || "")}" />
+          </div>`;
+      }
+      if (field.kind === "text") {
+        return `
+          <div class="answer-box">
+            <label for="field_${field.key}">${escapeHtml(field.label)}</label>
+            <input id="field_${field.key}" data-key="${field.key}" type="text" placeholder="${escapeHtml(field.placeholder || "")}" value="${escapeHtml(value || "")}" />
+          </div>`;
+      }
+      if (field.kind === "select") {
+        return `
+          <div class="answer-box">
+            <label for="field_${field.key}">${escapeHtml(field.label)}</label>
+            <select id="field_${field.key}" data-key="${field.key}">
+              <option value="">Choose</option>
+              ${field.options.map(([val, label]) => `<option value="${escapeHtml(val)}" ${String(value || "") === String(val) ? "selected" : ""}>${escapeHtml(label)}</option>`).join("")}
+            </select>
+          </div>`;
+      }
+      if (field.kind === "radio") {
+        return `
+          <fieldset class="answer-box">
+            <legend>${escapeHtml(field.label)}</legend>
+            ${field.options.map(([val, label]) => `
+              <label class="option-row">
+                <input type="radio" name="field_${field.key}" value="${escapeHtml(val)}" ${String(value || "") === String(val) ? "checked" : ""} />
+                <span>${escapeHtml(label)}</span>
+              </label>
+            `).join("")}
+          </fieldset>`;
+      }
+      return "";
+    }
+
+    function renderCurrentPack() {
+      const pack = ui.currentPack;
+      if (!pack) return;
+      $("questionMeta").innerHTML = getQuestionMetaChips(pack);
+
+      let stem = "";
+      let visual = "";
+      let extraTop = "";
+
+      if (pack.presentation === "worked" && pack.example) {
+        extraTop = `
+          <div class="example-card">
+            <h4>Worked example first</h4>
+            <div class="tiny">Study the example. Then solve the very similar question underneath without being told the operation.</div>
+            <div style="margin-top:10px;">${pack.example.stemHtml}</div>
+            ${pack.example.visualHtml ? `<div class="question-visual">${pack.example.visualHtml}</div>` : ""}
+            <div class="worked">
+              <strong>Worked solution</strong>
+              ${asList(pack.example.solutionLines || [])}
+              ${pack.example.reflectionPrompt ? `<p class="tiny" style="margin-top:10px;"><strong>Thinking prompt:</strong> ${escapeHtml(pack.example.reflectionPrompt)}</p>` : ""}
+            </div>
+          </div>`;
+      }
+
+      if (pack.presentation === "faded") {
+        const lines = pack.active.solutionLines || [];
+        const showCount = Math.max(1, Math.floor(lines.length / 2));
+        extraTop += `
+          <div class="scaffold">
+            <strong>Partly worked support</strong>
+            <div class="tiny" style="margin:6px 0 8px;">Use the given structure, then finish the thinking yourself.</div>
+            ${asList(lines.slice(0, showCount))}
+          </div>`;
+      }
+
+      stem = pack.active.stemHtml;
+      visual = pack.active.visualHtml || "";
+      $("questionStem").innerHTML = extraTop + stem;
+      $("questionVisual").innerHTML = visual;
+
+      const responseHtml = `
+        ${renderInputSpec(pack.active.inputSpec)}
+        <div class="working-box answer-box">
+          <label for="workingInput">Working (optional but useful)</label>
+          <textarea id="workingInput" placeholder="Show the steps you used."></textarea>
+        </div>
+      `;
+      $("responseArea").innerHTML = responseHtml;
+
+      $("feedbackArea").innerHTML = "";
+      $("submitAnswerBtn").classList.remove("hidden");
+      $("retryBtn").classList.add("hidden");
+      $("showWorkedBtn").classList.add("hidden");
+      $("useFadedBtn").classList.add("hidden");
+      toggleAiButtons(false);
+      $("nextQuestionBtn").disabled = false;
+    }
+
+    function renderFeedback(result, finalStage) {
+      const pack = ui.currentPack;
+      const tone = result.correct ? "good" : (result.score > 0 ? "warn" : "bad");
+      let html = `
+        <div class="feedback ${tone}">
+          <h3>${result.correct ? "Correct" : result.score > 0 ? "Partly right" : "Not quite yet"}</h3>
+          <p>${escapeHtml(finalStage ? result.feedbackLong || result.feedbackShort : result.feedbackShort || result.minimalHint)}</p>
+      `;
+      if (!finalStage && !result.correct) {
+        html += `<p><strong>Small nudge:</strong> ${escapeHtml(result.minimalHint)}</p>`;
+      }
+      if (result.misconception && finalStage) {
+        html += `<p><strong>Likely issue:</strong> ${escapeHtml(MISCONCEPTIONS[result.misconception] || result.misconception)}</p>`;
+      }
+      if (finalStage) {
+        html += `
+          <div class="worked">
+            <strong>Worked solution</strong>
+            ${asList(pack.active.solutionLines || [])}
+            ${pack.active.checkLine ? `<p style="margin-top:10px;"><strong>Check:</strong> ${escapeHtml(pack.active.checkLine)}</p>` : ""}
+            ${pack.active.reflectionPrompt ? `<p class="tiny" style="margin-top:10px;"><strong>Quick reflection:</strong> ${escapeHtml(pack.active.reflectionPrompt)}</p>` : ""}
+          </div>
+        `;
+      }
+      html += `</div>`;
+      $("feedbackArea").innerHTML = html;
+    }
+
+    function collectCurrentResponse() {
+      const pack = ui.currentPack;
+      if (!pack) return {};
+      const spec = pack.active.inputSpec;
+      const response = {};
+      if (!spec) return response;
+      if (spec.type === "number" || spec.type === "text") {
+        response.answer = $("answerInput") ? $("answerInput").value : "";
+        return response;
+      }
+      if (spec.type === "multi") {
+        spec.fields.forEach(field => {
+          if (field.kind === "radio") {
+            const checked = document.querySelector(`input[name="field_${field.key}"]:checked`);
+            response[field.key] = checked ? checked.value : "";
+          } else {
+            const el = $(`field_${field.key}`);
+            response[field.key] = el ? el.value : "";
+          }
+        });
+      }
+      return response;
+    }
+
+    function maybeTimerTick() {
+      let label = "--:--";
+      if (ui.satsSet && !ui.satsSet.finished) {
+        const remaining = Math.max(0, ui.satsSet.timeLimitMs - (nowMs() - ui.satsSet.startedAt));
+        label = formatMsClock(remaining);
+        if (remaining <= 0) finishMiniSet(true);
+      } else if (ui.session) {
+        const elapsed = nowMs() - ui.session.startedAt;
+        label = formatMsClock(elapsed);
+      }
+      $("sessionTimer").textContent = label;
+    }
+
+    function formatMsClock(ms) {
+      const total = Math.floor(ms / 1000);
+      const mins = Math.floor(total / 60);
+      const secs = total % 60;
+      return `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+    }
+
+    function renderSessionMeta() {
+      const mode = $("modeSelect").value;
+      $("modeNote").textContent = modeDescription(mode);
+      $("setSizeField").classList.toggle("hidden", mode !== "satsset");
+      $("finishSetBtn").classList.toggle("hidden", !(ui.satsSet && !ui.satsSet.finished));
+
+      if (ui.satsSet) {
+        const answered = ui.satsSet.questions.filter(q => {
+          const r = q.response || {};
+          return Object.values(r).some(v => String(v).trim() !== "");
+        }).length;
+        $("sessionAnswered").textContent = answered;
+        $("sessionCorrect").textContent = ui.satsSet.finished
+          ? ui.satsSet.questions.filter(q => q.marked && q.marked.correct).length
+          : "—";
+        $("sessionGoalProgress").textContent = `${answered}/${ui.satsSet.questions.length}`;
+        $("sessionSummary").textContent = ui.satsSet.finished
+          ? "Mini-set finished. Review the marking and explanations below."
+          : "Strict SATs-style mini set in progress. No feedback until the end.";
+        $("sessionChips").innerHTML = `<span class="chip warn">Timed mini-set</span><span class="chip neutral">${ui.satsSet.questions.length} questions</span>`;
+        maybeTimerTick();
+        renderMiniPaperNav();
+        return;
+      }
+
+      if (!ui.session) {
+        $("sessionAnswered").textContent = "0";
+        $("sessionCorrect").textContent = "0";
+        $("sessionGoalProgress").textContent = "0%";
+        $("sessionTimer").textContent = "--:--";
+        $("sessionSummary").textContent = "No active session yet.";
+        $("sessionChips").innerHTML = "";
+        $("miniPaperNav").classList.add("hidden");
+        return;
+      }
+
+      $("sessionAnswered").textContent = ui.session.answered;
+      $("sessionCorrect").textContent = ui.session.correct;
+      const progress = calcGoalProgress(ui.session);
+      $("sessionGoalProgress").textContent = progress;
+      maybeTimerTick();
+      const chips = [];
+      chips.push(`<span class="chip neutral">${escapeHtml(modeDescription(ui.session.mode).split(".")[0])}</span>`);
+      if (ui.session.focusSkillId) chips.push(`<span class="chip neutral">${escapeHtml(SKILLS[ui.session.focusSkillId].name)}</span>`);
+      if (ui.session.goal === "due") chips.push(`<span class="chip warn">Due left: ${learnerDueCount()}</span>`);
+      if (ui.session.goal === "15q") chips.push(`<span class="chip neutral">${ui.session.answered}/15 asked</span>`);
+      if (ui.session.goal === "10m") {
+        const elapsed = Math.floor((nowMs() - ui.session.startedAt)/60000);
+        chips.push(`<span class="chip neutral">${elapsed}/10 min</span>`);
+      }
+      $("sessionChips").innerHTML = chips.join("");
+      $("sessionSummary").textContent = `Mode: ${labelForMode(ui.session.mode)}. Keep the first attempt genuinely independent unless the mode itself provides support.`;
+      $("miniPaperNav").classList.add("hidden");
+    }
+
+    function calcGoalProgress(session) {
+      if (session.goal === "15q") return `${Math.min(100, Math.round((session.answered / 15) * 100))}%`;
+      if (session.goal === "due") {
+        const cleared = Math.max(0, session.dueStart - learnerDueCount());
+        return session.dueStart ? `${Math.min(100, Math.round((cleared / session.dueStart) * 100))}%` : "100%";
+      }
+      const elapsed = nowMs() - session.startedAt;
+      return `${Math.min(100, Math.round(elapsed / (10 * 60000) * 100))}%`;
+    }
+
+    function labelForMode(mode) {
+      return ({
+        smart:"Smart Review",
+        skill:"Skill Practice",
+        trouble:"Trouble Drill",
+        worked:"Worked Examples",
+        faded:"Faded Guidance",
+        sats:"SATs Single",
+        satsset:"SATs Mini-Set"
+      })[mode] || mode;
+    }
+
+    function renderMiniPaperNav() {
+      if (!ui.satsSet) return;
+      const nav = $("miniPaperNav");
+      nav.classList.remove("hidden");
+      nav.innerHTML = ui.satsSet.questions.map((q, i) => {
+        const hasAnswer = Object.values(q.response || {}).some(v => String(v).trim() !== "");
+        const classes = [i === ui.satsSet.index ? "current" : "", hasAnswer ? "done" : ""].join(" ");
+        return `<button class="${classes.trim()}" data-set-index="${i}">${i+1}</button>`;
+      }).join("");
+    }
+
+    function renderMiniSet() {
+      const current = miniSetCurrent();
+      if (!current) return;
+      ui.currentPack = current.pack;
+      renderCurrentPack();
+      renderMiniPaperNav();
+      $("questionMeta").innerHTML = `<span class="chip warn">SATs mini-set</span><span class="chip neutral">Question ${ui.satsSet.index + 1} of ${ui.satsSet.questions.length}</span><span class="chip neutral">${current.pack.active.marks} mark${current.pack.active.marks === 1 ? "" : "s"}</span>`;
+      $("feedbackArea").innerHTML = "";
+      $("retryBtn").classList.add("hidden");
+      $("showWorkedBtn").classList.add("hidden");
+      $("useFadedBtn").classList.add("hidden");
+      $("submitAnswerBtn").classList.add("hidden");
+      $("nextQuestionBtn").textContent = ui.satsSet.index < ui.satsSet.questions.length - 1 ? "Save and next" : "Save response";
+      if (current.response) {
+        const spec = current.pack.active.inputSpec;
+        if (spec && (spec.type === "number" || spec.type === "text")) {
+          if ($("answerInput")) $("answerInput").value = current.response.answer || "";
+        } else if (spec && spec.type === "multi") {
+          spec.fields.forEach(field => {
+            const val = current.response[field.key] || "";
+            if (field.kind === "radio") {
+              const radio = document.querySelector(`input[name="field_${field.key}"][value="${val}"]`);
+              if (radio) radio.checked = true;
+            } else {
+              const el = $(`field_${field.key}`);
+              if (el) el.value = val;
+            }
+          });
+        }
+      }
+      if ($("workingInput")) $("workingInput").value = current.working || "";
+    }
+
+    function renderMiniSetResults(totalScore, totalMarks, correctCount, auto) {
+      $("questionMeta").innerHTML = `<span class="chip good">Mini-set marked</span><span class="chip neutral">${totalScore}/${totalMarks} marks</span>`;
+      $("questionStem").innerHTML = `<p><strong>Mini-set complete.</strong> ${auto ? "Time ran out, so the set was marked automatically." : "The set has been marked."}</p><p>You got <strong>${correctCount}</strong> question${correctCount === 1 ? "" : "s"} fully correct and scored <strong>${totalScore} / ${totalMarks}</strong> marks.</p>`;
+      $("questionVisual").innerHTML = "";
+      $("responseArea").innerHTML = ui.satsSet.questions.map((entry, i) => {
+        const result = entry.marked;
+        return `
+          <details ${i === 0 ? "open" : ""}>
+            <summary>Question ${i+1} - ${result.score}/${result.maxScore} mark${result.maxScore === 1 ? "" : "s"} - ${result.correct ? "correct" : "review"}</summary>
+            <div class="review-card" style="margin-top:10px;">
+              ${entry.pack.active.stemHtml}
+              ${entry.pack.active.visualHtml ? `<div class="question-visual">${entry.pack.active.visualHtml}</div>` : ""}
+              <p><strong>Your response:</strong> ${escapeHtml(JSON.stringify(entry.response || {}))}</p>
+              <p><strong>Feedback:</strong> ${escapeHtml(result.feedbackLong || result.feedbackShort)}</p>
+              <div class="worked">
+                <strong>Worked solution</strong>
+                ${asList(entry.pack.active.solutionLines || [])}
+              </div>
+            </div>
+          </details>`;
+      }).join("");
+      $("submitAnswerBtn").classList.add("hidden");
+      $("nextQuestionBtn").textContent = "Start fresh question";
+      $("retryBtn").classList.add("hidden");
+      $("showWorkedBtn").classList.add("hidden");
+      $("useFadedBtn").classList.add("hidden");
+      toggleAiButtons(false);
+    }
+
+    function submitCurrentAnswer() {
+      if (!ui.currentPack || ui.satsSet) return;
+      const pack = ui.currentPack;
+      const response = collectCurrentResponse();
+      pack.attempts += 1;
+      const result = pack.active.evaluate(response);
+      const workingText = $("workingInput") ? $("workingInput").value : "";
+      const responseSnapshot = Object.assign({}, response, { working: workingText });
+
+      if (result.correct || $("modeSelect").value === "sats" || pack.presentation === "worked" || pack.presentation === "faded" || pack.attempts >= 2 || pack.workedShown) {
+        renderFeedback(result, true);
+        applyLearningUpdate(pack, result, responseSnapshot);
+        afterFinalisedAnswer(result);
+        if (ui.session) {
+          ui.session.answered += 1;
+          if (result.correct) ui.session.correct += 1;
+        }
+        recordSessionMaybeIfGoalMet();
+        renderAnalytics();
+        renderHeader();
+        renderSessionMeta();
+        return;
+      }
+
+      pack.firstWrongResult = result;
+      renderFeedback(result, false);
+      $("retryBtn").classList.remove("hidden");
+      $("showWorkedBtn").classList.remove("hidden");
+      $("useFadedBtn").classList.remove("hidden");
+      $("submitAnswerBtn").classList.remove("hidden");
+      toggleAiButtons(false);
+    }
+
+    function afterFinalisedAnswer(result) {
+      $("submitAnswerBtn").classList.add("hidden");
+      $("retryBtn").classList.add("hidden");
+      $("showWorkedBtn").classList.remove("hidden");
+      $("useFadedBtn").classList.add("hidden");
+      document.querySelectorAll("#responseArea input, #responseArea select, #responseArea textarea").forEach(el => el.disabled = true);
+      toggleAiButtons(aiEnabled());
+      $("showWorkedBtn").textContent = "Show worked solution again";
+    }
+
+    function recordSessionMaybeIfGoalMet() {
+      if (!ui.session) return;
+      const mode = ui.session.mode;
+      let complete = false;
+      if (ui.session.goal === "15q" && ui.session.answered >= 15) complete = true;
+      if (ui.session.goal === "due" && learnerDueCount() === 0) complete = true;
+      if (ui.session.goal === "10m" && (nowMs() - ui.session.startedAt) >= 10 * 60000) complete = true;
+      if (complete && !ui.session.loggedGoalCompletion) {
+        ui.session.loggedGoalCompletion = true;
+        recordSessionSummary({
+          mode,
+          totalQuestions: ui.session.answered,
+          correct: ui.session.correct,
+          goal: ui.session.goal
+        });
+      }
+    }
+
+    function showWorkedNow() {
+      if (!ui.currentPack) return;
+      ui.currentPack.workedShown = true;
+      ui.currentPack.supportLevel = Math.max(2, ui.currentPack.supportLevel || 0);
+      renderFeedback(ui.currentPack.firstWrongResult || ui.currentPack.active.evaluate(collectCurrentResponse()), true);
+      $("showWorkedBtn").classList.add("hidden");
+      $("useFadedBtn").classList.add("hidden");
+      $("retryBtn").classList.remove("hidden");
+    }
+
+    function useFadedSupport() {
+      if (!ui.currentPack) return;
+      ui.currentPack.supportLevel = Math.max(1, ui.currentPack.supportLevel || 0);
+      ui.currentPack.workedShown = false;
+      const lines = ui.currentPack.active.solutionLines || [];
+      const showCount = Math.max(1, Math.floor(lines.length / 2));
+      const scaffold = `
+        <div class="scaffold">
+          <strong>Partly worked support</strong>
+          ${asList(lines.slice(0, showCount))}
+        </div>`;
+      $("feedbackArea").innerHTML = scaffold + $("feedbackArea").innerHTML;
+      $("useFadedBtn").classList.add("hidden");
+      $("retryBtn").classList.remove("hidden");
+    }
+
+    function prepareRetry() {
+      $("feedbackArea").innerHTML = `<div class="feedback warn"><h3>Try again</h3><p>Have another genuine go before looking at the full solution. Keep the small nudge in mind.</p></div>`;
+      $("retryBtn").classList.add("hidden");
+      $("submitAnswerBtn").classList.remove("hidden");
+    }
+
+    function handleNextQuestionClick() {
+      if (ui.satsSet && !ui.satsSet.finished) {
+        saveCurrentMiniSetResponse();
+        if (ui.satsSet.index < ui.satsSet.questions.length - 1) {
+          ui.satsSet.index += 1;
+          renderMiniSet();
+          renderSessionMeta();
+        } else {
+          $("feedbackArea").innerHTML = `<div class="feedback warn"><h3>All responses saved</h3><p>You are on the last question. Press “Finish mini-set” when ready for marking.</p></div>`;
+        }
+        return;
+      }
+
+      const lastFinishedSet = ui.satsSet && ui.satsSet.finished;
+      if (lastFinishedSet) {
+        ui.satsSet = null;
+        startSession();
+        return;
+      }
+      if (!ui.session) {
+        startSession();
+        return;
+      }
+      loadNextQuestion();
+    }
+
+    function readCurrentQuestionAloud() {
+      const synth = window.speechSynthesis;
+      if (!synth) {
+        alert("This browser does not support speech synthesis.");
+        return;
+      }
+      const pack = ui.satsSet && !ui.satsSet.finished ? miniSetCurrent().pack : ui.currentPack;
+      if (!pack) return;
+      synth.cancel();
+      const text = (pack.active.stemHtml || "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = clamp(Number(currentLearner().settings.speechRate || 1), 0.6, 1.4);
+      utter.lang = "en-GB";
+      synth.speak(utter);
+    }
+
+    function toggleAiButtons(show) {
+      $("aiExplainBtn").classList.toggle("hidden", !show);
+      $("aiVariantBtn").classList.toggle("hidden", !show);
+      $("aiParentSummaryBtn").disabled = !show;
+    }
+
+    async function callAI(systemPrompt, userPrompt, temperature = 0.2) {
+      const ai = state.globalSettings.ai;
+      const key = getAIKey();
+      if (!ai.provider || ai.provider === "off" || !ai.model || !key) {
+        throw new Error("AI is not configured.");
+      }
+
+      if (ai.provider === "openai") {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${key}`
+          },
+          body: JSON.stringify({
+            model: ai.model,
+            temperature,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userPrompt }
+            ]
+          })
+        });
+        if (!res.ok) throw new Error(`OpenAI error ${res.status}`);
+        const data = await res.json();
+        return data.choices?.[0]?.message?.content || "";
+      }
+
+      if (ai.provider === "gemini") {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(ai.model)}:generateContent?key=${encodeURIComponent(key)}`, {
+          method: "POST",
+          headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            contents: [{ parts: [{ text: userPrompt }] }],
+            generationConfig: { temperature }
+          })
+        });
+        if (!res.ok) throw new Error(`Gemini error ${res.status}`);
+        const data = await res.json();
+        return (data.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("");
+      }
+
+      if (ai.provider === "anthropic") {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": key,
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model: ai.model,
+            max_tokens: 900,
+            temperature,
+            system: systemPrompt,
+            messages: [{ role: "user", content: userPrompt }]
+          })
+        });
+        if (!res.ok) throw new Error(`Anthropic error ${res.status}`);
+        const data = await res.json();
+        return (data.content || []).map(part => part.text || "").join("");
+      }
+
+      throw new Error("Unknown AI provider.");
+    }
+
+    function extractJsonBlock(text) {
+      const raw = String(text || "").trim();
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch (e) {}
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (!match) return null;
+      try { return JSON.parse(match[0]); } catch (e) { return null; }
+    }
+
+    async function explainWithAI() {
+      if (!ui.currentPack) return;
+      const pack = ui.currentPack;
+      const response = collectCurrentResponse();
+      const result = pack.active.evaluate(response);
+      const working = $("workingInput") ? $("workingInput").value : "";
+      $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback warn"><h3>AI explanation</h3><p>Generating explanation…</p></div>`);
+      try {
+        const system = "You are an excellent KS2 maths reasoning tutor for England. Give a short, age-appropriate explanation after the learner has already attempted the problem. Do not be patronising. Explain the likely misconception if there is one. Keep it concise.";
+        const user = `
+Question:
+${pack.active.stemHtml.replace(/<[^>]+>/g, " ")}
+
+Learner response:
+${JSON.stringify(response)}
+
+Working shown:
+${working}
+
+Correct answer:
+${result.answerText}
+
+Worked method:
+${(pack.active.solutionLines || []).join(" | ")}
+
+Likely misconception:
+${result.misconception || "none"}
+
+Write:
+1) one brief explanation,
+2) one quick check-for-understanding question,
+3) one short thing to remember next time.
+        `;
+        const text = await callAI(system, user, 0.2);
+        $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback good"><h3>AI explanation</h3><p>${nl2br(text)}</p></div>`);
+      } catch (err) {
+        $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback bad"><h3>AI explanation failed</h3><p>${escapeHtml(err.message)}. The rest of the app still works without AI.</p></div>`);
+      }
+    }
+
+    async function generateAiVariant() {
+      if (!ui.currentPack) return;
+      const skillId = ui.currentPack.skillIds[0];
+      const skillName = SKILLS[skillId] ? SKILLS[skillId].name : "KS2 maths reasoning";
+      $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback warn"><h3>AI similar problem</h3><p>Generating a similar problem…</p></div>`);
+      try {
+        const system = "You generate one KS2 maths reasoning problem for England. Return valid JSON only. Keep it solvable by a child in upper KS2. Do not reveal the solution in the prompt.";
+        const user = `
+Create one fresh SATs-style reasoning problem close to this skill: ${skillName}.
+
+Return JSON only:
+{
+  "prompt": "plain text question",
+  "answer": "plain text exact answer",
+  "worked": ["step 1", "step 2", "step 3"],
+  "inputType": "number or text",
+  "check": "a quick sense check sentence"
+}
+        `;
+        const text = await callAI(system, user, 0.4);
+        const data = extractJsonBlock(text);
+        if (!data || !data.prompt || !data.answer) throw new Error("Could not parse JSON from the AI response.");
+        const templateId = `ai_${skillId}`;
+        const newQuestion = makeBaseQuestion({
+          id: templateId,
+          label: "AI generated problem",
+          domain: SKILLS[skillId] ? SKILLS[skillId].domain : "AI",
+          skillIds: [skillId]
+        }, Math.floor(Math.random()*1e9), {
+          marks: 1,
+          stemHtml: `<p>${escapeHtml(data.prompt)}</p>`,
+          solutionLines: Array.isArray(data.worked) ? data.worked.map(String) : [`Answer: ${String(data.answer)}`],
+          checkLine: String(data.check || ""),
+          inputSpec: { type: String(data.inputType || "text").toLowerCase() === "number" ? "number" : "text", label:"Your answer" },
+          evaluate: (resp) => {
+            const expected = String(data.answer).trim();
+            const actualRaw = resp.answer || "";
+            const expectedNum = parseNumberInput(expected);
+            const actualNum = parseNumberInput(actualRaw);
+            const correct = expectedNum !== null && actualNum !== null
+              ? equalNumeric(expectedNum, actualNum)
+              : String(actualRaw).trim().toLowerCase() === expected.toLowerCase();
+            return mkResult({
+              correct,
+              score: correct ? 1 : 0,
+              maxScore: 1,
+              misconception: correct ? null : "misread_question",
+              feedbackShort: correct ? "Correct." : "Not quite.",
+              feedbackLong: `Expected answer: ${expected}.`,
+              answerText: expected
+            });
+          }
+        });
+
+        ui.currentPack = {
+          templateId,
+          templateLabel: "AI generated problem",
+          domain: newQuestion.domain,
+          skillIds: [skillId],
+          presentation: "independent",
+          active: newQuestion,
+          marks: 1,
+          attempts: 0,
+          supportLevel: 0,
+          startedAt: nowMs(),
+          workedShown: false,
+          firstWrongResult: null
+        };
+        renderCurrentPack();
+        renderSessionMeta();
+      } catch (err) {
+        $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback bad"><h3>AI generation failed</h3><p>${escapeHtml(err.message)}. Try a different provider, model, or use the built-in practice.</p></div>`);
+      }
+    }
+
+    function buildRuleBasedParentSummary() {
+      const learner = currentLearner();
+      const total = learner.events.length;
+      const recent = learner.events.slice(-30);
+      const acc = total ? Math.round((learner.events.filter(e => e.correct).length / total) * 100) : 0;
+      const weakest = weakSkillIds().slice(0, 3).map(id => SKILLS[id].name);
+      const miscs = Object.entries(learner.misconceptions)
+        .sort((a,b) => b[1].count - a[1].count)
+        .slice(0, 2)
+        .map(([id]) => MISCONCEPTIONS[id] || id);
+      let text = `${learner.name} has completed ${total} logged question${total === 1 ? "" : "s"} with overall accuracy around ${acc}%. `;
+      if (weakest.length) text += `The main areas to tighten are ${weakest.join(", ")}. `;
+      if (miscs.length) text += `The most common error patterns are ${miscs.join(" and ")}. `;
+      const recentAcc = recent.length ? Math.round((recent.filter(e => e.correct).length / recent.length) * 100) : 0;
+      text += `In the most recent practice block, accuracy was ${recentAcc}%. Next best move: keep Smart Review running daily, and use Trouble Drill when due items and recent misses build up.`;
+      return text;
+    }
+
+    async function buildAiParentSummary() {
+      const learner = currentLearner();
+      const events = learner.events.slice(-40);
+      const weak = weakSkillIds().slice(0, 5).map(id => SKILLS[id].name);
+      const misc = Object.entries(learner.misconceptions).sort((a,b) => b[1].count - a[1].count).slice(0,5).map(([id, obj]) => ({ id, label: MISCONCEPTIONS[id] || id, count: obj.count }));
+      const system = "You write concise, practical parent summaries for KS2 maths reasoning practice in England. Use plain UK English. Keep it to one short paragraph and three next-step bullet points.";
+      const user = `
+Learner: ${learner.name}
+Weak skills: ${JSON.stringify(weak)}
+Recent misconception counts: ${JSON.stringify(misc)}
+Recent events: ${JSON.stringify(events.map(e => ({
+  skillIds: e.skillIds, correct: e.correct, score: e.score, maxScore: e.maxScore, misconception: e.misconception
+})))}
+
+Write a brief parent summary focused on what the child is starting to do well, what still needs work, and what to do next week.
+      `;
+      return callAI(system, user, 0.2);
+    }
+
+    // Analytics view combines skill strength, question-family strength, misconceptions and recent activity.
+    function renderAnalytics() {
+      const learner = currentLearner();
+      const total = learner.events.length;
+      const correct = learner.events.filter(e => e.correct).length;
+      const accuracy = total ? Math.round((correct / total) * 100) : 0;
+      $("anaTotalQuestions").textContent = total;
+      $("anaAccuracy").textContent = `${accuracy}%`;
+      $("anaDue").textContent = learnerDueCount();
+
+      const statuses = Object.keys(SKILLS).map(id => statusFromNode(learner.skills[id] || defaultNode()));
+      $("anaSecured").textContent = statuses.filter(s => s === "secured").length;
+
+      $("parentSummary").textContent = buildRuleBasedParentSummary();
+
+      const miscEntries = Object.entries(learner.misconceptions).sort((a,b) => b[1].count - a[1].count);
+      if (!miscEntries.length) {
+        $("misconceptionList").innerHTML = "<p class='subtle'>No misconception data yet.</p>";
+      } else {
+        $("misconceptionList").innerHTML = miscEntries.map(([id, obj]) => `
+          <div class="skill-row">
+            <div><strong>${escapeHtml(MISCONCEPTIONS[id] || id)}</strong></div>
+            <div class="bar"><span style="width:${Math.min(100, obj.count * 12)}%"></span></div>
+            <div>${obj.count}</div>
+            <div class="tiny">${escapeHtml(formatDateTime(obj.lastSeenAt ? new Date(obj.lastSeenAt).getTime() : null))}</div>
+          </div>
+        `).join("");
+      }
+
+      const skillHtml = Object.entries(SKILLS).map(([id, skill]) => {
+        const node = learner.skills[id] || defaultNode();
+        const strength = Math.round((node.strength || 0) * 100);
+        const status = statusFromNode(node);
+        return `
+          <div class="skill-row">
+            <div>
+              <strong>${escapeHtml(skill.name)}</strong>
+              <div class="tiny">${escapeHtml(skill.domain)}</div>
+            </div>
+            <div class="bar"><span style="width:${strength}%"></span></div>
+            <div>${strength}%</div>
+            <div class="status-${status}">${humanStatus(status)}</div>
+          </div>`;
+      }).join("");
+      $("skillAnalytics").innerHTML = skillHtml;
+
+      const templateHtml = TEMPLATES.map(template => {
+        const node = learner.templates[template.id] || defaultNode();
+        const strength = Math.round((node.strength || 0) * 100);
+        const status = statusFromNode(node);
+        return {
+          html: `
+            <div class="skill-row">
+              <div>
+                <strong>${escapeHtml(template.label)}</strong>
+                <div class="tiny">${escapeHtml(template.domain)}</div>
+              </div>
+              <div class="bar"><span style="width:${strength}%"></span></div>
+              <div>${node.attempts || 0} seen</div>
+              <div class="status-${status}">${humanStatus(status)}</div>
+            </div>`,
+          score: (node.attempts ? 1 : 0) + (1 - (node.strength || 0.25)) + (status === "weak" ? 1 : 0) + (status === "due" ? 0.6 : 0)
+        };
+      }).sort((a, b) => b.score - a.score).map(x => x.html).join("");
+      $("templateAnalytics").innerHTML = templateHtml || "<p class='subtle'>No question family data yet.</p>";
+
+      const recent = getRecentEvents(20);
+      if (!recent.length) {
+        $("recentActivity").innerHTML = "<p class='subtle'>No activity yet.</p>";
+      } else {
+        $("recentActivity").innerHTML = recent.map(e => {
+          const skills = (e.skillIds || []).map(id => SKILLS[id]?.name || id).join(", ");
+          return `
+            <details>
+              <summary>${e.correct ? "Correct" : "Review"} - ${escapeHtml(TEMPLATE_MAP[e.templateId]?.label || e.templateId)} - ${escapeHtml(new Date(e.timestamp).toLocaleString("en-GB"))}</summary>
+              <div class="tiny" style="margin-top:8px;">Skills: ${escapeHtml(skills)} | Score: ${e.score}/${e.maxScore} | Support: ${e.supportLevel}</div>
+              ${e.misconception ? `<div class="tiny" style="margin-top:6px;">Likely issue: ${escapeHtml(MISCONCEPTIONS[e.misconception] || e.misconception)}</div>` : ""}
+            </details>
+          `;
+        }).join("");
+      }
+
+      toggleAiButtons(aiEnabled());
+    }
+
+    function savePracticeSettings() {
+      const learner = currentLearner();
+      learner.settings.allowTeachingItems = $("allowTeachingItems").value === "yes";
+      learner.settings.speechRate = clamp(Number($("speechRateInput").value || 1), 0.6, 1.4);
+      learner.settings.showDomainBeforeAnswer = $("showDomainBeforeAnswer").value === "yes";
+      saveState();
+      renderSessionMeta();
+      renderCurrentMaybe();
+    }
+
+    function renderCurrentMaybe() {
+      if (ui.satsSet && !ui.satsSet.finished) renderMiniSet();
+      else if (ui.currentPack) renderCurrentPack();
+    }
+
+    function saveAiSettings() {
+      const ai = state.globalSettings.ai;
+      ai.provider = $("aiProviderSelect").value;
+      ai.model = $("aiModelInput").value.trim();
+      setAIKey($("aiKeyInput").value.trim(), $("rememberAiKey").value === "yes");
+      saveState();
+      toggleAiButtons(aiEnabled());
+      alert("AI settings saved.");
+    }
+
+    async function testAiConnection() {
+      try {
+        const text = await callAI("Reply with only: connection ok", "connection ok", 0);
+        alert(`AI response: ${text.slice(0, 120)}`);
+      } catch (err) {
+        alert(`AI test failed: ${err.message}`);
+      }
+    }
+
+    function exportJson(filename, data) {
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function importJsonData(parsed) {
+      if (parsed.learners && parsed.currentLearnerId) {
+        state = parsed;
+        state = loadStateFromObject(state);
+        saveState();
+        initialiseUiAfterStateChange();
+        alert("Imported full app data.");
+        return;
+      }
+      if (parsed.id && parsed.name && parsed.skills !== undefined) {
+        const learner = normaliseLearner(parsed);
+        learner.id = learner.id || uid();
+        state.learners[learner.id] = learner;
+        state.currentLearnerId = learner.id;
+        saveState();
+        initialiseUiAfterStateChange();
+        alert("Imported learner profile.");
+        return;
+      }
+      throw new Error("JSON format not recognised.");
+    }
+
+    function loadStateFromObject(obj) {
+      const parsed = JSON.parse(JSON.stringify(obj));
+      if (!parsed.learners || !Object.keys(parsed.learners).length) return defaultAppState();
+      parsed.version = APP_VERSION;
+      if (!parsed.globalSettings) parsed.globalSettings = { ai: { provider:"off", model:"", rememberKey:false, storedKey:"" } };
+      if (!parsed.globalSettings.ai) parsed.globalSettings.ai = { provider:"off", model:"", rememberKey:false, storedKey:"" };
+      for (const learnerId of Object.keys(parsed.learners)) {
+        parsed.learners[learnerId] = normaliseLearner(parsed.learners[learnerId]);
+      }
+      if (!parsed.currentLearnerId || !parsed.learners[parsed.currentLearnerId]) {
+        parsed.currentLearnerId = Object.keys(parsed.learners)[0];
+      }
+      return parsed;
+    }
+
+    function createLearner() {
+      const name = $("newLearnerName").value.trim();
+      if (!name) {
+        alert("Enter a learner name first.");
+        return;
+      }
+      const learner = makeLearner(name);
+      state.learners[learner.id] = learner;
+      state.currentLearnerId = learner.id;
+      $("newLearnerName").value = "";
+      saveState();
+      initialiseUiAfterStateChange();
+    }
+
+    function renameCurrentLearner() {
+      const learner = currentLearner();
+      const next = prompt("Rename learner", learner.name);
+      if (!next) return;
+      learner.name = next.trim() || learner.name;
+      saveState();
+      initialiseUiAfterStateChange();
+    }
+
+    function deleteCurrentLearner() {
+      if (Object.keys(state.learners).length <= 1) {
+        alert("Keep at least one learner profile.");
+        return;
+      }
+      const learner = currentLearner();
+      if (!confirm(`Delete ${learner.name}? This cannot be undone.`)) return;
+      delete state.learners[learner.id];
+      state.currentLearnerId = Object.keys(state.learners)[0];
+      saveState();
+      initialiseUiAfterStateChange();
+    }
+
+    function resetCurrentLearner() {
+      const learner = currentLearner();
+      if (!confirm(`Reset all progress for ${learner.name}?`)) return;
+      const fresh = makeLearner(learner.name);
+      fresh.id = learner.id;
+      state.learners[learner.id] = fresh;
+      saveState();
+      initialiseUiAfterStateChange();
+    }
+
+    function resetAllData() {
+      if (!confirm("Reset all app data?")) return;
+      state = defaultAppState();
+      sessionStorage.removeItem(SESSION_AI_KEY);
+      saveState();
+      initialiseUiAfterStateChange();
+    }
+
+    function initialiseUiAfterStateChange() {
+      ui.session = null;
+      ui.currentPack = null;
+      ui.satsSet = null;
+      renderHeader();
+      renderSkillSelect();
+      renderSettings();
+      renderProfiles();
+      renderAnalytics();
+      renderSessionMeta();
+      $("questionMeta").innerHTML = `<span class="chip neutral">Ready</span>`;
+      $("questionStem").innerHTML = `<p>Choose a mode and start a session.</p>`;
+      $("questionVisual").innerHTML = "";
+      $("responseArea").innerHTML = "";
+      $("feedbackArea").innerHTML = "";
+      $("submitAnswerBtn").classList.add("hidden");
+      $("retryBtn").classList.add("hidden");
+      $("showWorkedBtn").classList.add("hidden");
+      $("useFadedBtn").classList.add("hidden");
+      $("nextQuestionBtn").textContent = "Next question";
+      $("finishSetBtn").classList.add("hidden");
+    }
+
+    async function handleAiParentSummary() {
+      if (!aiEnabled()) {
+        alert("AI is not configured.");
+        return;
+      }
+      const target = $("parentSummary");
+      const old = target.textContent;
+      target.textContent = "Generating AI parent summary…";
+      try {
+        const text = await buildAiParentSummary();
+        target.innerHTML = nl2br(text);
+      } catch (err) {
+        target.textContent = old;
+        alert(`AI summary failed: ${err.message}`);
+      }
+    }
+
+    function bindEvents() {
+      document.querySelectorAll("#tabButtons button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          ui.activeTab = btn.dataset.tab;
+          renderTabs();
+          if (ui.activeTab === "analytics") renderAnalytics();
+        });
+      });
+
+      $("currentLearnerSelect").addEventListener("change", (e) => {
+        state.currentLearnerId = e.target.value;
+        saveState();
+        initialiseUiAfterStateChange();
+      });
+
+      $("modeSelect").addEventListener("change", () => {
+        renderSessionMeta();
+      });
+
+      $("startSessionBtn").addEventListener("click", startSession);
+      $("nextQuestionBtn").addEventListener("click", handleNextQuestionClick);
+      $("submitAnswerBtn").addEventListener("click", submitCurrentAnswer);
+      $("retryBtn").addEventListener("click", prepareRetry);
+      $("showWorkedBtn").addEventListener("click", showWorkedNow);
+      $("useFadedBtn").addEventListener("click", useFadedSupport);
+      $("readAloudBtn").addEventListener("click", readCurrentQuestionAloud);
+      $("finishSetBtn").addEventListener("click", () => finishMiniSet(false));
+
+      $("miniPaperNav").addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-set-index]");
+        if (!btn || !ui.satsSet || ui.satsSet.finished) return;
+        saveCurrentMiniSetResponse();
+        ui.satsSet.index = Number(btn.dataset.setIndex);
+        renderMiniSet();
+        renderSessionMeta();
+      });
+
+      $("allowTeachingItems").addEventListener("change", savePracticeSettings);
+      $("speechRateInput").addEventListener("change", savePracticeSettings);
+      $("showDomainBeforeAnswer").addEventListener("change", savePracticeSettings);
+      $("saveAiSettingsBtn").addEventListener("click", saveAiSettings);
+      $("testAiBtn").addEventListener("click", testAiConnection);
+
+      $("createLearnerBtn").addEventListener("click", createLearner);
+      $("renameLearnerBtn").addEventListener("click", renameCurrentLearner);
+      $("deleteLearnerBtn").addEventListener("click", deleteCurrentLearner);
+      $("resetLearnerBtn").addEventListener("click", resetCurrentLearner);
+      $("resetAllBtn").addEventListener("click", resetAllData);
+
+      $("exportCurrentBtn").addEventListener("click", () => {
+        exportJson(`${currentLearner().name.replace(/\s+/g, "_").toLowerCase()}_ks2_reasoning.json`, currentLearner());
+      });
+      $("exportAllBtn").addEventListener("click", () => {
+        exportJson(`ks2_reasoning_app_data.json`, state);
+      });
+      $("importBtn").addEventListener("click", () => $("importFileInput").click());
+      $("importFileInput").addEventListener("change", async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        try {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          importJsonData(parsed);
+          e.target.value = "";
+        } catch (err) {
+          alert(`Import failed: ${err.message}`);
+        }
+      });
+
+      $("aiExplainBtn").addEventListener("click", explainWithAI);
+      $("aiVariantBtn").addEventListener("click", generateAiVariant);
+      $("aiParentSummaryBtn").addEventListener("click", handleAiParentSummary);
+    }
+
+    function initialise() {
+      renderHeader();
+      renderTabs();
+      renderSkillSelect();
+      renderSettings();
+      renderProfiles();
+      renderAnalytics();
+      renderSessionMeta();
+      bindEvents();
+      if (ui.timerInterval) clearInterval(ui.timerInterval);
+      ui.timerInterval = setInterval(maybeTimerTick, 1000);
+      toggleAiButtons(aiEnabled());
+    }
+
+    initialise();
+  </script>
+</body>
+</html>

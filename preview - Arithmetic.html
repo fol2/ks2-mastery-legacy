@@ -1,0 +1,4567 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KS2 Maths – Arithmetic Fluency Trainer</title>
+  <style>
+
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --ink:#1f2937;
+      --muted:#5b6575;
+      --line:#d7deea;
+      --accent:#2563eb;
+      --accent-2:#0f766e;
+      --good:#166534;
+      --warn:#b45309;
+      --bad:#b91c1c;
+      --soft:#eef4ff;
+      --soft-2:#ecfeff;
+      --shadow:0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius:16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: Inter, Arial, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f7f9fd 0%, #eef3fb 100%);
+      color:var(--ink);
+      line-height:1.45;
+    }
+    button, input, select, textarea{
+      font: inherit;
+    }
+    .app{
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+    header.app-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      padding: 18px 20px;
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      margin-bottom:16px;
+    }
+    .title-wrap h1{
+      margin:0 0 6px;
+      font-size: clamp(1.4rem, 2.8vw, 2.15rem);
+      line-height:1.1;
+    }
+    .title-wrap p{
+      margin:0;
+      color:var(--muted);
+      max-width:900px;
+    }
+    .header-right{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+      justify-content:flex-end;
+      min-width:280px;
+    }
+    .header-right .mini{
+      min-width: 160px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 12px;
+      border-radius:999px;
+      background: var(--soft);
+      border:1px solid #cfe0ff;
+      color:#1d4ed8;
+      font-weight:600;
+      white-space:nowrap;
+    }
+    nav.tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:16px;
+    }
+    nav.tabs button{
+      border:none;
+      border-radius:999px;
+      padding:10px 15px;
+      background:#dfe8f8;
+      color:#234;
+      cursor:pointer;
+      font-weight:600;
+    }
+    nav.tabs button.active{
+      background: var(--accent);
+      color:#fff;
+    }
+
+    .tab-panel{ display:none; }
+    .tab-panel.active{ display:block; }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+    .grid.two{
+      grid-template-columns: 1.1fr 0.9fr;
+    }
+    .grid.three{
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .panel{
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .panel h2, .panel h3{
+      margin:0 0 10px;
+      line-height:1.2;
+    }
+    .panel h2{ font-size:1.2rem; }
+    .panel h3{ font-size:1rem; color:#0f172a; }
+    .subtle{
+      color:var(--muted);
+      font-size:0.95rem;
+    }
+
+    .control-row, .wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:flex-end;
+    }
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:160px;
+      flex:1 1 170px;
+    }
+    .field.tight{ min-width: 120px; flex:0 1 150px; }
+    label{
+      font-weight:600;
+      color:#334155;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    select,
+    textarea{
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid #bfd0e7;
+      background:#fff;
+      color:var(--ink);
+    }
+    textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+    .mini input, .mini select{
+      padding:9px 10px;
+      border-radius:10px;
+    }
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:14px;
+    }
+    button.primary,
+    button.secondary,
+    button.ghost,
+    button.warn,
+    button.good{
+      border:none;
+      border-radius:12px;
+      padding:11px 14px;
+      cursor:pointer;
+      font-weight:700;
+    }
+    button.primary{ background:var(--accent); color:#fff; }
+    button.secondary{ background:#dbeafe; color:#1d4ed8; }
+    button.good{ background:#dcfce7; color:#166534; }
+    button.warn{ background:#ffedd5; color:#b45309; }
+    button.ghost{
+      background:#edf2f7;
+      color:#334155;
+    }
+    button:disabled{
+      opacity:0.55;
+      cursor:not-allowed;
+    }
+
+    .stats-row{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:10px;
+    }
+    .stat{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+    }
+    .stat .label{
+      color:var(--muted);
+      font-size:0.9rem;
+      margin-bottom:6px;
+    }
+    .stat .value{
+      font-size:1.4rem;
+      font-weight:800;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 11px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#3730a3;
+      border:1px solid #c7d2fe;
+      font-size:0.9rem;
+      font-weight:600;
+    }
+    .chip.good{ background:#dcfce7; color:#166534; border-color:#bbf7d0; }
+    .chip.warn{ background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
+    .chip.bad{ background:#fee2e2; color:#991b1b; border-color:#fecaca; }
+    .chip.neutral{ background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+
+    .question-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      background:linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+    }
+    .question-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+    .question-stem{
+      font-size:1.08rem;
+      margin-bottom:16px;
+    }
+    .question-stem p{
+      margin:0 0 10px;
+    }
+    .question-stem strong{
+      color:#0f172a;
+    }
+    .question-visual{
+      margin: 10px 0 16px;
+      overflow-x:auto;
+    }
+    .response-area{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+    .answer-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap:10px;
+    }
+    .answer-box{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+    }
+    .answer-box legend{
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .option-row{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      padding:8px 0;
+    }
+    .option-row input{
+      margin-top:2px;
+    }
+    .working-box textarea{
+      min-height:130px;
+    }
+    .feedback{
+      border-radius:16px;
+      padding:14px;
+      margin-top:16px;
+      border:1px solid var(--line);
+    }
+    .feedback.good{
+      background:#f0fdf4;
+      border-color:#bbf7d0;
+    }
+    .feedback.warn{
+      background:#fff7ed;
+      border-color:#fed7aa;
+    }
+    .feedback.bad{
+      background:#fef2f2;
+      border-color:#fecaca;
+    }
+    .feedback h3{
+      margin:0 0 8px;
+    }
+    .worked{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      background:#ffffff;
+      border:1px dashed #bfd0e7;
+    }
+    .worked ol{
+      margin: 8px 0 0 20px;
+      padding:0;
+    }
+    .worked li{
+      margin-bottom:6px;
+    }
+    .scaffold{
+      border:1px dashed #8ec5ff;
+      background:#f0f8ff;
+      border-radius:14px;
+      padding:12px;
+      margin-bottom:14px;
+    }
+    .example-card{
+      border:1px solid #bfe1ff;
+      background: linear-gradient(180deg, #eff7ff 0%, #ffffff 100%);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:14px;
+    }
+    .example-card h4{
+      margin:0 0 8px;
+      font-size:1rem;
+    }
+    .tiny{
+      font-size:0.88rem;
+      color:var(--muted);
+    }
+    table.clean{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:8px;
+      background:#fff;
+    }
+    table.clean th, table.clean td{
+      border:1px solid #dbe5f3;
+      padding:10px 12px;
+      text-align:left;
+      vertical-align:middle;
+    }
+    table.clean th{
+      background:#eff6ff;
+    }
+    .skill-row{
+      display:grid;
+      grid-template-columns: 210px 1fr 90px 105px;
+      gap:10px;
+      align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid #edf2f7;
+    }
+    .skill-row:last-child{ border-bottom:none; }
+    .bar{
+      width:100%;
+      height:12px;
+      background:#e9eef7;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid #dce4f2;
+    }
+    .bar > span{
+      display:block;
+      height:100%;
+      background:linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+      border-radius:999px;
+    }
+    .status-new{ color:#475569; font-weight:700; }
+    .status-learning{ color:#1d4ed8; font-weight:700; }
+    .status-due{ color:#b45309; font-weight:700; }
+    .status-weak{ color:#b91c1c; font-weight:700; }
+    .status-secured{ color:#166534; font-weight:700; }
+
+    .mini-paper-nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .mini-paper-nav button{
+      min-width:42px;
+      border:none;
+      border-radius:10px;
+      padding:9px 12px;
+      cursor:pointer;
+      font-weight:700;
+      background:#e5eefc;
+      color:#234;
+    }
+    .mini-paper-nav button.current{
+      background:var(--accent);
+      color:#fff;
+    }
+    .mini-paper-nav button.done{
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .chart-wrap{
+      padding:10px;
+      background:#fff;
+      border-radius:16px;
+      border:1px solid #dbe5f3;
+    }
+
+    .callout{
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid #bfdbfe;
+      background:#eff6ff;
+    }
+    .callout.warn{
+      border-color:#fed7aa;
+      background:#fff7ed;
+    }
+    .callout.good{
+      border-color:#bbf7d0;
+      background:#f0fdf4;
+    }
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .profile-card{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+      background:#fbfdff;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:0.92rem;
+    }
+    .hidden{
+      display:none !important;
+    }
+    details{
+      border:1px solid #dce5f2;
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fbfdff;
+    }
+    details + details{
+      margin-top:10px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:700;
+    }
+    .footer-note{
+      color:var(--muted);
+      font-size:0.9rem;
+      margin-top:12px;
+    }
+    .pill-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:6px;
+    }
+    .pill{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #dce5f2;
+      background:#fff;
+      font-size:0.86rem;
+    }
+    .review-card{
+      border:1px solid #dce5f2;
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+    }
+
+    @media (max-width: 1040px){
+      .grid.two, .grid.three, .split{
+        grid-template-columns: 1fr;
+      }
+      .stats-row{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .skill-row{
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px){
+      .app{ padding:12px; }
+      header.app-header{ padding:16px; }
+      .stats-row{
+        grid-template-columns: 1fr;
+      }
+      nav.tabs button{
+        flex:1 1 auto;
+      }
+    }
+  
+    pre.alg{
+      display:inline-block;
+      margin:0;
+      padding:12px 14px;
+      border:1px solid #dbe5f3;
+      border-radius:14px;
+      background:#ffffff;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:1.05rem;
+      line-height:1.25;
+      white-space:pre;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="title-wrap">
+        <h1>KS2 Maths – Arithmetic Fluency Trainer</h1>
+        <p>Daily arithmetic practice for England KS2 and SATs-style readiness. Built for durable fluency: real retrieval first, exact local marking, quick correction after the attempt, adaptive spaced review, and a strict no-feedback test mode when needed.</p>
+      </div>
+      <div class="header-right">
+        <div class="field mini">
+          <label for="currentLearnerSelect">Learner</label>
+          <select id="currentLearnerSelect"></select>
+        </div>
+        <div class="badge" id="dueBadge">0 due</div>
+        <div class="badge" id="streakBadge">0-day streak</div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabButtons">
+      <button class="active" data-tab="practice">Practice</button>
+      <button data-tab="analytics">Progress / Parent View</button>
+      <button data-tab="profiles">Profiles &amp; Data</button>
+      <button data-tab="settings">Settings</button>
+      <button data-tab="method">Method</button>
+    </nav>
+
+    <section class="tab-panel active" id="tab-practice">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Practice setup</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="modeSelect">Mode</label>
+              <select id="modeSelect">
+                <option value="smart">Smart Review</option>
+                <option value="skill">Skill Builder</option>
+                <option value="speed">Speed Drill</option>
+                <option value="clinic">Error Clinic</option>
+                <option value="test">True Test Mode</option>
+              </select>
+            </div>
+            <div class="field" id="skillField">
+              <label for="skillSelect">Skill focus</label>
+              <select id="skillSelect"></select>
+            </div>
+            <div class="field" id="goalField">
+              <label for="goalSelect">Session goal</label>
+              <select id="goalSelect">
+                <option value="5m">5 minutes</option>
+                <option value="10m">10 minutes</option>
+                <option value="20q">20 questions</option>
+                <option value="due">Clear due items</option>
+              </select>
+            </div>
+            <div class="field tight hidden" id="setSizeField">
+              <label for="setSizeSelect" id="setSizeLabel">Burst / paper form</label>
+              <select id="setSizeSelect">
+                <option value="180">3 minutes</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="startSessionBtn">Start / refresh session</button>
+            <button class="secondary" id="nextQuestionBtn">Next question</button>
+            <button class="ghost" id="readAloudBtn">Read aloud</button>
+            <button class="ghost hidden" id="finishSetBtn">Finish paper</button>
+          </div>
+          <p class="footer-note" id="modeNote"></p>
+        </div>
+
+        <div class="panel">
+          <h2>Session view</h2>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="label">Answered</div>
+              <div class="value" id="sessionAnswered">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Correct</div>
+              <div class="value" id="sessionCorrect">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Goal progress</div>
+              <div class="value" id="sessionGoalProgress">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Timer</div>
+              <div class="value" id="sessionTimer">--:--</div>
+            </div>
+          </div>
+          <div class="chips" style="margin-top:12px;" id="sessionChips"></div>
+          <div class="mini-paper-nav hidden" id="miniPaperNav"></div>
+          <p class="footer-note" id="sessionSummary">No active session yet.</p>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <div class="question-card" id="questionCard">
+          <div class="question-meta" id="questionMeta">
+            <span class="chip neutral">Ready</span>
+          </div>
+          <div class="question-stem" id="questionStem">
+            <p>Choose a mode and start a session. Smart Review is the default because it mixes due, weak, new and recently missed arithmetic skills instead of marching in a fixed order.</p>
+          </div>
+          <div class="question-visual" id="questionVisual"></div>
+          <div class="response-area" id="responseArea"></div>
+          <div class="actions" id="questionActions">
+            <button class="primary hidden" id="submitAnswerBtn">Submit answer</button>
+            <button class="warn hidden" id="retryBtn">Retry this question</button>
+            <button class="secondary hidden" id="showWorkedBtn">Show worked solution</button>
+            <button class="secondary hidden" id="useFadedBtn">Use a partly worked version</button>
+            <button class="good hidden" id="aiExplainBtn">AI explain this</button>
+            <button class="good hidden" id="aiVariantBtn">AI diagnose &amp; tune next</button>
+          </div>
+          <div id="feedbackArea"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-analytics">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Overview</h2>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="label">Total questions</div>
+              <div class="value" id="anaTotalQuestions">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">Accuracy</div>
+              <div class="value" id="anaAccuracy">0%</div>
+            </div>
+            <div class="stat">
+              <div class="label">Average time</div>
+              <div class="value" id="anaAvgTime">—</div>
+            </div>
+            <div class="stat">
+              <div class="label">Due now</div>
+              <div class="value" id="anaDue">0</div>
+            </div>
+          </div>
+          <div class="stats-row" style="margin-top:10px;">
+            <div class="stat">
+              <div class="label">Secured skills</div>
+              <div class="value" id="anaSecured">0</div>
+            </div>
+          </div>
+          <div class="callout" style="margin-top:14px;">
+            <strong>Parent / teacher summary</strong>
+            <div id="parentSummary" style="margin-top:8px;"></div>
+          </div>
+          <div class="actions">
+            <button class="good" id="aiParentSummaryBtn">AI parent summary</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Recent mistakes</h2>
+          <div id="recentMistakesList"></div>
+          <div class="footer-note">Use this with Error Clinic. The goal is to repair the exact pattern that keeps breaking, not just do more random questions.</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Common error patterns</h2>
+        <div id="misconceptionList"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Mastery by arithmetic strand</h2>
+        <div id="strandAnalytics"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Skill strength</h2>
+        <div id="skillAnalytics"></div>
+      </div>
+
+      <div class="panel" style="margin-top:16px;">
+        <h2>Recent activity</h2>
+        <div id="recentActivity"></div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-profiles">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Learner profiles</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="newLearnerName">New learner name</label>
+              <input type="text" id="newLearnerName" placeholder="e.g. Ava" />
+            </div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="createLearnerBtn">Create learner</button>
+            <button class="ghost" id="renameLearnerBtn">Rename current learner</button>
+            <button class="warn" id="deleteLearnerBtn">Delete current learner</button>
+          </div>
+          <div id="learnerList" style="margin-top:14px;"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Import / export / reset</h2>
+          <p class="subtle">Progress is stored in your browser with localStorage. Export regularly if you care about keeping the data.</p>
+          <div class="actions">
+            <button class="secondary" id="exportCurrentBtn">Export current learner JSON</button>
+            <button class="secondary" id="exportAllBtn">Export all app data JSON</button>
+            <button class="ghost" id="importBtn">Import JSON</button>
+            <button class="warn" id="resetLearnerBtn">Reset current learner progress</button>
+            <button class="warn" id="resetAllBtn">Reset all app data</button>
+          </div>
+          <input type="file" id="importFileInput" accept=".json,application/json" class="hidden" />
+          <div class="callout warn" style="margin-top:14px;">
+            Reset removes progress but keeps the app file itself. Export first if you may want the data later.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-settings">
+      <div class="grid two">
+        <div class="panel">
+          <h2>Practice settings</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="allowTeachingItems">Teaching support inside Smart Review / Clinic</label>
+              <select id="allowTeachingItems">
+                <option value="yes">Yes - allow faded or worked support after difficulty shows</option>
+                <option value="no">No - keep practice fully independent</option>
+              </select>
+            </div>
+            <div class="field tight">
+              <label for="speechRateInput">Read-aloud speed</label>
+              <input type="number" min="0.6" max="1.4" step="0.1" id="speechRateInput" />
+            </div>
+            <div class="field">
+              <label for="showDomainBeforeAnswer">Show arithmetic strand before answer</label>
+              <select id="showDomainBeforeAnswer">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="footer-note">True Test Mode never shows early hints or worked support before marking. Read-aloud is lightweight browser TTS for accessibility only.</div>
+        </div>
+
+        <div class="panel">
+          <h2>Optional AI</h2>
+          <div class="control-row">
+            <div class="field">
+              <label for="aiProviderSelect">Provider</label>
+              <select id="aiProviderSelect">
+                <option value="off">AI off</option>
+                <option value="openai">OpenAI</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="anthropic">Anthropic</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="aiModelInput">Model name</label>
+              <input type="text" id="aiModelInput" placeholder="Enter model name" />
+            </div>
+          </div>
+          <div class="control-row" style="margin-top:8px;">
+            <div class="field">
+              <label for="aiKeyInput">API key</label>
+              <input type="password" id="aiKeyInput" placeholder="Stored in session by default" />
+            </div>
+            <div class="field tight">
+              <label for="rememberAiKey">Remember key locally</label>
+              <select id="rememberAiKey">
+                <option value="no">No - session only</option>
+                <option value="yes">Yes - localStorage</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="good" id="saveAiSettingsBtn">Save AI settings</button>
+            <button class="ghost" id="testAiBtn">Test AI connection</button>
+          </div>
+          <div class="callout warn" style="margin-top:14px;">
+            In a single local HTML file, any direct API key use is client-side. Session-only storage is the safer default. Some providers may reject direct browser requests or hit CORS restrictions. The arithmetic engine still works fully without AI, and the provider adapter is isolated so you can later swap in a tiny proxy if needed.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-method">
+      <div class="panel">
+        <h2>How this trainer is designed</h2>
+        <p>This tool is built around the real job of KS2 arithmetic: recall number facts quickly, carry written methods accurately, keep place value under control, and stay reliable under time pressure. The app separates learning mode from test mode on purpose, because the best way to build fluency is not identical to the best way to measure SATs readiness.</p>
+        <div class="split">
+          <div>
+            <h3>Skill status</h3>
+            <div class="pill-list">
+              <span class="pill"><strong>New</strong>: barely seen yet</span>
+              <span class="pill"><strong>Learning</strong>: building but not stable</span>
+              <span class="pill"><strong>Due</strong>: ready for spaced review</span>
+              <span class="pill"><strong>Weak</strong>: repeated difficulty</span>
+              <span class="pill"><strong>Secured</strong>: strong and spaced out</span>
+            </div>
+          </div>
+          <div>
+            <h3>Core learning loop</h3>
+            <div class="pill-list">
+              <span class="pill">Genuine first attempt</span>
+              <span class="pill">No answer leakage first</span>
+              <span class="pill">Quick correction after the attempt</span>
+              <span class="pill">Worked help only when needed</span>
+              <span class="pill">Fresh retry later with spacing</span>
+            </div>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:16px;">
+          Honest limitation: the app mirrors the released arithmetic paper closely on timing and question style, but it does not reliably award official handwritten method marks on long multiplication and long division. It auto-scores the final answer locally and leaves method quality for self- or parent review.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+
+    const STORAGE_KEY = "ks2_arithmetic_fluency_v1";
+    const SESSION_AI_KEY = "ks2_arithmetic_ai_session_key";
+    const APP_VERSION = 1;
+
+    
+const MISCONCEPTIONS = {
+  fact_recall: "Forgot or misrecalled a number fact",
+  place_value_confusion: "Place value confusion",
+  powers_of_ten_shift: "Moved digits the wrong way when multiplying or dividing by powers of 10",
+  regrouping_error: "Exchange / regrouping error",
+  digit_alignment: "Digits or decimal points were not aligned correctly",
+  operation_confusion: "Used the wrong operation or sequence of operations",
+  inverse_error: "Undo steps were done in the wrong order",
+  decimal_point_error: "Decimal point placed incorrectly",
+  fraction_method_error: "Fraction method error",
+  simplification_missed: "Equivalent answer but not in simplest fraction form",
+  percentage_method_error: "Percentage method broke down",
+  remainder_interpretation: "Division remainder or quotient was handled incorrectly",
+  order_of_operations_error: "Order of operations error",
+  misread_question: "Misread what the question was asking for"
+};
+
+const MINIMAL_HINTS = {
+  fact_recall: "Pause and recall the key fact first before doing anything else.",
+  place_value_confusion: "Focus on the value of each digit, not just the digit itself.",
+  powers_of_ten_shift: "Multiplying or dividing by 10, 100 or 1,000 changes place value, not the order of the digits.",
+  regrouping_error: "Check each column from right to left and see whether you needed to exchange.",
+  digit_alignment: "Line up ones under ones and decimal points under decimal points.",
+  operation_confusion: "Decide exactly which operation belongs first before calculating.",
+  inverse_error: "Undo the operations in reverse order.",
+  decimal_point_error: "Estimate first so the decimal point ends up in a sensible place.",
+  fraction_method_error: "Keep track of whether you are finding a fraction of an amount, combining fractions, or dividing a fraction.",
+  simplification_missed: "You have the right value, but KS2 arithmetic usually wants the simplest fraction form.",
+  percentage_method_error: "Break the percentage into easy parts such as 10%, 5%, 1%, 50% or 25%.",
+  remainder_interpretation: "Check whether the division should be exact and whether you have handled the remainder correctly.",
+  order_of_operations_error: "Do brackets first, then multiplication or division, then addition or subtraction.",
+  misread_question: "Read the final line again and make sure your answer matches exactly what is being asked."
+};
+
+const SKILLS = {
+  number_bonds: { domain:"Number facts", name:"Number bonds and complements" },
+  place_value_partition: { domain:"Place value", name:"Place value partitioning" },
+  powers_of_10_shift: { domain:"Place value", name:"Multiply and divide by 10, 100 and 1,000" },
+  mental_addition: { domain:"Addition and subtraction", name:"Mental addition" },
+  column_addition: { domain:"Addition and subtraction", name:"Column addition" },
+  mental_subtraction: { domain:"Addition and subtraction", name:"Mental subtraction" },
+  column_subtraction: { domain:"Addition and subtraction", name:"Column subtraction" },
+  inverse_missing: { domain:"Addition and subtraction", name:"Missing-number and inverse equations" },
+  times_tables: { domain:"Multiplication and division", name:"Times-table and division facts" },
+  mental_multiplication: { domain:"Multiplication and division", name:"Mental multiplication" },
+  short_multiplication: { domain:"Multiplication and division", name:"Short multiplication" },
+  long_multiplication: { domain:"Multiplication and division", name:"Long multiplication" },
+  division_facts: { domain:"Multiplication and division", name:"Division facts and exact quotients" },
+  short_division: { domain:"Multiplication and division", name:"Short division" },
+  long_division: { domain:"Multiplication and division", name:"Long division" },
+  decimals_add_sub: { domain:"Decimals", name:"Decimal addition and subtraction" },
+  decimals_multiply: { domain:"Decimals", name:"Decimal multiplication and place-value scaling" },
+  fractions_of_amount: { domain:"Fractions", name:"Fractions of amounts" },
+  fractions_calc: { domain:"Fractions", name:"Fraction calculations" },
+  percentages_of_amount: { domain:"Percentages", name:"Percentages of amounts" },
+  order_of_operations: { domain:"Mixed arithmetic", name:"Order of operations" }
+};
+
+
+    function uid() {
+      return "id_" + Math.random().toString(36).slice(2, 10) + "_" + Date.now().toString(36);
+    }
+
+    function clamp(n, min, max) {
+      return Math.min(max, Math.max(min, n));
+    }
+
+    function randInt(rng, min, max) {
+      return Math.floor(rng() * (max - min + 1)) + min;
+    }
+
+    function pick(rng, arr) {
+      return arr[randInt(rng, 0, arr.length - 1)];
+    }
+
+    function shuffle(rng, arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function mulberry32(seed) {
+      let t = seed >>> 0;
+      return function() {
+        t += 0x6D2B79F5;
+        let r = Math.imul(t ^ (t >>> 15), 1 | t);
+        r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+        return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    function nowMs() {
+      return Date.now();
+    }
+
+    function isoNow() {
+      return new Date().toISOString();
+    }
+
+    function formatDateTime(ts) {
+      if (!ts) return "—";
+      return new Date(ts).toLocaleString("en-GB", {
+        year:"numeric", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit"
+      });
+    }
+
+    function todayKey(ts = Date.now()) {
+      const d = new Date(ts);
+      return [d.getFullYear(), String(d.getMonth()+1).padStart(2, "0"), String(d.getDate()).padStart(2, "0")].join("-");
+    }
+
+    function diffDays(aKey, bKey) {
+      const a = new Date(aKey + "T00:00:00");
+      const b = new Date(bKey + "T00:00:00");
+      return Math.round((b - a) / 86400000);
+    }
+
+    function average(nums) {
+      return nums.length ? nums.reduce((a,b)=>a+b,0) / nums.length : 0;
+    }
+
+    function gcd(a, b) {
+      a = Math.abs(a); b = Math.abs(b);
+      while (b) [a, b] = [b, a % b];
+      return a || 1;
+    }
+
+    function simplifyFraction(n, d) {
+      const g = gcd(n, d);
+      return { n: n / g, d: d / g };
+    }
+
+    function fractionToText(n, d) {
+      return `${n}/${d}`;
+    }
+
+    function formatNumber(n) {
+      return Number(n).toLocaleString("en-GB");
+    }
+
+    function formatMoney(n) {
+      return "£" + Number(n).toFixed(2);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function nl2br(str) {
+      return escapeHtml(str).replace(/\n/g, "<br>");
+    }
+
+    function asList(items) {
+      return "<ol>" + items.map(x => `<li>${escapeHtml(x)}</li>`).join("") + "</ol>";
+    }
+
+    function cleanNumText(value) {
+      return String(value || "").trim().replace(/,/g, "").replace(/£/g, "").replace(/\s+/g, "");
+    }
+
+    function parseNumberInput(value) {
+      const s = cleanNumText(value);
+      if (s === "") return null;
+      if (/^-?\d+(\.\d+)?$/.test(s)) return Number(s);
+      return null;
+    }
+
+    function parseFractionOrNumber(value) {
+      const s = String(value || "").trim().replace(/\s+/g, "");
+      if (!s) return null;
+      if (/^-?\d+\/-?\d+$/.test(s)) {
+        const [a,b] = s.split("/").map(Number);
+        if (b === 0) return null;
+        return a / b;
+      }
+      const num = parseNumberInput(s);
+      return num;
+    }
+
+    function equalNumeric(a, b, tol = 1e-9) {
+      return Math.abs(a - b) <= tol;
+    }
+
+    function parseClockTime(text) {
+      const raw = String(text || "").trim();
+      if (!raw) return null;
+      const s = raw.replace(/\./g, ":");
+      if (/^\d{3,4}$/.test(s)) {
+        const hours = s.length === 3 ? Number(s.slice(0,1)) : Number(s.slice(0,2));
+        const mins = Number(s.slice(-2));
+        if (hours >= 0 && hours < 24 && mins >= 0 && mins < 60) return hours * 60 + mins;
+      }
+      const m = s.match(/^(\d{1,2})[:h](\d{2})$/i);
+      if (m) {
+        const hours = Number(m[1]);
+        const mins = Number(m[2]);
+        if (hours >= 0 && hours < 24 && mins >= 0 && mins < 60) return hours * 60 + mins;
+      }
+      return null;
+    }
+
+    function minutesToClock(totalMinutes) {
+      let mins = ((totalMinutes % (24*60)) + (24*60)) % (24*60);
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    }
+
+    function roundToPlace(n, place) {
+      return Math.round(n / place) * place;
+    }
+
+    function parseCommaNumberList(text) {
+      return String(text || "")
+        .split(/[,\n;]/)
+        .map(x => x.trim())
+        .filter(Boolean)
+        .map(x => parseNumberInput(x))
+        .filter(x => x !== null);
+    }
+
+    function parseSymbol(text) {
+      return String(text || "").trim();
+    }
+
+    
+function stripTrailingZeros(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return String(value);
+  if (Number.isInteger(num)) return String(num);
+  return num.toFixed(10).replace(/0+$/, "").replace(/\.$/, "");
+}
+
+function padLeft(value, width) {
+  return String(value).padStart(width, " ");
+}
+
+function toPlainNumber(n) {
+  return stripTrailingZeros(n);
+}
+
+function normaliseFraction(n, d) {
+  if (d < 0) {
+    n *= -1;
+    d *= -1;
+  }
+  const simp = simplifyFraction(n, d);
+  return { n: simp.n, d: simp.d };
+}
+
+function formatMixedFraction(n, d, preferMixed = true) {
+  const simp = normaliseFraction(n, d);
+  n = simp.n;
+  d = simp.d;
+  if (d === 1) return String(n);
+  const sign = n < 0 ? "-" : "";
+  const absN = Math.abs(n);
+  if (preferMixed && absN > d) {
+    const whole = Math.floor(absN / d);
+    const rem = absN % d;
+    if (rem === 0) return sign + String(whole);
+    return `${sign}${whole} ${rem}/${d}`;
+  }
+  return `${n}/${d}`;
+}
+
+function parseFractionTextDetailed(value) {
+  const raw = String(value || "").trim().replace(/\u2212/g, "-");
+  if (!raw) return null;
+  const cleaned = raw.replace(/,/g, "").replace(/\s+/g, " ").trim();
+  if (/^-?\d+$/.test(cleaned)) {
+    const n = Number(cleaned);
+    return {
+      value: n,
+      n,
+      d: 1,
+      simplified: true,
+      isWhole: true,
+      isFraction: false,
+      raw: cleaned
+    };
+  }
+  let m = cleaned.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);
+  if (m) {
+    let whole = Number(m[1]);
+    const fracN = Number(m[2]);
+    const fracD = Number(m[3]);
+    if (!Number.isFinite(fracN) || !Number.isFinite(fracD) || fracD === 0) return null;
+    const sign = whole < 0 ? -1 : 1;
+    whole = Math.abs(whole);
+    const improperN = sign * (whole * fracD + fracN);
+    const simp = normaliseFraction(improperN, fracD);
+    return {
+      value: improperN / fracD,
+      n: improperN,
+      d: fracD,
+      simplified: gcd(Math.abs(improperN), Math.abs(fracD)) === 1,
+      normalN: simp.n,
+      normalD: simp.d,
+      isWhole: false,
+      isFraction: true,
+      isMixed: true,
+      raw: cleaned
+    };
+  }
+  m = cleaned.match(/^(-?\d+)\/(-?\d+)$/);
+  if (m) {
+    let n = Number(m[1]);
+    let d = Number(m[2]);
+    if (!Number.isFinite(n) || !Number.isFinite(d) || d === 0) return null;
+    const simp = normaliseFraction(n, d);
+    return {
+      value: n / d,
+      n,
+      d,
+      simplified: gcd(Math.abs(n), Math.abs(d)) === 1,
+      normalN: simp.n,
+      normalD: simp.d,
+      isWhole: false,
+      isFraction: true,
+      isMixed: false,
+      raw: cleaned
+    };
+  }
+  const num = parseNumberInput(cleaned);
+  if (num !== null) {
+    return {
+      value: num,
+      decimal: true,
+      raw: cleaned
+    };
+  }
+  return null;
+}
+
+function evaluateFractionEntry(raw, expectedN, expectedD, opts = {}) {
+  const parsed = parseFractionTextDetailed(raw);
+  const expected = normaliseFraction(expectedN, expectedD);
+  const expectedValue = expected.n / expected.d;
+  if (!parsed) {
+    return {
+      ok: false,
+      reason: "blank",
+      parsed: null,
+      text: formatMixedFraction(expected.n, expected.d, !!opts.preferMixed)
+    };
+  }
+  if (!equalNumeric(parsed.value, expectedValue)) {
+    let reason = "fraction_method_error";
+    if (parsed.isFraction && parsed.d && parsed.d !== 1 && expected.d && parsed.d !== expected.d && parsed.d === Math.abs(expectedD) * 2) {
+      reason = "fraction_method_error";
+    }
+    return {
+      ok: false,
+      reason,
+      parsed,
+      text: formatMixedFraction(expected.n, expected.d, !!opts.preferMixed)
+    };
+  }
+  if (parsed.decimal && !opts.allowDecimalEquivalent) {
+    return {
+      ok: false,
+      reason: "fraction_method_error",
+      parsed,
+      equivalentOnly: true,
+      text: formatMixedFraction(expected.n, expected.d, !!opts.preferMixed)
+    };
+  }
+  if (parsed.isFraction && (!parsed.simplified || (parsed.normalN !== undefined && (parsed.normalN !== expected.n || parsed.normalD !== expected.d)))) {
+    return {
+      ok: false,
+      reason: "simplification_missed",
+      parsed,
+      equivalentOnly: true,
+      text: formatMixedFraction(expected.n, expected.d, !!opts.preferMixed)
+    };
+  }
+  if (parsed.isWhole && expected.d !== 1) {
+    return {
+      ok: false,
+      reason: "fraction_method_error",
+      parsed,
+      text: formatMixedFraction(expected.n, expected.d, !!opts.preferMixed)
+    };
+  }
+  return {
+    ok: true,
+    parsed,
+    text: formatMixedFraction(expected.n, expected.d, !!opts.preferMixed)
+  };
+}
+
+function verticalOpHtml(top, bottom, op) {
+  const topStr = String(top);
+  const bottomStr = String(bottom);
+  const width = Math.max(topStr.length, bottomStr.length + 2);
+  return `<pre class="alg">${padLeft(topStr, width)}\n${op} ${padLeft(bottomStr, width - 2)}\n${"─".repeat(width)}</pre>`;
+}
+
+function alignDecimalStrings(a, b) {
+  const aStr = String(a);
+  const bStr = String(b);
+  const [ai, af = ""] = aStr.split(".");
+  const [bi, bf = ""] = bStr.split(".");
+  const left = Math.max(ai.length, bi.length);
+  const right = Math.max(af.length, bf.length);
+  const top = ai.padStart(left, " ") + (right ? "." : "") + af.padEnd(right, " ");
+  const bottom = bi.padStart(left, " ") + (right ? "." : "") + bf.padEnd(right, " ");
+  return { top, bottom, width: top.length };
+}
+
+function verticalDecimalHtml(top, bottom, op) {
+  const aligned = alignDecimalStrings(top, bottom);
+  return `<pre class="alg">${aligned.top}\n${op} ${aligned.bottom}\n${"─".repeat(aligned.width + 2)}</pre>`;
+}
+
+function longMultiplicationHtml(a, b) {
+  const width = Math.max(String(a).length, String(b).length + 2) + 1;
+  return `<pre class="alg">${padLeft(a, width)}\n× ${padLeft(b, width - 2)}\n${"─".repeat(width)}</pre><div class="tiny">Show your method if you want to check the formal layout.</div>`;
+}
+
+function divisionBracketHtml(dividend, divisor, showMethod = false) {
+  return `<pre class="alg">${divisor} ) ${dividend}</pre>${showMethod ? '<div class="tiny">Show your method.</div>' : ''}`;
+}
+
+function methodMarkNoteHtml() {
+  return `<div class="callout warn" style="margin-top:10px;">Official arithmetic papers can award 1 method mark on long multiplication and long division. This local app auto-scores the final answer but does not reliably mark handwritten method.</div>`;
+}
+
+function difficultyBandFromStrength(strength) {
+  if (strength < 0.36) return 0;
+  if (strength < 0.68) return 1;
+  return 2;
+}
+
+function computeDifficulty(template, mode, forcedDifficulty = null) {
+  if (forcedDifficulty !== null && forcedDifficulty !== undefined) return forcedDifficulty;
+  const learner = currentLearner();
+  const avgStrength = average(template.skillIds.map(id => (learner.skills[id] || defaultNode()).strength || 0.25));
+  let band = difficultyBandFromStrength(avgStrength);
+  if (mode === "clinic") band = Math.max(0, band - 1);
+  if (mode === "speed") band = Math.min(1, band);
+  return band;
+}
+
+function recentMistakeSkillIds() {
+  const recentWrong = currentLearner().events.filter(e => !e.correct).slice(-20);
+  const ids = new Set();
+  recentWrong.forEach(event => (event.skillIds || []).forEach(id => ids.add(id)));
+  return Array.from(ids);
+}
+
+
+function numericCheck(raw, expected, opts = {}) {
+  const ans = parseNumberInput(raw);
+  const marks = opts.marks || 1;
+  if (ans === null) {
+    return mkResult({
+      correct: false,
+      score: 0,
+      maxScore: marks,
+      misconception: opts.blankMisconception || "misread_question",
+      feedbackShort: "Enter a number."
+    });
+  }
+  if (equalNumeric(ans, expected)) {
+    return mkResult({
+      correct: true,
+      score: marks,
+      maxScore: marks,
+      feedbackShort: "Correct.",
+      feedbackLong: opts.successText || `The answer is ${opts.answerText || toPlainNumber(expected)}.`,
+      answerText: opts.answerText || toPlainNumber(expected)
+    });
+  }
+  if (Array.isArray(opts.partials)) {
+    for (const partial of opts.partials) {
+      if (partial.when(ans)) {
+        return mkResult({
+          correct: false,
+          score: partial.score || 0,
+          maxScore: marks,
+          misconception: partial.misconception || opts.defaultMisconception || "misread_question",
+          feedbackShort: partial.feedbackShort || "Not quite.",
+          feedbackLong: opts.failText || `The answer is ${opts.answerText || toPlainNumber(expected)}.`,
+          answerText: opts.answerText || toPlainNumber(expected),
+          minimalHint: partial.minimalHint || opts.minimalHint
+        });
+      }
+    }
+  }
+  return mkResult({
+    correct: false,
+    score: 0,
+    maxScore: marks,
+    misconception: opts.defaultMisconception || "misread_question",
+    feedbackShort: opts.failShort || "Not quite.",
+    feedbackLong: opts.failText || `The answer is ${opts.answerText || toPlainNumber(expected)}.`,
+    answerText: opts.answerText || toPlainNumber(expected),
+    minimalHint: opts.minimalHint
+  });
+}
+
+function fractionCheck(raw, expectedN, expectedD, opts = {}) {
+  const marks = opts.marks || 1;
+  const check = evaluateFractionEntry(raw, expectedN, expectedD, opts);
+  if (check.ok) {
+    return mkResult({
+      correct: true,
+      score: marks,
+      maxScore: marks,
+      feedbackShort: "Correct.",
+      feedbackLong: opts.successText || `The answer is ${check.text}.`,
+      answerText: check.text
+    });
+  }
+  if (check.reason === "blank") {
+    return mkResult({
+      correct: false,
+      score: 0,
+      maxScore: marks,
+      misconception: "misread_question",
+      feedbackShort: "Enter your answer as a fraction, mixed number or whole number."
+    });
+  }
+  if (check.equivalentOnly) {
+    return mkResult({
+      correct: false,
+      score: Math.max(0, marks - 1),
+      maxScore: marks,
+      misconception: check.reason,
+      feedbackShort: "You have the right value, but not in the form KS2 arithmetic expects.",
+      feedbackLong: opts.failText || `Write the answer as ${check.text}.`,
+      answerText: check.text
+    });
+  }
+  return mkResult({
+    correct: false,
+    score: 0,
+    maxScore: marks,
+    misconception: check.reason || "fraction_method_error",
+    feedbackShort: opts.failShort || "Not quite.",
+    feedbackLong: opts.failText || `The answer is ${check.text}.`,
+    answerText: check.text
+  });
+}
+
+
+    function statusFromNode(node) {
+      const now = Date.now();
+      if (!node || !node.attempts) return "new";
+      if ((node.strength || 0) < 0.42 || (node.wrong || 0) > (node.correct || 0) + 1) return "weak";
+      if ((node.dueAt || 0) <= now) return "due";
+      if ((node.strength || 0) >= 0.82 && (node.intervalDays || 0) >= 7 && (node.correctStreak || 0) >= 3) return "secured";
+      return "learning";
+    }
+
+    function humanStatus(status) {
+      return ({
+        new:"New",
+        learning:"Learning",
+        due:"Due",
+        weak:"Weak",
+        secured:"Secured"
+      })[status] || status;
+    }
+
+    function defaultNode() {
+      return {
+        attempts: 0,
+        correct: 0,
+        wrong: 0,
+        strength: 0.25,
+        intervalDays: 0,
+        dueAt: 0,
+        lastSeenAt: null,
+        lastWrongAt: null,
+        correctStreak: 0
+      };
+    }
+
+    function makeLearner(name) {
+      return {
+        id: uid(),
+        name: name || "Learner",
+        createdAt: isoNow(),
+        settings: {
+          allowTeachingItems: true,
+          speechRate: 1,
+          showDomainBeforeAnswer: true
+        },
+        skills: {},
+        templates: {},
+        items: {},
+        misconceptions: {},
+        retryQueue: [],
+        events: [],
+        sessions: [],
+        lastPracticeDay: null,
+        streakDays: 0
+      };
+    }
+
+    function defaultAppState() {
+      const learner = makeLearner("Learner 1");
+      return {
+        version: APP_VERSION,
+        currentLearnerId: learner.id,
+        learners: { [learner.id]: learner },
+        globalSettings: {
+          ai: {
+            provider: "off",
+            model: "",
+            rememberKey: false,
+            storedKey: ""
+          }
+        }
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultAppState();
+        const parsed = JSON.parse(raw);
+        if (!parsed.learners || !Object.keys(parsed.learners).length) return defaultAppState();
+        parsed.version = APP_VERSION;
+        if (!parsed.globalSettings) parsed.globalSettings = { ai: { provider:"off", model:"", rememberKey:false, storedKey:"" } };
+        if (!parsed.globalSettings.ai) parsed.globalSettings.ai = { provider:"off", model:"", rememberKey:false, storedKey:"" };
+        for (const learnerId of Object.keys(parsed.learners)) {
+          parsed.learners[learnerId] = normaliseLearner(parsed.learners[learnerId]);
+        }
+        if (!parsed.currentLearnerId || !parsed.learners[parsed.currentLearnerId]) {
+          parsed.currentLearnerId = Object.keys(parsed.learners)[0];
+        }
+        return parsed;
+      } catch (err) {
+        console.error(err);
+        return defaultAppState();
+      }
+    }
+
+    function normaliseLearner(learner) {
+      const clean = Object.assign(makeLearner(learner.name || "Learner"), learner);
+      clean.settings = Object.assign({
+        allowTeachingItems: true,
+        speechRate: 1,
+        showDomainBeforeAnswer: true
+      }, learner.settings || {});
+      clean.skills = learner.skills || {};
+      clean.templates = learner.templates || {};
+      clean.items = learner.items || {};
+      clean.misconceptions = learner.misconceptions || {};
+      clean.retryQueue = (learner.retryQueue || []).filter(x => x && x.templateId);
+      clean.events = (learner.events || []).slice(-700);
+      clean.sessions = (learner.sessions || []).slice(-100);
+      if (!clean.lastPracticeDay) clean.lastPracticeDay = null;
+      if (!Number.isFinite(clean.streakDays)) clean.streakDays = 0;
+      return clean;
+    }
+
+    let state = loadState();
+
+    const ui = {
+      activeTab: "practice",
+      session: null,
+      currentPack: null,
+      satsSet: null,
+      timerInterval: null
+    };
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function currentLearner() {
+      return state.learners[state.currentLearnerId];
+    }
+
+    function ensureSkillNode(skillId) {
+      const learner = currentLearner();
+      if (!learner.skills[skillId]) learner.skills[skillId] = defaultNode();
+      return learner.skills[skillId];
+    }
+
+    function ensureTemplateNode(templateId) {
+      const learner = currentLearner();
+      if (!learner.templates[templateId]) learner.templates[templateId] = defaultNode();
+      return learner.templates[templateId];
+    }
+
+    function ensureItemNode(itemId) {
+      const learner = currentLearner();
+      if (!learner.items[itemId]) learner.items[itemId] = defaultNode();
+      return learner.items[itemId];
+    }
+
+    function learnerDueCount() {
+      const learner = currentLearner();
+      const now = nowMs();
+      let count = learner.retryQueue.filter(x => x.dueAt <= now).length;
+      for (const skillId of Object.keys(SKILLS)) {
+        const node = learner.skills[skillId];
+        if (node && node.attempts && (node.dueAt || 0) <= now) count += 1;
+      }
+      return count;
+    }
+
+    function updateStreak() {
+      const learner = currentLearner();
+      const today = todayKey();
+      if (!learner.lastPracticeDay) {
+        learner.lastPracticeDay = today;
+        learner.streakDays = 1;
+        return;
+      }
+      if (learner.lastPracticeDay === today) return;
+      const gap = diffDays(learner.lastPracticeDay, today);
+      learner.streakDays = gap === 1 ? learner.streakDays + 1 : 1;
+      learner.lastPracticeDay = today;
+    }
+
+    function bumpMisconception(tag) {
+      if (!tag) return;
+      const learner = currentLearner();
+      if (!learner.misconceptions[tag]) learner.misconceptions[tag] = { count:0, lastSeenAt:null };
+      learner.misconceptions[tag].count += 1;
+      learner.misconceptions[tag].lastSeenAt = isoNow();
+    }
+
+    function recordEvent(event) {
+      const learner = currentLearner();
+      learner.events.push(event);
+      if (learner.events.length > 700) learner.events = learner.events.slice(-700);
+    }
+
+    function recordSessionSummary(extra) {
+      const learner = currentLearner();
+      learner.sessions.push(Object.assign({ createdAt: isoNow() }, extra || {}));
+      if (learner.sessions.length > 100) learner.sessions = learner.sessions.slice(-100);
+    }
+
+    function outcomeQuality(result, pack) {
+      const attempts = pack.attempts || 1;
+      const support = pack.supportLevel || 0;
+      if (result.correct) {
+        if (support >= 2) return 3;
+        if (support === 1) return attempts === 1 ? 3.4 : 3;
+        if (attempts === 1) return 5;
+        if (attempts === 2) return 3.6;
+        return 3.2;
+      }
+      if (result.score > 0) return 1.5;
+      return 0;
+    }
+
+    function updateNodeFromQuality(node, quality) {
+      node.attempts += 1;
+      node.lastSeenAt = isoNow();
+      const now = nowMs();
+      if (quality >= 4.8) {
+        node.correct += 1;
+        node.correctStreak += 1;
+        node.strength = clamp(node.strength + 0.13, 0.05, 0.99);
+        node.intervalDays = node.intervalDays ? Math.min(45, node.intervalDays * 2) : 1;
+        node.dueAt = now + node.intervalDays * 86400000;
+      } else if (quality >= 4) {
+        node.correct += 1;
+        node.correctStreak += 1;
+        node.strength = clamp(node.strength + 0.09, 0.05, 0.98);
+        node.intervalDays = node.intervalDays ? Math.min(28, node.intervalDays * 1.7) : 1;
+        node.dueAt = now + node.intervalDays * 86400000;
+      } else if (quality >= 3) {
+        node.correct += 1;
+        node.correctStreak = Math.max(1, node.correctStreak);
+        node.strength = clamp(node.strength + 0.04, 0.05, 0.95);
+        node.intervalDays = node.intervalDays ? Math.max(0.25, node.intervalDays * 0.9) : 0.25;
+        node.dueAt = now + Math.max(6 * 3600000, node.intervalDays * 86400000);
+      } else {
+        node.wrong += 1;
+        node.correctStreak = 0;
+        node.strength = clamp(node.strength - (quality > 0 ? 0.08 : 0.15), 0.02, 0.95);
+        node.intervalDays = Math.max(0.04, (node.intervalDays || 0.2) * 0.45);
+        node.dueAt = now + (quality > 0 ? 20 : 12) * 60000;
+        node.lastWrongAt = isoNow();
+      }
+    }
+
+    function enqueueRetry(pack, result) {
+      const learner = currentLearner();
+      const dueAt = nowMs() + (result.correct ? 6 * 3600000 : 15 * 60000);
+      learner.retryQueue.push({
+        templateId: pack.templateId,
+        seed: pack.active.seed,
+        dueAt,
+        skillIds: pack.skillIds.slice(),
+        reason: result.correct ? "supported-or-shaky" : "recent-miss"
+      });
+      learner.retryQueue = learner.retryQueue
+        .sort((a,b) => a.dueAt - b.dueAt)
+        .slice(-300);
+    }
+
+    function applyLearningUpdate(pack, result, responseSnapshot) {
+      const quality = outcomeQuality(result, pack);
+      const learner = currentLearner();
+      updateStreak();
+      for (const skillId of pack.skillIds) {
+        updateNodeFromQuality(ensureSkillNode(skillId), quality);
+      }
+      updateNodeFromQuality(ensureTemplateNode(pack.templateId), quality);
+      updateNodeFromQuality(ensureItemNode(pack.active.itemId), quality);
+      if (result.misconception) bumpMisconception(result.misconception);
+      if (!result.correct || quality < 4) enqueueRetry(pack, result);
+
+      recordEvent({
+        timestamp: isoNow(),
+        templateId: pack.templateId,
+        itemId: pack.active.itemId,
+        promptType: pack.presentation,
+        mode: ui.session ? ui.session.mode : (ui.satsSet ? "satsset" : "single"),
+        skillIds: pack.skillIds,
+        score: result.score,
+        maxScore: result.maxScore,
+        correct: result.correct,
+        attempts: pack.attempts,
+        supportLevel: pack.supportLevel || 0,
+        misconception: result.misconception || null,
+        response: responseSnapshot,
+        durationSec: Math.round((nowMs() - pack.startedAt) / 1000)
+      });
+
+      saveState();
+    }
+
+    function getRecentEvents(limit = 20) {
+      return currentLearner().events.slice(-limit).reverse();
+    }
+
+    function recentSkillPenalty(skillIds) {
+      const recent = getRecentEvents(6);
+      const recentSkills = recent.flatMap(e => e.skillIds || []);
+      let repeats = 0;
+      for (const id of skillIds) if (recentSkills.includes(id)) repeats += 1;
+      return repeats;
+    }
+
+    function weakSkillIds() {
+      const learner = currentLearner();
+      return Object.keys(SKILLS).sort((a,b) => {
+        const A = learner.skills[a] || defaultNode();
+        const B = learner.skills[b] || defaultNode();
+        const scoreA = (1 - A.strength) + ((A.wrong || 0) / Math.max(1, A.attempts));
+        const scoreB = (1 - B.strength) + ((B.wrong || 0) / Math.max(1, B.attempts));
+        return scoreB - scoreA;
+      });
+    }
+
+    function getAIKey() {
+      const ai = state.globalSettings.ai || {};
+      if (ai.rememberKey) return ai.storedKey || "";
+      return sessionStorage.getItem(SESSION_AI_KEY) || "";
+    }
+
+    function setAIKey(value, remember) {
+      const ai = state.globalSettings.ai;
+      ai.rememberKey = !!remember;
+      if (remember) {
+        ai.storedKey = value || "";
+        sessionStorage.removeItem(SESSION_AI_KEY);
+      } else {
+        ai.storedKey = "";
+        if (value) sessionStorage.setItem(SESSION_AI_KEY, value);
+        else sessionStorage.removeItem(SESSION_AI_KEY);
+      }
+      saveState();
+    }
+
+    function aiEnabled() {
+      const ai = state.globalSettings.ai || {};
+      return ai.provider && ai.provider !== "off" && ai.model && getAIKey();
+    }
+
+    function mkResult({correct, score, maxScore, misconception, feedbackShort, feedbackLong, answerText, minimalHint}) {
+      return {
+        correct: !!correct,
+        score,
+        maxScore,
+        misconception: misconception || null,
+        feedbackShort: feedbackShort || "",
+        feedbackLong: feedbackLong || "",
+        answerText: answerText || "",
+        minimalHint: minimalHint || MINIMAL_HINTS[misconception] || "Check the structure and units carefully."
+      };
+    }
+
+    function rectangleSvg(widthLabel, heightLabel) {
+      return `
+      <svg width="320" height="170" viewBox="0 0 320 170" role="img" aria-label="Rectangle diagram">
+        <rect x="60" y="35" width="200" height="100" fill="#eff6ff" stroke="#2563eb" stroke-width="3" rx="8" />
+        <text x="160" y="28" text-anchor="middle" font-size="18" fill="#1f2937">${escapeHtml(widthLabel)}</text>
+        <text x="35" y="90" text-anchor="middle" font-size="18" fill="#1f2937" transform="rotate(-90, 35, 90)">${escapeHtml(heightLabel)}</text>
+      </svg>`;
+    }
+
+    function tableHtml(headers, rows) {
+      return `
+      <table class="clean">
+        <thead><tr>${headers.map(h => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead>
+        <tbody>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join("")}</tr>`).join("")}</tbody>
+      </table>`;
+    }
+
+    function barChartSvg(values, labels, yStep, title) {
+      const maxV = Math.max(...values);
+      const top = Math.ceil(maxV / yStep) * yStep;
+      const width = 430;
+      const height = 250;
+      const left = 48;
+      const bottom = 38;
+      const chartW = 330;
+      const chartH = 170;
+      const barW = 48;
+      const gap = 26;
+      let grid = "";
+      for (let y = 0; y <= top; y += yStep) {
+        const py = 20 + chartH - (y / top) * chartH;
+        grid += `<line x1="${left}" y1="${py}" x2="${left+chartW}" y2="${py}" stroke="#dbe5f3" />`;
+        grid += `<text x="${left-10}" y="${py+4}" text-anchor="end" font-size="12" fill="#475569">${y}</text>`;
+      }
+      let bars = "";
+      values.forEach((v, i) => {
+        const x = left + 20 + i * (barW + gap);
+        const h = (v / top) * chartH;
+        const y = 20 + chartH - h;
+        bars += `<rect x="${x}" y="${y}" width="${barW}" height="${h}" rx="8" fill="#60a5fa" stroke="#2563eb" />`;
+        bars += `<text x="${x + barW/2}" y="${20 + chartH + 18}" text-anchor="middle" font-size="12" fill="#1f2937">${escapeHtml(labels[i])}</text>`;
+      });
+      return `
+      <div class="chart-wrap">
+        <div class="tiny" style="margin-bottom:6px;">${escapeHtml(title)}</div>
+        <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(title)}">
+          ${grid}
+          <line x1="${left}" y1="${20 + chartH}" x2="${left+chartW}" y2="${20 + chartH}" stroke="#94a3b8" stroke-width="2" />
+          <line x1="${left}" y1="${20}" x2="${left}" y2="${20 + chartH}" stroke="#94a3b8" stroke-width="2" />
+          ${bars}
+        </svg>
+      </div>`;
+    }
+
+    function anglePointSvg(a, b) {
+      return `
+      <svg width="280" height="220" viewBox="0 0 280 220" role="img" aria-label="Angles around a point diagram">
+        <line x1="140" y1="110" x2="240" y2="70" stroke="#2563eb" stroke-width="3" />
+        <line x1="140" y1="110" x2="230" y2="165" stroke="#2563eb" stroke-width="3" />
+        <line x1="140" y1="110" x2="75" y2="190" stroke="#2563eb" stroke-width="3" />
+        <line x1="140" y1="110" x2="70" y2="40" stroke="#2563eb" stroke-width="3" />
+        <circle cx="140" cy="110" r="4" fill="#1f2937" />
+        <text x="190" y="86" font-size="17" fill="#1f2937">${a}°</text>
+        <text x="178" y="146" font-size="17" fill="#1f2937">${b}°</text>
+        <text x="93" y="70" font-size="15" fill="#475569">90°</text>
+        <text x="90" y="150" font-size="18" fill="#1f2937">?</text>
+        <text x="16" y="18" font-size="12" fill="#64748b">Not to scale</text>
+      </svg>`;
+    }
+
+    
+function makeBaseQuestion(template, seed, data) {
+  return Object.assign({
+    templateId: template.id,
+    templateLabel: template.label,
+    domain: template.domain,
+    skillIds: template.skillIds.slice(),
+    seed,
+    itemId: `${template.id}:${seed}`,
+    marks: 1,
+    visualHtml: "",
+    reflectionPrompt: "",
+    checkLine: ""
+  }, data || {});
+}
+
+function makeIndependentPack(template, seed, ctx = {}) {
+  const q = template.generator(seed, ctx);
+  return {
+    templateId: template.id,
+    templateLabel: template.label,
+    domain: template.domain,
+    skillIds: template.skillIds.slice(),
+    presentation: "independent",
+    active: q,
+    marks: q.marks,
+    attempts: 0,
+    supportLevel: 0,
+    startedAt: nowMs(),
+    workedShown: false,
+    firstWrongResult: null,
+    difficulty: ctx.difficulty ?? 1
+  };
+}
+
+function makeWorkedPack(template, seedA, seedB, ctx = {}) {
+  const example = template.generator(seedA, ctx);
+  const target = template.generator(seedB, ctx);
+  return {
+    templateId: template.id,
+    templateLabel: template.label,
+    domain: template.domain,
+    skillIds: template.skillIds.slice(),
+    presentation: "worked",
+    example,
+    active: target,
+    marks: target.marks,
+    attempts: 0,
+    supportLevel: 2,
+    startedAt: nowMs(),
+    workedShown: true,
+    firstWrongResult: null,
+    difficulty: ctx.difficulty ?? 1
+  };
+}
+
+function makeFadedPack(template, seed, ctx = {}) {
+  const q = template.generator(seed, ctx);
+  return {
+    templateId: template.id,
+    templateLabel: template.label,
+    domain: template.domain,
+    skillIds: template.skillIds.slice(),
+    presentation: "faded",
+    active: q,
+    marks: q.marks,
+    attempts: 0,
+    supportLevel: 1,
+    startedAt: nowMs(),
+    workedShown: false,
+    firstWrongResult: null,
+    difficulty: ctx.difficulty ?? 1
+  };
+}
+
+
+
+const TEMPLATES = [
+  {
+    id: "bonds_missing",
+    label: "Number bonds and complements",
+    domain: "Number facts",
+    skillIds: ["number_bonds"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const targets = d === 0 ? [10, 20, 50, 100] : d === 1 ? [100, 1000] : [1000, 10000];
+      const target = pick(rng, targets);
+      const part = d === 2 ? randInt(rng, Math.floor(target * 0.12), Math.floor(target * 0.88)) : randInt(rng, Math.floor(target * 0.1), Math.floor(target * 0.9));
+      const answer = target - part;
+      const style = randInt(rng, 0, 2);
+      let stemHtml = "";
+      if (style === 0) stemHtml = `<p>${formatNumber(part)} + □ = ${formatNumber(target)}</p>`;
+      if (style === 1) stemHtml = `<p>□ + ${formatNumber(part)} = ${formatNumber(target)}</p>`;
+      if (style === 2) stemHtml = `<p>${formatNumber(target)} − ${formatNumber(part)} = □</p>`;
+      return makeBaseQuestion(this, seed, {
+        stemHtml,
+        solutionLines: [
+          `Think of the missing part that completes ${formatNumber(target)}.`,
+          `${formatNumber(target)} - ${formatNumber(part)} = ${formatNumber(answer)}.`
+        ],
+        checkLine: `Your answer plus ${formatNumber(part)} should equal ${formatNumber(target)}.`,
+        inputSpec: { type:"number", label:"Missing number" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "fact_recall",
+          answerText: formatNumber(answer),
+          successText: `${formatNumber(answer)} completes the number bond.`,
+          failText: `${formatNumber(target)} - ${formatNumber(part)} = ${formatNumber(answer)}.`,
+          partials: [
+            {
+              when: ans => ans === part,
+              score: 0,
+              misconception: "operation_confusion",
+              feedbackShort: "That repeats the given part, but the question asks for the missing complement."
+            }
+          ]
+        })
+      });
+    }
+  },
+
+  {
+    id: "place_value_partition",
+    label: "Place value partitioning",
+    domain: "Place value",
+    skillIds: ["place_value_partition"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const digits = d === 0 ? 4 : d === 1 ? 5 : 6;
+      let num = 0;
+      while (true) {
+        let parts = [];
+        for (let i = 0; i < digits; i++) {
+          let digit = i === 0 ? randInt(rng, 1, 9) : randInt(rng, 0, 9);
+          parts.push(digit);
+        }
+        num = Number(parts.join(""));
+        const values = parts.map((digit, idx) => digit * Math.pow(10, digits - idx - 1));
+        const nonZeroIndexes = values.map((v, i) => v ? i : -1).filter(i => i >= 0);
+        if (nonZeroIndexes.length >= 3) {
+          const missingIndex = pick(rng, nonZeroIndexes.slice(1));
+          const expanded = values.map((v, i) => i === missingIndex ? "□" : formatNumber(v));
+          const answer = values[missingIndex];
+          return makeBaseQuestion(this, seed, {
+            stemHtml: `<p>${formatNumber(num)} = ${expanded.join(" + ")}</p>`,
+            solutionLines: [
+              `Read the number one place at a time.`,
+              `The missing part is ${formatNumber(answer)}.`
+            ],
+            inputSpec: { type:"number", label:"Missing place-value part" },
+            evaluate: (resp) => numericCheck(resp.answer, answer, {
+              marks: 1,
+              defaultMisconception: "place_value_confusion",
+              answerText: formatNumber(answer),
+              successText: `${formatNumber(answer)} is the missing place-value part.`,
+              failText: `The missing place-value part is ${formatNumber(answer)}.`,
+              partials: [
+                {
+                  when: ans => String(ans) === String(parts[missingIndex]),
+                  misconception: "place_value_confusion",
+                  feedbackShort: "That is the digit, but not its value."
+                }
+              ]
+            })
+          });
+        }
+      }
+    }
+  },
+
+  {
+    id: "powers_of_ten_shift",
+    label: "Multiply and divide by powers of 10",
+    domain: "Place value",
+    skillIds: ["powers_of_10_shift"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const op = pick(rng, ["×", "÷"]);
+      const power = pick(rng, d === 0 ? [10, 100] : d === 1 ? [10, 100, 1000] : [100, 1000]);
+      let base;
+      if (d === 0) {
+        base = randInt(rng, 12, 980);
+      } else if (d === 1) {
+        base = pick(rng, [
+          randInt(rng, 12, 980),
+          Number((randInt(rng, 10, 999) / 10).toFixed(1)),
+          Number((randInt(rng, 100, 9999) / 100).toFixed(2))
+        ]);
+      } else {
+        base = pick(rng, [
+          Number((randInt(rng, 100, 9999) / 100).toFixed(2)),
+          Number((randInt(rng, 1000, 99999) / 1000).toFixed(3))
+        ]);
+      }
+      const answer = op === "×" ? base * power : base / power;
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${toPlainNumber(base)} ${op} ${formatNumber(power)} =</p>`,
+        solutionLines: [
+          `Changing by powers of 10 changes place value.`,
+          `${toPlainNumber(base)} ${op} ${formatNumber(power)} = ${toPlainNumber(answer)}.`
+        ],
+        checkLine: op === "×"
+          ? `The answer should be larger than ${toPlainNumber(base)} because you multiplied by ${formatNumber(power)}.`
+          : `The answer should be smaller than ${toPlainNumber(base)} because you divided by ${formatNumber(power)}.`,
+        inputSpec: { type:"text", label:"Answer" },
+        evaluate: (resp) => {
+          const raw = resp.answer;
+          const ans = parseNumberInput(raw);
+          if (ans === null) return mkResult({ correct:false, score:0, maxScore:1, misconception:"misread_question", feedbackShort:"Enter a number." });
+          if (equalNumeric(ans, answer)) {
+            return mkResult({
+              correct:true, score:1, maxScore:1,
+              feedbackShort:"Correct.",
+              feedbackLong:`${toPlainNumber(base)} ${op} ${formatNumber(power)} = ${toPlainNumber(answer)}.`,
+              answerText: toPlainNumber(answer)
+            });
+          }
+          const reverse = op === "×" ? base / power : base * power;
+          const misconception = equalNumeric(ans, reverse) ? "operation_confusion" : "powers_of_ten_shift";
+          return mkResult({
+            correct:false, score:0, maxScore:1,
+            misconception,
+            feedbackShort:"Not quite.",
+            feedbackLong:`${toPlainNumber(base)} ${op} ${formatNumber(power)} = ${toPlainNumber(answer)}.`,
+            answerText: toPlainNumber(answer)
+          });
+        }
+      });
+    }
+  },
+
+  {
+    id: "mental_addition",
+    label: "Mental addition",
+    domain: "Addition and subtraction",
+    skillIds: ["mental_addition"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      let numbers = [];
+      if (d === 0) {
+        const starts = [98, 199, 298, 398, 499];
+        numbers = [pick(rng, starts), randInt(rng, 2, 36)];
+      } else if (d === 1) {
+        numbers = [randInt(rng, 120, 950), randInt(rng, 15, 180)];
+        if (randInt(rng, 0, 1) === 1) numbers.push(pick(rng, [5, 10, 20, 25, 50]));
+      } else {
+        numbers = [pick(rng, [997, 1998, 2997, 3998]), randInt(rng, 102, 540), pick(rng, [3, 5, 10, 20])];
+      }
+      const answer = numbers.reduce((a, b) => a + b, 0);
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${numbers.map(n => formatNumber(n)).join(" + ")} =</p>`,
+        solutionLines: [
+          `Look for an efficient jump or bridge to the next ten, hundred or thousand.`,
+          `${numbers.map(n => formatNumber(n)).join(" + ")} = ${formatNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "fact_recall",
+          answerText: formatNumber(answer),
+          successText: `The total is ${formatNumber(answer)}.`,
+          failText: `The total is ${formatNumber(answer)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "column_addition",
+    label: "Column addition",
+    domain: "Addition and subtraction",
+    skillIds: ["column_addition"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const digits = d === 0 ? 3 : d === 1 ? 4 : 5;
+      let a, b;
+      while (true) {
+        a = randInt(rng, Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
+        b = randInt(rng, Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
+        let carries = 0;
+        let x = a, y = b;
+        for (let i = 0; i < digits; i++) {
+          if ((x % 10) + (y % 10) >= 10) carries += 1;
+          x = Math.floor(x / 10);
+          y = Math.floor(y / 10);
+        }
+        if (carries >= (d === 0 ? 1 : 2)) break;
+      }
+      const answer = a + b;
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>Work out:</p>`,
+        visualHtml: verticalOpHtml(formatNumber(a), formatNumber(b), "+"),
+        solutionLines: [
+          `Add from right to left, exchanging where needed.`,
+          `${formatNumber(a)} + ${formatNumber(b)} = ${formatNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "regrouping_error",
+          answerText: formatNumber(answer),
+          successText: `The total is ${formatNumber(answer)}.`,
+          failText: `The total is ${formatNumber(answer)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "mental_subtraction",
+    label: "Mental subtraction",
+    domain: "Addition and subtraction",
+    skillIds: ["mental_subtraction"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      let a, b;
+      if (d === 0) {
+        a = pick(rng, [84, 96, 104, 204, 904, 1004]);
+        b = pick(rng, [7, 8, 9, 12, 15]);
+      } else if (d === 1) {
+        a = pick(rng, [500, 600, 700, 1000, 1200, 2500]);
+        b = pick(rng, [125, 175, 225, 275, 340, 480]);
+      } else {
+        a = pick(rng, [10004, 5003, 12000, 20005]);
+        b = pick(rng, [998, 1997, 2456, 387]);
+      }
+      const answer = a - b;
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${formatNumber(a)} − ${formatNumber(b)} =</p>`,
+        solutionLines: [
+          `Use a mental strategy such as counting on, compensating or subtracting in parts.`,
+          `${formatNumber(a)} − ${formatNumber(b)} = ${formatNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "fact_recall",
+          answerText: formatNumber(answer),
+          successText: `The answer is ${formatNumber(answer)}.`,
+          failText: `The answer is ${formatNumber(answer)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "column_subtraction",
+    label: "Column subtraction",
+    domain: "Addition and subtraction",
+    skillIds: ["column_subtraction"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const digits = d === 0 ? 3 : d === 1 ? 4 : 6;
+      let a, b;
+      while (true) {
+        a = randInt(rng, Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
+        b = randInt(rng, Math.pow(10, digits - 2), a - 1);
+        if (String(a).length === digits && b < a) {
+          let exchanges = 0;
+          let x = a, y = b;
+          while (x > 0 || y > 0) {
+            if (x % 10 < y % 10) exchanges += 1;
+            x = Math.floor(x / 10);
+            y = Math.floor(y / 10);
+          }
+          if (exchanges >= (d === 0 ? 1 : 2)) break;
+        }
+      }
+      const answer = a - b;
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>Work out:</p>`,
+        visualHtml: verticalOpHtml(formatNumber(a), formatNumber(b), "−"),
+        solutionLines: [
+          `Subtract from right to left, exchanging where needed.`,
+          `${formatNumber(a)} − ${formatNumber(b)} = ${formatNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "regrouping_error",
+          answerText: formatNumber(answer),
+          successText: `The answer is ${formatNumber(answer)}.`,
+          failText: `The answer is ${formatNumber(answer)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "missing_number_inverse",
+    label: "Missing-number equation",
+    domain: "Addition and subtraction",
+    skillIds: ["inverse_missing"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const style = pick(rng, ["add", "sub", "bridge"]);
+      let answer, stemHtml, solutionLines;
+      if (style === "add") {
+        const total = d === 0 ? randInt(rng, 60, 300) : d === 1 ? randInt(rng, 200, 2000) : randInt(rng, 2000, 10000);
+        const known = randInt(rng, Math.floor(total * 0.2), Math.floor(total * 0.85));
+        answer = total - known;
+        stemHtml = `<p>${formatNumber(known)} + □ = ${formatNumber(total)}</p>`;
+        solutionLines = [
+          `Subtract the known part from the total.`,
+          `${formatNumber(total)} − ${formatNumber(known)} = ${formatNumber(answer)}.`
+        ];
+      } else if (style === "sub") {
+        const sub = d === 0 ? randInt(rng, 20, 180) : d === 1 ? randInt(rng, 120, 950) : randInt(rng, 800, 4500);
+        const answerWanted = d === 0 ? randInt(rng, 20, 180) : d === 1 ? randInt(rng, 200, 1200) : randInt(rng, 1500, 6500);
+        answer = sub + answerWanted;
+        stemHtml = `<p>□ − ${formatNumber(sub)} = ${formatNumber(answerWanted)}</p>`;
+        solutionLines = [
+          `Add the subtracted amount back on.`,
+          `${formatNumber(answerWanted)} + ${formatNumber(sub)} = ${formatNumber(answer)}.`
+        ];
+      } else {
+        const base = d === 0 ? 100 : d === 1 ? 1000 : 10000;
+        const known = randInt(rng, Math.floor(base * 0.15), Math.floor(base * 0.9));
+        answer = base - known;
+        stemHtml = `<p>□ + ${formatNumber(known)} = ${formatNumber(base)}</p>`;
+        solutionLines = [
+          `Find the complement to ${formatNumber(base)}.`,
+          `${formatNumber(base)} − ${formatNumber(known)} = ${formatNumber(answer)}.`
+        ];
+      }
+      return makeBaseQuestion(this, seed, {
+        stemHtml,
+        solutionLines,
+        inputSpec: { type:"number", label:"Missing number" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "inverse_error",
+          answerText: formatNumber(answer),
+          successText: `The missing number is ${formatNumber(answer)}.`,
+          failText: `The missing number is ${formatNumber(answer)}.`,
+          partials: [
+            {
+              when: ans => typeof ans === "number" && ans !== answer && Math.abs(ans - answer) < 10 && d === 0,
+              misconception: "inverse_error",
+              feedbackShort: "You are close, but the inverse step is not quite right."
+            }
+          ]
+        })
+      });
+    }
+  },
+
+  {
+    id: "times_table_fact",
+    label: "Times-table and division facts",
+    domain: "Multiplication and division",
+    skillIds: ["times_tables", "division_facts"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed) {
+      const rng = mulberry32(seed);
+      const a = randInt(rng, 2, 12);
+      const b = randInt(rng, 2, 12);
+      const product = a * b;
+      const style = pick(rng, ["mul-right", "mul-left", "div-divisor", "div-quotient"]);
+      let stemHtml = "";
+      let answer = 0;
+      if (style === "mul-right") {
+        answer = b;
+        stemHtml = `<p>${a} × □ = ${product}</p>`;
+      } else if (style === "mul-left") {
+        answer = a;
+        stemHtml = `<p>□ × ${b} = ${product}</p>`;
+      } else if (style === "div-divisor") {
+        answer = a;
+        stemHtml = `<p>${product} ÷ □ = ${b}</p>`;
+      } else {
+        answer = b;
+        stemHtml = `<p>${product} ÷ ${a} = □</p>`;
+      }
+      return makeBaseQuestion(this, seed, {
+        stemHtml,
+        solutionLines: [
+          `Recall the multiplication fact ${a} × ${b} = ${product}.`,
+          `So the missing number is ${answer}.`
+        ],
+        inputSpec: { type:"number", label:"Missing number" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "fact_recall",
+          answerText: String(answer),
+          successText: `The missing number is ${answer}.`,
+          failText: `The missing number is ${answer}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "mental_multiplication",
+    label: "Mental multiplication",
+    domain: "Multiplication and division",
+    skillIds: ["mental_multiplication"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      let expression = "";
+      let answer = 0;
+      if (d === 0) {
+        const forms = [
+          () => {
+            const a = randInt(rng, 2, 12);
+            const b = pick(rng, [10, 20, 30]);
+            answer = a * b;
+            expression = `${a} × ${b}`;
+          },
+          () => {
+            const a = randInt(rng, 2, 12);
+            answer = 12 * a * 10;
+            expression = `12 × ${a} × 10`;
+          },
+          () => {
+            const a = pick(rng, [4, 8, 25, 50]);
+            const b = pick(rng, [2, 4, 5, 10]);
+            answer = a * b;
+            expression = `${a} × ${b}`;
+          }
+        ];
+        pick(rng, forms)();
+      } else if (d === 1) {
+        const forms = [
+          () => {
+            const a = pick(rng, [3, 4, 5, 6, 8]);
+            const b = pick(rng, [120, 140, 160, 180, 240]);
+            answer = a * b;
+            expression = `${a} × ${b}`;
+          },
+          () => {
+            const a = pick(rng, [14, 15, 16, 18]);
+            const b = pick(rng, [20, 25, 30]);
+            answer = a * b;
+            expression = `${a} × ${b}`;
+          }
+        ];
+        pick(rng, forms)();
+      } else {
+        const forms = [
+          () => {
+            const a = pick(rng, [25, 125]);
+            const b = pick(rng, [16, 24, 32]);
+            answer = a * b;
+            expression = `${a} × ${b}`;
+          },
+          () => {
+            const a = pick(rng, [12, 15, 18]);
+            const b = pick(rng, [30, 40, 50]);
+            const c = pick(rng, [2, 5]);
+            answer = a * b * c;
+            expression = `${a} × ${b} × ${c}`;
+          }
+        ];
+        pick(rng, forms)();
+      }
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${expression} =</p>`,
+        solutionLines: [
+          `Use a helpful fact and place-value pattern.`,
+          `${expression} = ${formatNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "fact_recall",
+          answerText: formatNumber(answer),
+          successText: `${expression} = ${formatNumber(answer)}.`,
+          failText: `${expression} = ${formatNumber(answer)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "short_multiplication",
+    label: "Short multiplication",
+    domain: "Multiplication and division",
+    skillIds: ["short_multiplication"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const digits = d === 0 ? 2 : d === 1 ? 3 : 4;
+      let a = randInt(rng, Math.pow(10, digits - 1), Math.pow(10, digits) - 1);
+      let b = randInt(rng, 3, 9);
+      const answer = a * b;
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>Work out:</p>`,
+        visualHtml: verticalOpHtml(formatNumber(a), formatNumber(b), "×"),
+        solutionLines: [
+          `Multiply from right to left.`,
+          `${formatNumber(a)} × ${b} = ${formatNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "regrouping_error",
+          answerText: formatNumber(answer),
+          successText: `The answer is ${formatNumber(answer)}.`,
+          failText: `The answer is ${formatNumber(answer)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "short_division",
+    label: "Short division",
+    domain: "Multiplication and division",
+    skillIds: ["short_division"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const divisor = d === 0 ? randInt(rng, 2, 9) : randInt(rng, 3, 9);
+      const quotient = d === 0 ? randInt(rng, 10, 99) : d === 1 ? randInt(rng, 50, 450) : randInt(rng, 200, 900);
+      const dividend = divisor * quotient;
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>Work out:</p>`,
+        visualHtml: divisionBracketHtml(formatNumber(dividend), divisor),
+        solutionLines: [
+          `Use exact division.`,
+          `${formatNumber(dividend)} ÷ ${divisor} = ${formatNumber(quotient)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, quotient, {
+          marks: 1,
+          defaultMisconception: "remainder_interpretation",
+          answerText: formatNumber(quotient),
+          successText: `The quotient is ${formatNumber(quotient)}.`,
+          failText: `The quotient is ${formatNumber(quotient)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "decimal_add_sub",
+    label: "Decimal addition and subtraction",
+    domain: "Decimals",
+    skillIds: ["decimals_add_sub"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const op = pick(rng, ["+", "−"]);
+      let a, b, answer;
+      if (d === 0) {
+        a = Number((randInt(rng, 120, 899) / 10).toFixed(1));
+        b = Number((randInt(rng, 10, 199) / 10).toFixed(1));
+      } else if (d === 1) {
+        a = Number((randInt(rng, 1000, 9999) / 100).toFixed(2));
+        b = Number((randInt(rng, 100, 9999) / 100).toFixed(2));
+      } else {
+        a = Number((randInt(rng, 10000, 99999) / 1000).toFixed(3));
+        b = Number((randInt(rng, 1000, 99999) / 1000).toFixed(3));
+      }
+      if (op === "−" && b > a) [a, b] = [b, a];
+      answer = op === "+" ? a + b : a - b;
+      answer = Number(answer.toFixed(6));
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>Work out:</p>`,
+        visualHtml: verticalDecimalHtml(toPlainNumber(a), toPlainNumber(b), op),
+        solutionLines: [
+          `Line up decimal points before calculating.`,
+          `${toPlainNumber(a)} ${op} ${toPlainNumber(b)} = ${toPlainNumber(answer)}.`
+        ],
+        inputSpec: { type:"text", label:"Answer" },
+        evaluate: (resp) => {
+          const ans = parseNumberInput(resp.answer);
+          if (ans === null) return mkResult({ correct:false, score:0, maxScore:1, misconception:"misread_question", feedbackShort:"Enter a number." });
+          if (equalNumeric(ans, answer)) {
+            return mkResult({
+              correct:true, score:1, maxScore:1,
+              feedbackShort:"Correct.",
+              feedbackLong:`${toPlainNumber(a)} ${op} ${toPlainNumber(b)} = ${toPlainNumber(answer)}.`,
+              answerText: toPlainNumber(answer)
+            });
+          }
+          return mkResult({
+            correct:false, score:0, maxScore:1,
+            misconception:"digit_alignment",
+            feedbackShort:"Not quite.",
+            feedbackLong:`${toPlainNumber(a)} ${op} ${toPlainNumber(b)} = ${toPlainNumber(answer)}.`,
+            answerText: toPlainNumber(answer)
+          });
+        }
+      });
+    }
+  },
+
+  {
+    id: "decimal_times_integer",
+    label: "Decimal multiplication",
+    domain: "Decimals",
+    skillIds: ["decimals_multiply"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const multiplier = d === 0 ? randInt(rng, 2, 9) : d === 1 ? randInt(rng, 3, 12) : randInt(rng, 6, 20);
+      const base = d === 0
+        ? Number((randInt(rng, 10, 99) / 10).toFixed(1))
+        : d === 1
+          ? Number((randInt(rng, 100, 999) / 100).toFixed(2))
+          : Number((randInt(rng, 100, 999) / 100).toFixed(2));
+      const answer = Number((base * multiplier).toFixed(6));
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${multiplier} × ${toPlainNumber(base)} =</p>`,
+        solutionLines: [
+          `Use the whole-number multiplication fact and then place the decimal point carefully.`,
+          `${multiplier} × ${toPlainNumber(base)} = ${toPlainNumber(answer)}.`
+        ],
+        checkLine: `Estimate first so the decimal point ends up in a sensible place.`,
+        inputSpec: { type:"text", label:"Answer" },
+        evaluate: (resp) => {
+          const ans = parseNumberInput(resp.answer);
+          if (ans === null) return mkResult({ correct:false, score:0, maxScore:1, misconception:"misread_question", feedbackShort:"Enter a number." });
+          if (equalNumeric(ans, answer)) {
+            return mkResult({
+              correct:true, score:1, maxScore:1,
+              feedbackShort:"Correct.",
+              feedbackLong:`${multiplier} × ${toPlainNumber(base)} = ${toPlainNumber(answer)}.`,
+              answerText: toPlainNumber(answer)
+            });
+          }
+          return mkResult({
+            correct:false, score:0, maxScore:1,
+            misconception:"decimal_point_error",
+            feedbackShort:"Not quite.",
+            feedbackLong:`${multiplier} × ${toPlainNumber(base)} = ${toPlainNumber(answer)}.`,
+            answerText: toPlainNumber(answer)
+          });
+        }
+      });
+    }
+  },
+
+  {
+    id: "fraction_of_amount",
+    label: "Fractions of amounts",
+    domain: "Fractions",
+    skillIds: ["fractions_of_amount"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const den = pick(rng, d === 0 ? [2, 3, 4, 5] : d === 1 ? [3, 4, 5, 8, 10] : [6, 8, 10, 12]);
+      const num = randInt(rng, 1, den - 1);
+      const onePart = d === 0 ? randInt(rng, 4, 20) : d === 1 ? randInt(rng, 6, 40) : randInt(rng, 12, 80);
+      const total = den * onePart;
+      const answer = num * onePart;
+      const style = randInt(rng, 0, 1);
+      const stemHtml = style === 0
+        ? `<p>${fractionToText(num, den)} of ${formatNumber(total)} =</p>`
+        : `<p>${fractionToText(num, den)} × ${formatNumber(total)} =</p>`;
+      return makeBaseQuestion(this, seed, {
+        stemHtml,
+        solutionLines: [
+          `Find one part first: ${formatNumber(total)} ÷ ${den} = ${formatNumber(onePart)}.`,
+          `Then find ${num} part${num === 1 ? "" : "s"}: ${formatNumber(onePart)} × ${num} = ${formatNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "fraction_method_error",
+          answerText: formatNumber(answer),
+          successText: `The answer is ${formatNumber(answer)}.`,
+          failText: `The answer is ${formatNumber(answer)}.`,
+          partials: [
+            {
+              when: ans => ans === onePart,
+              misconception: "fraction_method_error",
+              feedbackShort: "You found one equal part, but not the number of parts asked for."
+            }
+          ]
+        })
+      });
+    }
+  },
+
+  {
+    id: "fraction_add_sub",
+    label: "Fraction calculations",
+    domain: "Fractions",
+    skillIds: ["fractions_calc"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const op = pick(rng, ["+", "−"]);
+      let aN, aD, bN, bD;
+      if (d === 0) {
+        aD = pick(rng, [4, 5, 6, 8]);
+        bD = aD;
+        aN = randInt(rng, 1, aD - 1);
+        bN = randInt(rng, 1, aD - 1);
+        if (op === "−" && bN > aN) [aN, bN] = [bN, aN];
+      } else if (d === 1) {
+        const pairs = pick(rng, [[1, 3, 1, 9], [2, 5, 1, 10], [3, 4, 1, 8], [1, 6, 2, 3]]);
+        [aN, aD, bN, bD] = pairs;
+        if (randInt(rng, 0, 1)) [aN, aD, bN, bD] = [bN, bD, aN, aD];
+        if (op === "−" && aN / aD < bN / bD) [aN, aD, bN, bD] = [bN, bD, aN, aD];
+      } else {
+        const pairs = pick(rng, [[5, 6, 2, 3], [3, 4, 7, 8], [5, 8, 3, 4], [2, 5, 1, 2]]);
+        [aN, aD, bN, bD] = pairs;
+        if (op === "−" && aN / aD < bN / bD) [aN, aD, bN, bD] = [bN, bD, aN, aD];
+      }
+      const lcm = Math.abs(aD * bD) / gcd(aD, bD);
+      const resultN = op === "+" ? aN * (lcm / aD) + bN * (lcm / bD) : aN * (lcm / aD) - bN * (lcm / bD);
+      const simp = normaliseFraction(resultN, lcm);
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${fractionToText(aN, aD)} ${op} ${fractionToText(bN, bD)} =</p>`,
+        solutionLines: [
+          aD === bD
+            ? `The denominators match, so keep ${aD} and ${op === "+" ? "add" : "subtract"} the numerators.`
+            : `Change both fractions to denominator ${lcm}.`,
+          `${fractionToText(aN, aD)} ${op} ${fractionToText(bN, bD)} = ${formatMixedFraction(simp.n, simp.d, true)}.`
+        ],
+        inputSpec: { type:"text", label:"Answer as a fraction or mixed number" },
+        evaluate: (resp) => fractionCheck(resp.answer, simp.n, simp.d, {
+          marks: 1,
+          preferMixed: true,
+          failText: `The answer is ${formatMixedFraction(simp.n, simp.d, true)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "fraction_divide_whole",
+    label: "Divide a fraction by a whole number",
+    domain: "Fractions",
+    skillIds: ["fractions_calc"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const den = pick(rng, d === 0 ? [2, 3, 4, 5] : d === 1 ? [4, 5, 6, 8] : [6, 8, 10, 12]);
+      const num = randInt(rng, 1, den - 1);
+      const divisor = d === 0 ? randInt(rng, 2, 4) : d === 1 ? randInt(rng, 2, 6) : randInt(rng, 3, 8);
+      const simp = normaliseFraction(num, den * divisor);
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${fractionToText(num, den)} ÷ ${divisor} =</p>`,
+        solutionLines: [
+          `Dividing by ${divisor} makes each part ${divisor} times smaller.`,
+          `${fractionToText(num, den)} ÷ ${divisor} = ${formatMixedFraction(simp.n, simp.d, false)}.`
+        ],
+        inputSpec: { type:"text", label:"Answer as a fraction" },
+        evaluate: (resp) => fractionCheck(resp.answer, simp.n, simp.d, {
+          marks: 1,
+          preferMixed: false,
+          failText: `The answer is ${formatMixedFraction(simp.n, simp.d, false)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "mixed_number_add_sub",
+    label: "Mixed-number calculations",
+    domain: "Fractions",
+    skillIds: ["fractions_calc"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const op = pick(rng, ["+", "−"]);
+      const den = pick(rng, d === 0 ? [4, 5, 6] : d === 1 ? [5, 6, 7, 8] : [6, 8, 10, 12]);
+      let w1 = randInt(rng, 1, d === 0 ? 3 : 6);
+      let w2 = randInt(rng, 1, d === 0 ? 3 : 5);
+      let n1 = randInt(rng, 1, den - 1);
+      let n2 = randInt(rng, 1, den - 1);
+      if (op === "−" && (w1 + n1 / den) < (w2 + n2 / den)) {
+        [w1, w2] = [w2, w1];
+        [n1, n2] = [n2, n1];
+      }
+      const improper1 = w1 * den + n1;
+      const improper2 = w2 * den + n2;
+      const resultImproper = op === "+" ? improper1 + improper2 : improper1 - improper2;
+      const simp = normaliseFraction(resultImproper, den);
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${w1} ${fractionToText(n1, den)} ${op} ${w2} ${fractionToText(n2, den)} =</p>`,
+        solutionLines: [
+          `Convert to improper fractions or work with whole numbers and fractional parts carefully.`,
+          `${w1} ${fractionToText(n1, den)} ${op} ${w2} ${fractionToText(n2, den)} = ${formatMixedFraction(simp.n, simp.d, true)}.`
+        ],
+        inputSpec: { type:"text", label:"Answer as a mixed number, fraction or whole number" },
+        evaluate: (resp) => fractionCheck(resp.answer, simp.n, simp.d, {
+          marks: 1,
+          preferMixed: true,
+          failText: `The answer is ${formatMixedFraction(simp.n, simp.d, true)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "percentage_of_amount",
+    label: "Percentages of amounts",
+    domain: "Percentages",
+    skillIds: ["percentages_of_amount"],
+    speedFriendly: true,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const pct = pick(rng, d === 0 ? [5, 10, 20, 25, 50] : d === 1 ? [15, 30, 40, 75] : [19, 35, 65]);
+      let baseUnit = d === 0 ? randInt(rng, 4, 90) : d === 1 ? randInt(rng, 10, 120) : randInt(rng, 20, 250);
+      let amount = 0;
+      if ([5, 10, 20, 25, 50, 75].includes(pct)) {
+        const factor = 100 / gcd(100, pct);
+        amount = baseUnit * factor;
+      } else if (pct === 15) {
+        amount = baseUnit * 20;
+      } else if (pct === 30) {
+        amount = baseUnit * 10;
+      } else if (pct === 40) {
+        amount = baseUnit * 5;
+      } else {
+        amount = baseUnit * 100;
+      }
+      const answer = amount * pct / 100;
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${pct}% of ${formatNumber(amount)} =</p>`,
+        solutionLines: [
+          `Break the percentage into easy parts such as 10%, 5%, 1%, 50% or 25%.`,
+          `${pct}% of ${formatNumber(amount)} = ${formatNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "percentage_method_error",
+          answerText: formatNumber(answer),
+          successText: `${pct}% of ${formatNumber(amount)} is ${formatNumber(answer)}.`,
+          failText: `${pct}% of ${formatNumber(amount)} is ${formatNumber(answer)}.`,
+          partials: [
+            {
+              when: ans => ans === amount / 10 && pct !== 10,
+              misconception: "percentage_method_error",
+              feedbackShort: "You have found 10%, but not the percentage asked for."
+            },
+            {
+              when: ans => ans === amount / 100 && pct !== 1,
+              misconception: "percentage_method_error",
+              feedbackShort: "You have found 1%, but not the percentage asked for."
+            }
+          ]
+        })
+      });
+    }
+  },
+
+  {
+    id: "order_of_operations",
+    label: "Order of operations",
+    domain: "Mixed arithmetic",
+    skillIds: ["order_of_operations"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      let expression = "";
+      let answer = 0;
+      if (d === 0) {
+        const a = randInt(rng, 20, 70);
+        const b = randInt(rng, 2, 12);
+        const c = randInt(rng, 2, 9);
+        const d2 = randInt(rng, 2, 5);
+        expression = `(${a} + ${c}) − ${b} ÷ ${d2}`;
+        answer = (a + c) - b / d2;
+      } else if (d === 1) {
+        const a = randInt(rng, 30, 80);
+        const b = randInt(rng, 3, 12);
+        const c = randInt(rng, 2, 11);
+        const d2 = randInt(rng, 2, 9);
+        expression = `${a} − ${b} × ${d2} + ${c}`;
+        answer = a - b * d2 + c;
+      } else {
+        const a = randInt(rng, 60, 120);
+        const b = randInt(rng, 12, 48);
+        const c = randInt(rng, 3, 8);
+        const d2 = randInt(rng, 10, 30);
+        expression = `(${a} − ${b}) ÷ ${c} + ${d2}`;
+        answer = (a - b) / c + d2;
+      }
+      return makeBaseQuestion(this, seed, {
+        stemHtml: `<p>${expression} =</p>`,
+        solutionLines: [
+          `Do brackets first, then multiplication or division, then addition or subtraction.`,
+          `${expression} = ${toPlainNumber(answer)}.`
+        ],
+        inputSpec: { type:"number", label:"Answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 1,
+          defaultMisconception: "order_of_operations_error",
+          answerText: toPlainNumber(answer),
+          successText: `${expression} = ${toPlainNumber(answer)}.`,
+          failText: `${expression} = ${toPlainNumber(answer)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "long_multiplication",
+    label: "Long multiplication",
+    domain: "Multiplication and division",
+    skillIds: ["long_multiplication"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const a = d === 0 ? randInt(rng, 120, 999) : d === 1 ? randInt(rng, 200, 4999) : randInt(rng, 3000, 9999);
+      const b = d === 0 ? randInt(rng, 12, 39) : d === 1 ? randInt(rng, 24, 79) : randInt(rng, 35, 96);
+      const answer = a * b;
+      return makeBaseQuestion(this, seed, {
+        marks: 2,
+        stemHtml: `<p>Work out:</p>`,
+        visualHtml: longMultiplicationHtml(formatNumber(a), formatNumber(b)),
+        solutionLines: [
+          `Multiply by the ones digit first, then by the tens digit, then combine the partial products.`,
+          `${formatNumber(a)} × ${formatNumber(b)} = ${formatNumber(answer)}.`
+        ],
+        checkLine: `Estimate first so you know the final answer is in the right range.`,
+        manualMethodMark: true,
+        inputSpec: { type:"number", label:"Final answer" },
+        evaluate: (resp) => numericCheck(resp.answer, answer, {
+          marks: 2,
+          defaultMisconception: "regrouping_error",
+          answerText: formatNumber(answer),
+          successText: `The final answer is ${formatNumber(answer)}.`,
+          failText: `The final answer is ${formatNumber(answer)}.`
+        })
+      });
+    }
+  },
+
+  {
+    id: "long_division",
+    label: "Long division",
+    domain: "Multiplication and division",
+    skillIds: ["long_division"],
+    speedFriendly: false,
+    testFriendly: true,
+    generator(seed, ctx = {}) {
+      const rng = mulberry32(seed);
+      const d = ctx.difficulty ?? 1;
+      const divisor = d === 0 ? randInt(rng, 12, 24) : d === 1 ? randInt(rng, 14, 36) : randInt(rng, 18, 49);
+      const quotient = d === 0 ? randInt(rng, 30, 99) : d === 1 ? randInt(rng, 80, 299) : randInt(rng, 200, 999);
+      const dividend = divisor * quotient;
+      return makeBaseQuestion(this, seed, {
+        marks: 2,
+        stemHtml: `<p>Work out:</p>`,
+        visualHtml: divisionBracketHtml(formatNumber(dividend), divisor, true),
+        solutionLines: [
+          `Use formal long division and keep checking partial products.`,
+          `${formatNumber(dividend)} ÷ ${divisor} = ${formatNumber(quotient)}.`
+        ],
+        checkLine: `Multiply your quotient by ${divisor} to check it returns ${formatNumber(dividend)}.`,
+        manualMethodMark: true,
+        inputSpec: { type:"number", label:"Final answer" },
+        evaluate: (resp) => numericCheck(resp.answer, quotient, {
+          marks: 2,
+          defaultMisconception: "remainder_interpretation",
+          answerText: formatNumber(quotient),
+          successText: `The quotient is ${formatNumber(quotient)}.`,
+          failText: `The quotient is ${formatNumber(quotient)}.`
+        })
+      });
+    }
+  }
+];
+
+
+    const TEMPLATE_MAP = Object.fromEntries(TEMPLATES.map(t => [t.id, t]));
+
+    
+const TEST_BLUEPRINT_FULL = [
+  { templateId:"place_value_partition", difficulty:0 },
+  { templateId:"mental_subtraction", difficulty:0 },
+  { templateId:"times_table_fact", difficulty:0 },
+  { templateId:"decimal_add_sub", difficulty:0 },
+  { templateId:"mental_subtraction", difficulty:0 },
+  { templateId:"times_table_fact", difficulty:0 },
+  { templateId:"fraction_of_amount", difficulty:0 },
+  { templateId:"mental_multiplication", difficulty:0 },
+  { templateId:"missing_number_inverse", difficulty:0 },
+  { templateId:"times_table_fact", difficulty:0 },
+  { templateId:"fraction_of_amount", difficulty:0 },
+  { templateId:"short_division", difficulty:0 },
+  { templateId:"short_multiplication", difficulty:0 },
+  { templateId:"long_multiplication", difficulty:1 },
+  { templateId:"short_division", difficulty:0 },
+  { templateId:"decimal_times_integer", difficulty:0 },
+  { templateId:"powers_of_ten_shift", difficulty:0 },
+  { templateId:"fraction_add_sub", difficulty:1 },
+  { templateId:"short_division", difficulty:1 },
+  { templateId:"column_subtraction", difficulty:1 },
+  { templateId:"short_division", difficulty:1 },
+  { templateId:"fraction_add_sub", difficulty:1 },
+  { templateId:"decimal_add_sub", difficulty:1 },
+  { templateId:"mixed_number_add_sub", difficulty:0 },
+  { templateId:"percentage_of_amount", difficulty:0 },
+  { templateId:"fraction_divide_whole", difficulty:0 },
+  { templateId:"percentage_of_amount", difficulty:2 },
+  { templateId:"long_division", difficulty:1 },
+  { templateId:"mixed_number_add_sub", difficulty:1 },
+  { templateId:"long_multiplication", difficulty:2 },
+  { templateId:"order_of_operations", difficulty:1 },
+  { templateId:"percentage_of_amount", difficulty:2 },
+  { templateId:"fraction_of_amount", difficulty:2 },
+  { templateId:"long_division", difficulty:2 },
+  { templateId:"fraction_of_amount", difficulty:2 },
+  { templateId:"mixed_number_add_sub", difficulty:2 }
+];
+
+const TEST_BLUEPRINT_SHORT = [
+  { templateId:"place_value_partition", difficulty:0 },
+  { templateId:"times_table_fact", difficulty:0 },
+  { templateId:"mental_addition", difficulty:0 },
+  { templateId:"fraction_of_amount", difficulty:0 },
+  { templateId:"short_division", difficulty:0 },
+  { templateId:"decimal_add_sub", difficulty:0 },
+  { templateId:"percentage_of_amount", difficulty:0 },
+  { templateId:"long_multiplication", difficulty:1 },
+  { templateId:"powers_of_ten_shift", difficulty:1 },
+  { templateId:"fraction_add_sub", difficulty:1 },
+  { templateId:"long_division", difficulty:1 },
+  { templateId:"order_of_operations", difficulty:1 }
+];
+
+function modeDescription(mode) {
+  return ({
+    smart: "Smart Review interleaves due, weak, new and recently missed arithmetic skills. It can occasionally use faded or worked support after difficulty starts to show.",
+    skill: "Skill Builder keeps the focus on one arithmetic skill while still varying number size and structure so it does not become rote copying.",
+    speed: "Speed Drill uses short timed bursts on fluency-friendly arithmetic items. It is for automaticity, not for learning a new written method from scratch.",
+    clinic: "Error Clinic targets recent mistakes and the weakest arithmetic patterns first, then recycles them later with fresh numbers.",
+    test: "True Test Mode gives a strict no-feedback arithmetic paper with a running timer and delayed marking."
+  })[mode] || "";
+}
+
+function updateModeControls() {
+  const mode = $("modeSelect").value;
+  const goalField = $("goalField");
+  const setField = $("setSizeField");
+  const skillField = $("skillField");
+  const setLabel = $("setSizeLabel");
+  const setSelect = $("setSizeSelect");
+
+  if (mode === "speed") {
+    goalField.classList.add("hidden");
+    setField.classList.remove("hidden");
+    skillField.classList.remove("hidden");
+    setLabel.textContent = "Burst length";
+    setSelect.innerHTML = `
+      <option value="60">1 minute</option>
+      <option value="180" selected>3 minutes</option>
+      <option value="300">5 minutes</option>
+    `;
+  } else if (mode === "test") {
+    goalField.classList.add("hidden");
+    setField.classList.remove("hidden");
+    skillField.classList.add("hidden");
+    setLabel.textContent = "Paper form";
+    setSelect.innerHTML = `
+      <option value="full">Full paper: 36 questions, 40 marks, 30 minutes</option>
+      <option value="short">Short paper: 12 questions, 14 marks, 10 minutes</option>
+    `;
+  } else {
+    goalField.classList.remove("hidden");
+    setField.classList.add("hidden");
+    skillField.classList.remove("hidden");
+  }
+}
+
+function chooseTemplateForMode(mode, focusSkillId) {
+  const learner = currentLearner();
+  const recent = getRecentEvents(8);
+  const recentTemplateIds = recent.map(e => e.templateId);
+  const weakSet = new Set(weakSkillIds().slice(0, 6));
+  const recentMistakes = new Set(recentMistakeSkillIds());
+  const dueNow = nowMs();
+
+  let candidates = TEMPLATES.filter(t => {
+    if (mode === "speed" && !t.speedFriendly) return false;
+    if (focusSkillId && mode === "skill") return t.skillIds.includes(focusSkillId);
+    if (focusSkillId && mode === "speed") return t.skillIds.includes(focusSkillId);
+    return true;
+  });
+
+  if (mode === "clinic") {
+    const clinicSkills = new Set([...Array.from(weakSet), ...Array.from(recentMistakes)]);
+    candidates = TEMPLATES.filter(t => t.skillIds.some(id => clinicSkills.has(id)));
+    if (!candidates.length) candidates = TEMPLATES.filter(t => t.skillIds.some(id => weakSet.has(id))) || TEMPLATES.slice();
+  }
+
+  if (!candidates.length) candidates = TEMPLATES.slice();
+
+  const weighted = [];
+  for (const template of candidates) {
+    const skillNodes = template.skillIds.map(id => learner.skills[id] || defaultNode());
+    const avgStrength = average(skillNodes.map(n => n.strength || 0.25));
+    const dueSkills = skillNodes.filter(n => n.attempts && (n.dueAt || 0) <= dueNow).length;
+    const tplNode = learner.templates[template.id] || defaultNode();
+    let weight = 1;
+    weight += (1 - avgStrength) * 4.4;
+    weight += dueSkills * 2.2;
+    weight += (1 - (tplNode.strength || 0.25)) * 1.8;
+    if (skillNodes.some(n => n.lastWrongAt && (Date.now() - new Date(n.lastWrongAt).getTime()) < 3 * 86400000)) weight += 2.2;
+    const statusBoost = template.skillIds.map(id => statusFromNode(learner.skills[id] || defaultNode()));
+    if (statusBoost.includes("new")) weight += 0.8;
+    if (statusBoost.includes("weak")) weight += 2;
+    if (statusBoost.includes("due")) weight += 1.5;
+    if (mode === "clinic" && template.skillIds.some(id => recentMistakes.has(id))) weight += 2.4;
+    if (mode === "speed") weight += template.speedFriendly ? 1.2 : -0.5;
+    const repeatPenalty = recentTemplateIds.filter(x => x === template.id).length;
+    if (repeatPenalty) weight *= Math.pow(0.55, repeatPenalty);
+    const skillRepeatPenalty = recentSkillPenalty(template.skillIds);
+    if (skillRepeatPenalty >= 2) weight *= 0.72;
+    if (focusSkillId && template.skillIds.includes(focusSkillId)) weight *= 2.4;
+    weight = Math.max(0.05, weight);
+    weighted.push([template, weight]);
+  }
+
+  let total = weighted.reduce((sum, x) => sum + x[1], 0);
+  let roll = Math.random() * total;
+  for (const [template, weight] of weighted) {
+    roll -= weight;
+    if (roll <= 0) return template;
+  }
+  return weighted[weighted.length - 1][0];
+}
+
+function takeDueRetryEntry(filterSkillId, mode) {
+  const learner = currentLearner();
+  const now = nowMs();
+  const dueItems = learner.retryQueue.filter(entry => {
+    if (entry.dueAt > now) return false;
+    if (filterSkillId && !entry.skillIds.includes(filterSkillId)) return false;
+    const template = TEMPLATE_MAP[entry.templateId];
+    if (!template) return false;
+    if (mode === "speed" && !template.speedFriendly) return false;
+    return true;
+  });
+  if (!dueItems.length) return null;
+  dueItems.sort((a,b) => a.dueAt - b.dueAt);
+  const entry = dueItems[0];
+  const index = learner.retryQueue.indexOf(entry);
+  if (index >= 0) learner.retryQueue.splice(index, 1);
+  return entry;
+}
+
+function buildPack(mode, focusSkillId) {
+  const learner = currentLearner();
+  let retryEntry = null;
+  if (!["test"].includes(mode)) {
+    retryEntry = takeDueRetryEntry(mode === "skill" || mode === "speed" ? focusSkillId : null, mode);
+  }
+  if (retryEntry) {
+    const template = TEMPLATE_MAP[retryEntry.templateId];
+    if (template) {
+      const difficulty = computeDifficulty(template, mode);
+      return makeIndependentPack(template, retryEntry.seed, { difficulty, mode });
+    }
+  }
+
+  const template = chooseTemplateForMode(mode, focusSkillId);
+  const difficulty = computeDifficulty(template, mode);
+  const seedA = Math.floor(Math.random() * 1e9);
+  const seedB = Math.floor(Math.random() * 1e9);
+
+  if (mode === "speed") {
+    return makeIndependentPack(template, seedA, { difficulty, mode });
+  }
+  if (mode === "skill") {
+    const skillNodes = template.skillIds.map(id => learner.skills[id] || defaultNode());
+    const weak = skillNodes.some(n => statusFromNode(n) === "weak" || statusFromNode(n) === "new");
+    if (learner.settings.allowTeachingItems && weak && Math.random() < 0.22) {
+      return Math.random() < 0.45
+        ? makeWorkedPack(template, seedA, seedB, { difficulty, mode })
+        : makeFadedPack(template, seedA, { difficulty, mode });
+    }
+    return makeIndependentPack(template, seedA, { difficulty, mode });
+  }
+  if (mode === "smart") {
+    const skillNodes = template.skillIds.map(id => learner.skills[id] || defaultNode());
+    const weak = skillNodes.some(n => statusFromNode(n) === "weak" || statusFromNode(n) === "new");
+    if (learner.settings.allowTeachingItems && weak) {
+      const roll = Math.random();
+      if (roll < 0.14) return makeWorkedPack(template, seedA, seedB, { difficulty, mode });
+      if (roll < 0.28) return makeFadedPack(template, seedA, { difficulty, mode });
+    }
+    return makeIndependentPack(template, seedA, { difficulty, mode });
+  }
+  if (mode === "clinic") {
+    const roll = Math.random();
+    if (learner.settings.allowTeachingItems && roll < 0.24) return makeWorkedPack(template, seedA, seedB, { difficulty, mode });
+    if (learner.settings.allowTeachingItems && roll < 0.46) return makeFadedPack(template, seedA, { difficulty, mode });
+    return makeIndependentPack(template, seedA, { difficulty, mode });
+  }
+  return makeIndependentPack(template, seedA, { difficulty, mode });
+}
+
+function buildTestQuestions(form = "full") {
+  const blueprint = form === "short" ? TEST_BLUEPRINT_SHORT : TEST_BLUEPRINT_FULL;
+  return blueprint.map((slot, idx) => {
+    const template = TEMPLATE_MAP[slot.templateId];
+    const seed = Math.floor(Math.random() * 1e9) + idx;
+    const pack = makeIndependentPack(template, seed, {
+      difficulty: slot.difficulty,
+      mode: "test",
+      strictTest: true
+    });
+    return {
+      pack,
+      response: {},
+      working: "",
+      marked: null
+    };
+  });
+}
+
+function startSession() {
+  const mode = document.getElementById("modeSelect").value;
+  const focusSkillId = document.getElementById("skillSelect").value || "";
+  updateModeControls();
+  if (mode === "test") {
+    startMiniSet();
+    return;
+  }
+  ui.satsSet = null;
+  let goal = document.getElementById("goalSelect").value;
+  if (mode === "speed") {
+    goal = `speed:${Number(document.getElementById("setSizeSelect").value || 180)}`;
+  }
+  ui.session = {
+    mode,
+    goal,
+    focusSkillId,
+    startedAt: nowMs(),
+    answered: 0,
+    correct: 0,
+    dueStart: learnerDueCount(),
+    targetQuestions: goal === "20q" ? 20 : 0
+  };
+  renderSessionMeta();
+  loadNextQuestion();
+}
+
+function loadNextQuestion() {
+  const mode = ui.session ? ui.session.mode : document.getElementById("modeSelect").value;
+  const focusSkillId = ui.session ? ui.session.focusSkillId : document.getElementById("skillSelect").value;
+  ui.currentPack = buildPack(mode, focusSkillId);
+  renderCurrentPack();
+  renderSessionMeta();
+}
+
+function startMiniSet() {
+  const form = document.getElementById("setSizeSelect").value || "full";
+  const questions = buildTestQuestions(form);
+  ui.session = null;
+  ui.currentPack = null;
+  ui.satsSet = {
+    startedAt: nowMs(),
+    form,
+    timeLimitMs: form === "short" ? 10 * 60000 : 30 * 60000,
+    index: 0,
+    questions,
+    finished: false
+  };
+  renderMiniSet();
+  renderSessionMeta();
+}
+
+
+    function miniSetCurrent() {
+      return ui.satsSet ? ui.satsSet.questions[ui.satsSet.index] : null;
+    }
+
+    function saveCurrentMiniSetResponse() {
+      if (!ui.satsSet || ui.satsSet.finished) return;
+      const current = miniSetCurrent();
+      if (!current) return;
+      current.response = collectCurrentResponse();
+      const workingEl = document.getElementById("workingInput");
+      current.working = workingEl ? workingEl.value : "";
+    }
+
+    function finishMiniSet(auto = false) {
+      if (!ui.satsSet || ui.satsSet.finished) return;
+      saveCurrentMiniSetResponse();
+      let totalScore = 0;
+      let totalMarks = 0;
+      let correctCount = 0;
+      for (const entry of ui.satsSet.questions) {
+        const result = entry.pack.active.evaluate(entry.response || {});
+        entry.marked = result;
+        totalScore += result.score;
+        totalMarks += result.maxScore;
+        if (result.correct) correctCount += 1;
+        entry.pack.attempts = 1;
+        applyLearningUpdate(entry.pack, result, entry.response);
+      }
+      ui.satsSet.finished = true;
+      recordSessionSummary({
+        mode: "test",
+        totalQuestions: ui.satsSet.questions.length,
+        correct: correctCount,
+        score: totalScore,
+        maxScore: totalMarks,
+        autoFinished: !!auto
+      });
+      saveState();
+      renderMiniSetResults(totalScore, totalMarks, correctCount, auto);
+      renderAnalytics();
+      renderHeader();
+      renderSessionMeta();
+    }
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function renderHeader() {
+      const learner = currentLearner();
+      const select = $("currentLearnerSelect");
+      select.innerHTML = Object.values(state.learners)
+        .map(l => `<option value="${l.id}" ${l.id === state.currentLearnerId ? "selected" : ""}>${escapeHtml(l.name)}</option>`)
+        .join("");
+      $("dueBadge").textContent = `${learnerDueCount()} due`;
+      $("streakBadge").textContent = `${learner.streakDays || 0}-day streak`;
+    }
+
+    function renderTabs() {
+      document.querySelectorAll(".tab-panel").forEach(panel => panel.classList.remove("active"));
+      document.querySelectorAll("#tabButtons button").forEach(btn => btn.classList.remove("active"));
+      document.querySelector(`#tab-${ui.activeTab}`).classList.add("active");
+      document.querySelector(`#tabButtons button[data-tab="${ui.activeTab}"]`).classList.add("active");
+    }
+
+    function renderSkillSelect() {
+      const options = [`<option value="">Mixed</option>`].concat(
+        Object.entries(SKILLS).map(([id, skill]) => `<option value="${id}">${escapeHtml(skill.name)}</option>`)
+      );
+      $("skillSelect").innerHTML = options.join("");
+    }
+
+    function renderSettings() {
+      const learner = currentLearner();
+      $("allowTeachingItems").value = learner.settings.allowTeachingItems ? "yes" : "no";
+      $("speechRateInput").value = learner.settings.speechRate || 1;
+      $("showDomainBeforeAnswer").value = learner.settings.showDomainBeforeAnswer ? "yes" : "no";
+
+      const ai = state.globalSettings.ai;
+      $("aiProviderSelect").value = ai.provider || "off";
+      $("aiModelInput").value = ai.model || "";
+      $("rememberAiKey").value = ai.rememberKey ? "yes" : "no";
+      $("aiKeyInput").value = getAIKey();
+    }
+
+    function renderProfiles() {
+      const learnerCards = Object.values(state.learners).map(l => {
+        const count = l.events ? l.events.length : 0;
+        const current = l.id === state.currentLearnerId;
+        return `
+          <div class="profile-card">
+            <div class="wrap" style="justify-content:space-between; align-items:center;">
+              <div>
+                <strong>${escapeHtml(l.name)}</strong>
+                <div class="tiny">${count} logged questions</div>
+              </div>
+              <div class="chip ${current ? "good" : "neutral"}">${current ? "Current" : "Saved profile"}</div>
+            </div>
+          </div>`;
+      }).join("");
+      $("learnerList").innerHTML = learnerCards || "<p class='subtle'>No learners yet.</p>";
+    }
+
+    function getQuestionMetaChips(pack) {
+      const chips = [];
+      const learner = currentLearner();
+      const skillStatuses = pack.skillIds.map(id => statusFromNode(learner.skills[id] || defaultNode()));
+      const primaryStatus = skillStatuses.includes("weak") ? "weak"
+        : skillStatuses.includes("due") ? "due"
+        : skillStatuses.includes("new") ? "new"
+        : skillStatuses.includes("learning") ? "learning"
+        : "secured";
+
+      chips.push(`<span class="chip ${primaryStatus === "weak" ? "bad" : primaryStatus === "due" ? "warn" : primaryStatus === "secured" ? "good" : "neutral"}">${humanStatus(primaryStatus)}</span>`);
+      chips.push(`<span class="chip neutral">${escapeHtml(pack.presentation === "worked" ? "Worked example" : pack.presentation === "faded" ? "Faded guidance" : "Independent attempt")}</span>`);
+      chips.push(`<span class="chip neutral">${pack.active.marks} mark${pack.active.marks === 1 ? "" : "s"}</span>`);
+      if (currentLearner().settings.showDomainBeforeAnswer && pack.presentation !== "worked") {
+        chips.push(`<span class="chip neutral">${escapeHtml(pack.domain)}</span>`);
+      }
+      return chips.join("");
+    }
+
+    function renderInputSpec(inputSpec, response = {}) {
+      if (!inputSpec) return "";
+      if (inputSpec.type === "number") {
+        return `
+          <div class="answer-box">
+            <label for="answerInput">${escapeHtml(inputSpec.label || "Answer")}</label>
+            <input id="answerInput" type="text" inputmode="numeric" placeholder="${escapeHtml(inputSpec.placeholder || "")}" value="${escapeHtml(response.answer || "")}" />
+          </div>`;
+      }
+      if (inputSpec.type === "text") {
+        return `
+          <div class="answer-box">
+            <label for="answerInput">${escapeHtml(inputSpec.label || "Answer")}</label>
+            <input id="answerInput" type="text" placeholder="${escapeHtml(inputSpec.placeholder || "")}" value="${escapeHtml(response.answer || "")}" />
+          </div>`;
+      }
+      if (inputSpec.type === "multi") {
+        return `
+          <div class="answer-grid">
+            ${inputSpec.fields.map(field => renderOneField(field, response[field.key])).join("")}
+          </div>`;
+      }
+      return "";
+    }
+
+    function renderOneField(field, value) {
+      if (field.kind === "number") {
+        return `
+          <div class="answer-box">
+            <label for="field_${field.key}">${escapeHtml(field.label)}</label>
+            <input id="field_${field.key}" data-key="${field.key}" type="text" inputmode="numeric" value="${escapeHtml(value || "")}" />
+          </div>`;
+      }
+      if (field.kind === "text") {
+        return `
+          <div class="answer-box">
+            <label for="field_${field.key}">${escapeHtml(field.label)}</label>
+            <input id="field_${field.key}" data-key="${field.key}" type="text" placeholder="${escapeHtml(field.placeholder || "")}" value="${escapeHtml(value || "")}" />
+          </div>`;
+      }
+      if (field.kind === "select") {
+        return `
+          <div class="answer-box">
+            <label for="field_${field.key}">${escapeHtml(field.label)}</label>
+            <select id="field_${field.key}" data-key="${field.key}">
+              <option value="">Choose</option>
+              ${field.options.map(([val, label]) => `<option value="${escapeHtml(val)}" ${String(value || "") === String(val) ? "selected" : ""}>${escapeHtml(label)}</option>`).join("")}
+            </select>
+          </div>`;
+      }
+      if (field.kind === "radio") {
+        return `
+          <fieldset class="answer-box">
+            <legend>${escapeHtml(field.label)}</legend>
+            ${field.options.map(([val, label]) => `
+              <label class="option-row">
+                <input type="radio" name="field_${field.key}" value="${escapeHtml(val)}" ${String(value || "") === String(val) ? "checked" : ""} />
+                <span>${escapeHtml(label)}</span>
+              </label>
+            `).join("")}
+          </fieldset>`;
+      }
+      return "";
+    }
+
+    function renderCurrentPack() {
+      const pack = ui.currentPack;
+      if (!pack) return;
+      $("questionMeta").innerHTML = getQuestionMetaChips(pack);
+
+      let stem = "";
+      let visual = "";
+      let extraTop = "";
+
+      if (pack.presentation === "worked" && pack.example) {
+        extraTop = `
+          <div class="example-card">
+            <h4>Worked example first</h4>
+            <div class="tiny">Study the example. Then solve the very similar question underneath without being told the operation.</div>
+            <div style="margin-top:10px;">${pack.example.stemHtml}</div>
+            ${pack.example.visualHtml ? `<div class="question-visual">${pack.example.visualHtml}</div>` : ""}
+            <div class="worked">
+              <strong>Worked solution</strong>
+              ${asList(pack.example.solutionLines || [])}
+              ${pack.example.reflectionPrompt ? `<p class="tiny" style="margin-top:10px;"><strong>Thinking prompt:</strong> ${escapeHtml(pack.example.reflectionPrompt)}</p>` : ""}
+            </div>
+          </div>`;
+      }
+
+      if (pack.presentation === "faded") {
+        const lines = pack.active.solutionLines || [];
+        const showCount = Math.max(1, Math.floor(lines.length / 2));
+        extraTop += `
+          <div class="scaffold">
+            <strong>Partly worked support</strong>
+            <div class="tiny" style="margin:6px 0 8px;">Use the given structure, then finish the thinking yourself.</div>
+            ${asList(lines.slice(0, showCount))}
+          </div>`;
+      }
+
+      stem = pack.active.stemHtml;
+      visual = (pack.active.visualHtml || "") + (pack.active.manualMethodMark ? `<div class="tiny" style="margin-top:8px;">Worth 2 marks on the official paper. This app auto-scores the final answer; official method marks are not fully replicated.</div>` : "");
+      $("questionStem").innerHTML = extraTop + stem;
+      $("questionVisual").innerHTML = visual;
+
+      const responseHtml = `
+        ${renderInputSpec(pack.active.inputSpec)}
+        <div class="working-box answer-box">
+          <label for="workingInput">Working (optional but useful)</label>
+          <textarea id="workingInput" placeholder="Show the steps you used."></textarea>
+        </div>
+      `;
+      $("responseArea").innerHTML = responseHtml;
+
+      $("feedbackArea").innerHTML = "";
+      $("submitAnswerBtn").classList.remove("hidden");
+      $("retryBtn").classList.add("hidden");
+      $("showWorkedBtn").textContent = "Show worked solution";
+      $("showWorkedBtn").classList.add("hidden");
+      $("useFadedBtn").textContent = "Use a partly worked version";
+      $("useFadedBtn").classList.add("hidden");
+      toggleAiButtons(false);
+      $("nextQuestionBtn").disabled = false;
+      focusPrimaryResponseField();
+    }
+
+    function focusPrimaryResponseField() {
+      const first = document.querySelector("#responseArea input:not([disabled]), #responseArea select:not([disabled]), #responseArea textarea:not([disabled])");
+      if (first) first.focus();
+    }
+
+    function actionButtonReady(button) {
+      return !!(button && !button.disabled && !button.classList.contains("hidden"));
+    }
+
+    function triggerQuestionKeyboardAction() {
+      if (actionButtonReady($("submitAnswerBtn"))) {
+        $("submitAnswerBtn").click();
+        return true;
+      }
+      if (actionButtonReady($("nextQuestionBtn")) && (ui.currentPack || ui.satsSet)) {
+        $("nextQuestionBtn").click();
+        return true;
+      }
+      return false;
+    }
+
+    function handlePracticeEnterShortcut(event) {
+      if (event.key !== "Enter" || event.isComposing || event.repeat) return;
+      if (ui.activeTab !== "practice") return;
+
+      const target = event.target;
+      const withinQuestionCard = target instanceof Element && !!target.closest("#questionCard");
+      if (!withinQuestionCard && target !== document.body && target !== document.documentElement) return;
+      if (target instanceof Element && target.closest("button")) return;
+
+      if (target instanceof HTMLTextAreaElement) {
+        if (!(event.ctrlKey || event.metaKey)) return;
+      } else if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
+        return;
+      }
+
+      if (!triggerQuestionKeyboardAction()) return;
+      event.preventDefault();
+    }
+
+    function renderFeedback(result, finalStage) {
+      const pack = ui.currentPack;
+      const tone = result.correct ? "good" : (result.score > 0 ? "warn" : "bad");
+      let html = `
+        <div class="feedback ${tone}">
+          <h3>${result.correct ? "Correct" : result.score > 0 ? "Partly right" : "Not quite yet"}</h3>
+          <p>${escapeHtml(finalStage ? result.feedbackLong || result.feedbackShort : result.feedbackShort || result.minimalHint)}</p>
+      `;
+      if (!finalStage && !result.correct) {
+        html += `<p><strong>Small nudge:</strong> ${escapeHtml(result.minimalHint)}</p>`;
+      }
+      if (result.misconception && finalStage) {
+        html += `<p><strong>Likely issue:</strong> ${escapeHtml(MISCONCEPTIONS[result.misconception] || result.misconception)}</p>`;
+      }
+      if (finalStage) {
+        html += `
+          <div class="worked">
+            <strong>Worked solution</strong>
+            ${asList(pack.active.solutionLines || [])}
+            ${pack.active.checkLine ? `<p style="margin-top:10px;"><strong>Check:</strong> ${escapeHtml(pack.active.checkLine)}</p>` : ""}
+            ${pack.active.reflectionPrompt ? `<p class="tiny" style="margin-top:10px;"><strong>Quick reflection:</strong> ${escapeHtml(pack.active.reflectionPrompt)}</p>` : ""}
+          </div>
+        `;
+      }
+      html += `</div>`;
+      $("feedbackArea").innerHTML = html;
+    }
+
+    function collectCurrentResponse() {
+      const pack = ui.currentPack;
+      if (!pack) return {};
+      const spec = pack.active.inputSpec;
+      const response = {};
+      if (!spec) return response;
+      if (spec.type === "number" || spec.type === "text") {
+        response.answer = $("answerInput") ? $("answerInput").value : "";
+        return response;
+      }
+      if (spec.type === "multi") {
+        spec.fields.forEach(field => {
+          if (field.kind === "radio") {
+            const checked = document.querySelector(`input[name="field_${field.key}"]:checked`);
+            response[field.key] = checked ? checked.value : "";
+          } else {
+            const el = $(`field_${field.key}`);
+            response[field.key] = el ? el.value : "";
+          }
+        });
+      }
+      return response;
+    }
+
+    
+function maybeTimerTick() {
+  let label = "--:--";
+  if (ui.satsSet && !ui.satsSet.finished) {
+    const remaining = Math.max(0, ui.satsSet.timeLimitMs - (nowMs() - ui.satsSet.startedAt));
+    label = formatMsClock(remaining);
+    if (remaining <= 0) finishMiniSet(true);
+  } else if (ui.session) {
+    const elapsed = nowMs() - ui.session.startedAt;
+    if (ui.session.mode === "speed") {
+      const burstSec = Number(String(ui.session.goal || "").split(":")[1] || 180);
+      const remaining = Math.max(0, burstSec * 1000 - elapsed);
+      label = formatMsClock(remaining);
+      if (remaining <= 0 && !ui.session.loggedGoalCompletion) {
+        recordSessionSummary({
+          mode: "speed",
+          totalQuestions: ui.session.answered,
+          correct: ui.session.correct,
+          goal: ui.session.goal
+        });
+        ui.session.loggedGoalCompletion = true;
+      }
+    } else {
+      label = formatMsClock(elapsed);
+    }
+  }
+  $("sessionTimer").textContent = label;
+}
+
+
+function formatMsClock(ms) {
+  const total = Math.floor(ms / 1000);
+  const mins = Math.floor(total / 60);
+  const secs = total % 60;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+
+    function renderSessionMeta() {
+  updateModeControls();
+  const mode = $("modeSelect").value;
+  $("modeNote").textContent = modeDescription(mode);
+  $("finishSetBtn").classList.toggle("hidden", !(ui.satsSet && !ui.satsSet.finished));
+
+  if (ui.satsSet) {
+    const answered = ui.satsSet.questions.filter(q => {
+      const r = q.response || {};
+      return Object.values(r).some(v => String(v).trim() !== "");
+    }).length;
+    const totalMarks = ui.satsSet.questions.reduce((sum, q) => sum + (q.pack.active.marks || 1), 0);
+    $("sessionAnswered").textContent = answered;
+    $("sessionCorrect").textContent = ui.satsSet.finished
+      ? ui.satsSet.questions.filter(q => q.marked && q.marked.correct).length
+      : "—";
+    $("sessionGoalProgress").textContent = `${answered}/${ui.satsSet.questions.length}`;
+    $("sessionSummary").textContent = ui.satsSet.finished
+      ? "True Test Mode finished. Review the paper and mark breakdown below."
+      : "True Test Mode is running. No feedback until the end. No calculator.";
+    $("sessionChips").innerHTML = `<span class="chip warn">True Test Mode</span><span class="chip neutral">${ui.satsSet.questions.length} questions</span><span class="chip neutral">${totalMarks} marks</span><span class="chip neutral">${ui.satsSet.form === "short" ? "10 minutes" : "30 minutes"}</span>`;
+    maybeTimerTick();
+    renderMiniPaperNav();
+    return;
+  }
+
+  if (!ui.session) {
+    $("sessionAnswered").textContent = "0";
+    $("sessionCorrect").textContent = "0";
+    $("sessionGoalProgress").textContent = "0%";
+    $("sessionTimer").textContent = "--:--";
+    $("sessionSummary").textContent = "No active session yet.";
+    $("sessionChips").innerHTML = "";
+    $("miniPaperNav").classList.add("hidden");
+    return;
+  }
+
+  $("sessionAnswered").textContent = ui.session.answered;
+  $("sessionCorrect").textContent = ui.session.correct;
+  const progress = calcGoalProgress(ui.session);
+  $("sessionGoalProgress").textContent = progress;
+  maybeTimerTick();
+  const chips = [];
+  chips.push(`<span class="chip neutral">${escapeHtml(labelForMode(ui.session.mode))}</span>`);
+  if (ui.session.focusSkillId) chips.push(`<span class="chip neutral">${escapeHtml(SKILLS[ui.session.focusSkillId].name)}</span>`);
+  if (ui.session.goal === "due") chips.push(`<span class="chip warn">Due left: ${learnerDueCount()}</span>`);
+  if (ui.session.goal === "20q") chips.push(`<span class="chip neutral">${ui.session.answered}/20 asked</span>`);
+  if (ui.session.goal === "5m") chips.push(`<span class="chip neutral">${Math.min(5, Math.floor((nowMs() - ui.session.startedAt) / 60000))}/5 min</span>`);
+  if (ui.session.goal === "10m") chips.push(`<span class="chip neutral">${Math.min(10, Math.floor((nowMs() - ui.session.startedAt) / 60000))}/10 min</span>`);
+  if (ui.session.mode === "speed") {
+    const burstSec = Number(String(ui.session.goal || "").split(":")[1] || 180);
+    chips.push(`<span class="chip warn">${Math.round(burstSec / 60)}-minute burst</span>`);
+  }
+  $("sessionChips").innerHTML = chips.join("");
+  $("sessionSummary").textContent = `Mode: ${labelForMode(ui.session.mode)}. Keep the first attempt genuine; feedback comes after the attempt, not before it.`;
+  $("miniPaperNav").classList.add("hidden");
+}
+
+function calcGoalProgress(session) {
+  if (session.goal === "20q") return `${Math.min(100, Math.round((session.answered / 20) * 100))}%`;
+  if (session.goal === "due") {
+    const cleared = Math.max(0, session.dueStart - learnerDueCount());
+    return session.dueStart ? `${Math.min(100, Math.round((cleared / session.dueStart) * 100))}%` : "100%";
+  }
+  if (session.goal === "5m") {
+    const elapsed = nowMs() - session.startedAt;
+    return `${Math.min(100, Math.round(elapsed / (5 * 60000) * 100))}%`;
+  }
+  if (session.goal === "10m") {
+    const elapsed = nowMs() - session.startedAt;
+    return `${Math.min(100, Math.round(elapsed / (10 * 60000) * 100))}%`;
+  }
+  if (String(session.goal || "").startsWith("speed:")) {
+    const burstSec = Number(String(session.goal).split(":")[1] || 180);
+    const elapsed = nowMs() - session.startedAt;
+    return `${Math.min(100, Math.round(elapsed / (burstSec * 1000) * 100))}%`;
+  }
+  return "0%";
+}
+
+function labelForMode(mode) {
+  return ({
+    smart:"Smart Review",
+    skill:"Skill Builder",
+    speed:"Speed Drill",
+    clinic:"Error Clinic",
+    test:"True Test Mode"
+  })[mode] || mode;
+}
+
+
+function renderMiniPaperNav() {
+  if (!ui.satsSet) return;
+  const nav = $("miniPaperNav");
+  nav.classList.remove("hidden");
+  nav.innerHTML = ui.satsSet.questions.map((q, i) => {
+    const hasAnswer = Object.values(q.response || {}).some(v => String(v).trim() !== "");
+    const classes = [i === ui.satsSet.index ? "current" : "", hasAnswer ? "done" : ""].join(" ");
+    return `<button class="${classes.trim()}" data-set-index="${i}">${i+1}</button>`;
+  }).join("");
+}
+
+
+    function renderMiniSet() {
+  const current = miniSetCurrent();
+  if (!current) return;
+  ui.currentPack = current.pack;
+  renderCurrentPack();
+  renderMiniPaperNav();
+  $("questionMeta").innerHTML = `<span class="chip warn">True Test Mode</span><span class="chip neutral">Question ${ui.satsSet.index + 1} of ${ui.satsSet.questions.length}</span><span class="chip neutral">${current.pack.active.marks} mark${current.pack.active.marks === 1 ? "" : "s"}</span>`;
+  $("feedbackArea").innerHTML = "";
+  $("retryBtn").classList.add("hidden");
+  $("showWorkedBtn").classList.add("hidden");
+  $("useFadedBtn").classList.add("hidden");
+  $("submitAnswerBtn").classList.add("hidden");
+  $("nextQuestionBtn").textContent = ui.satsSet.index < ui.satsSet.questions.length - 1 ? "Save and next" : "Save response";
+  if (current.response) {
+    const spec = current.pack.active.inputSpec;
+    if (spec && (spec.type === "number" || spec.type === "text")) {
+      if ($("answerInput")) $("answerInput").value = current.response.answer || "";
+    } else if (spec && spec.type === "multi") {
+      spec.fields.forEach(field => {
+        const val = current.response[field.key] || "";
+        if (field.kind === "radio") {
+          const radio = document.querySelector(`input[name="field_${field.key}"][value="${val}"]`);
+          if (radio) radio.checked = true;
+        } else {
+          const el = $(`field_${field.key}`);
+          if (el) el.value = val;
+        }
+      });
+    }
+  }
+  if ($("workingInput")) $("workingInput").value = current.working || "";
+}
+
+function renderMiniSetResults(totalScore, totalMarks, correctCount, auto) {
+  $("questionMeta").innerHTML = `<span class="chip good">True Test marked</span><span class="chip neutral">${totalScore}/${totalMarks} marks</span>`;
+  $("questionStem").innerHTML = `<p><strong>True Test Mode complete.</strong> ${auto ? "Time ran out, so the paper was marked automatically." : "The paper has been marked."}</p><p>You got <strong>${correctCount}</strong> question${correctCount === 1 ? "" : "s"} fully correct and scored <strong>${totalScore} / ${totalMarks}</strong> marks.</p>`;
+  $("questionVisual").innerHTML = methodMarkNoteHtml();
+  $("responseArea").innerHTML = ui.satsSet.questions.map((entry, i) => {
+    const result = entry.marked;
+    return `
+      <details ${i === 0 ? "open" : ""}>
+        <summary>Question ${i+1} - ${result.score}/${result.maxScore} mark${result.maxScore === 1 ? "" : "s"} - ${result.correct ? "correct" : "review"}</summary>
+        <div class="review-card" style="margin-top:10px;">
+          ${entry.pack.active.stemHtml}
+          ${entry.pack.active.visualHtml ? `<div class="question-visual">${entry.pack.active.visualHtml}</div>` : ""}
+          <p><strong>Your response:</strong> ${escapeHtml(JSON.stringify(entry.response || {}))}</p>
+          <p><strong>Feedback:</strong> ${escapeHtml(result.feedbackLong || result.feedbackShort)}</p>
+          ${entry.pack.active.manualMethodMark ? `<div class="tiny" style="margin-bottom:8px;">Official papers may award a method mark here; this local app marked the final answer only.</div>` : ""}
+          <div class="worked">
+            <strong>Worked solution</strong>
+            ${asList(entry.pack.active.solutionLines || [])}
+          </div>
+        </div>
+      </details>`;
+  }).join("");
+  $("submitAnswerBtn").classList.add("hidden");
+  $("nextQuestionBtn").textContent = "Start fresh session";
+  $("retryBtn").classList.add("hidden");
+  $("showWorkedBtn").classList.add("hidden");
+  $("useFadedBtn").classList.add("hidden");
+  toggleAiButtons(false);
+}
+
+function submitCurrentAnswer() {
+  if (!ui.currentPack || ui.satsSet) return;
+  const pack = ui.currentPack;
+  const response = collectCurrentResponse();
+  pack.attempts += 1;
+  const result = pack.active.evaluate(response);
+  const workingText = $("workingInput") ? $("workingInput").value : "";
+  const responseSnapshot = Object.assign({}, response, { working: workingText });
+
+  const instantFinalMode = ui.session && ui.session.mode === "speed";
+  if (result.correct || instantFinalMode || pack.presentation === "worked" || pack.presentation === "faded" || pack.attempts >= 2 || pack.workedShown) {
+    renderFeedback(result, true);
+    applyLearningUpdate(pack, result, responseSnapshot);
+    afterFinalisedAnswer(result);
+    if (ui.session) {
+      ui.session.answered += 1;
+      if (result.correct) ui.session.correct += 1;
+    }
+    recordSessionMaybeIfGoalMet();
+    renderAnalytics();
+    renderHeader();
+    renderSessionMeta();
+    return;
+  }
+
+  pack.firstWrongResult = result;
+  renderFeedback(result, false);
+  $("retryBtn").classList.remove("hidden");
+  $("showWorkedBtn").classList.remove("hidden");
+  $("useFadedBtn").classList.remove("hidden");
+  $("submitAnswerBtn").classList.remove("hidden");
+  toggleAiButtons(false);
+}
+
+function recordSessionMaybeIfGoalMet() {
+  if (!ui.session) return;
+  const mode = ui.session.mode;
+  let complete = false;
+  if (ui.session.goal === "20q" && ui.session.answered >= 20) complete = true;
+  if (ui.session.goal === "due" && learnerDueCount() === 0) complete = true;
+  if (ui.session.goal === "5m" && (nowMs() - ui.session.startedAt) >= 5 * 60000) complete = true;
+  if (ui.session.goal === "10m" && (nowMs() - ui.session.startedAt) >= 10 * 60000) complete = true;
+  if (String(ui.session.goal || "").startsWith("speed:")) {
+    const burstSec = Number(String(ui.session.goal).split(":")[1] || 180);
+    if ((nowMs() - ui.session.startedAt) >= burstSec * 1000) complete = true;
+  }
+  if (complete && !ui.session.loggedGoalCompletion) {
+    ui.session.loggedGoalCompletion = true;
+    recordSessionSummary({
+      mode,
+      totalQuestions: ui.session.answered,
+      correct: ui.session.correct,
+      goal: ui.session.goal
+    });
+  }
+}
+
+
+    
+function afterFinalisedAnswer(result) {
+  $("submitAnswerBtn").classList.add("hidden");
+  $("retryBtn").classList.add("hidden");
+  $("showWorkedBtn").classList.remove("hidden");
+  $("useFadedBtn").classList.add("hidden");
+  document.querySelectorAll("#responseArea input, #responseArea select, #responseArea textarea").forEach(el => el.disabled = true);
+  toggleAiButtons(aiEnabled());
+  $("showWorkedBtn").textContent = "Show worked solution again";
+}
+
+function showWorkedNow() {
+  if (!ui.currentPack) return;
+  ui.currentPack.workedShown = true;
+  ui.currentPack.supportLevel = Math.max(2, ui.currentPack.supportLevel || 0);
+  renderFeedback(ui.currentPack.firstWrongResult || ui.currentPack.active.evaluate(collectCurrentResponse()), true);
+  $("showWorkedBtn").classList.add("hidden");
+  $("useFadedBtn").classList.add("hidden");
+  $("retryBtn").classList.remove("hidden");
+}
+
+function useFadedSupport() {
+  if (!ui.currentPack) return;
+  ui.currentPack.supportLevel = Math.max(1, ui.currentPack.supportLevel || 0);
+  ui.currentPack.workedShown = false;
+  const lines = ui.currentPack.active.solutionLines || [];
+  const showCount = Math.max(1, Math.floor(lines.length / 2));
+  const scaffold = `
+    <div class="scaffold">
+      <strong>Partly worked support</strong>
+      ${asList(lines.slice(0, showCount))}
+    </div>`;
+  $("feedbackArea").innerHTML = scaffold + $("feedbackArea").innerHTML;
+  $("useFadedBtn").classList.add("hidden");
+  $("retryBtn").classList.remove("hidden");
+}
+
+
+    function prepareRetry() {
+      $("feedbackArea").innerHTML = `<div class="feedback warn"><h3>Try again</h3><p>Have another genuine go before looking at the full solution. Keep the small nudge in mind.</p></div>`;
+      $("retryBtn").classList.add("hidden");
+      $("submitAnswerBtn").classList.remove("hidden");
+    }
+
+    function handleNextQuestionClick() {
+      if (ui.satsSet && !ui.satsSet.finished) {
+        saveCurrentMiniSetResponse();
+        if (ui.satsSet.index < ui.satsSet.questions.length - 1) {
+          ui.satsSet.index += 1;
+          renderMiniSet();
+          renderSessionMeta();
+        } else {
+          $("feedbackArea").innerHTML = `<div class="feedback warn"><h3>All responses saved</h3><p>You are on the last question. Press “Finish paper” when ready for marking.</p></div>`;
+        }
+        return;
+      }
+
+      const lastFinishedSet = ui.satsSet && ui.satsSet.finished;
+      if (lastFinishedSet) {
+        ui.satsSet = null;
+        startSession();
+        return;
+      }
+      if (!ui.session) {
+        startSession();
+        return;
+      }
+      loadNextQuestion();
+    }
+
+    function readCurrentQuestionAloud() {
+      const synth = window.speechSynthesis;
+      if (!synth) {
+        alert("This browser does not support speech synthesis.");
+        return;
+      }
+      const pack = ui.satsSet && !ui.satsSet.finished ? miniSetCurrent().pack : ui.currentPack;
+      if (!pack) return;
+      synth.cancel();
+      const text = (pack.active.stemHtml || "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = clamp(Number(currentLearner().settings.speechRate || 1), 0.6, 1.4);
+      utter.lang = "en-GB";
+      synth.speak(utter);
+    }
+
+    function toggleAiButtons(show) {
+      $("aiExplainBtn").classList.toggle("hidden", !show);
+      $("aiVariantBtn").classList.toggle("hidden", !show);
+      $("aiParentSummaryBtn").disabled = !show;
+    }
+
+    async function callAI(systemPrompt, userPrompt, temperature = 0.2) {
+      const ai = state.globalSettings.ai;
+      const key = getAIKey();
+      if (!ai.provider || ai.provider === "off" || !ai.model || !key) {
+        throw new Error("AI is not configured.");
+      }
+
+      if (ai.provider === "openai") {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${key}`
+          },
+          body: JSON.stringify({
+            model: ai.model,
+            temperature,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userPrompt }
+            ]
+          })
+        });
+        if (!res.ok) throw new Error(`OpenAI error ${res.status}`);
+        const data = await res.json();
+        return data.choices?.[0]?.message?.content || "";
+      }
+
+      if (ai.provider === "gemini") {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(ai.model)}:generateContent?key=${encodeURIComponent(key)}`, {
+          method: "POST",
+          headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            contents: [{ parts: [{ text: userPrompt }] }],
+            generationConfig: { temperature }
+          })
+        });
+        if (!res.ok) throw new Error(`Gemini error ${res.status}`);
+        const data = await res.json();
+        return (data.candidates?.[0]?.content?.parts || []).map(p => p.text || "").join("");
+      }
+
+      if (ai.provider === "anthropic") {
+        const res = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": key,
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model: ai.model,
+            max_tokens: 900,
+            temperature,
+            system: systemPrompt,
+            messages: [{ role: "user", content: userPrompt }]
+          })
+        });
+        if (!res.ok) throw new Error(`Anthropic error ${res.status}`);
+        const data = await res.json();
+        return (data.content || []).map(part => part.text || "").join("");
+      }
+
+      throw new Error("Unknown AI provider.");
+    }
+
+    function extractJsonBlock(text) {
+      const raw = String(text || "").trim();
+      if (!raw) return null;
+      try { return JSON.parse(raw); } catch (e) {}
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (!match) return null;
+      try { return JSON.parse(match[0]); } catch (e) { return null; }
+    }
+
+    
+    async function explainWithAI() {
+      if (!ui.currentPack) return;
+      const pack = ui.currentPack;
+      const response = collectCurrentResponse();
+      const result = pack.active.evaluate(response);
+      const working = $("workingInput") ? $("workingInput").value : "";
+      $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback warn"><h3>AI explanation</h3><p>Generating explanation…</p></div>`);
+      try {
+        const system = "You are an excellent KS2 arithmetic tutor for England. Give a short, child-friendly explanation after the learner has already attempted the question. Keep it concise and practical. Do not invent a different answer.";
+        const user = `
+Question:
+${pack.active.stemHtml.replace(/<[^>]+>/g, " ")}
+
+Learner response:
+${JSON.stringify(response)}
+
+Working shown:
+${working}
+
+Correct answer:
+${result.answerText}
+
+Worked method:
+${(pack.active.solutionLines || []).join(" | ")}
+
+Likely misconception:
+${result.misconception || "none"}
+
+Write:
+1) one brief explanation,
+2) one tiny thing to watch next time,
+3) one quick check question without giving its answer.
+        `;
+        const text = await callAI(system, user, 0.2);
+        $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback good"><h3>AI explanation</h3><p>${nl2br(text)}</p></div>`);
+      } catch (err) {
+        $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback bad"><h3>AI explanation failed</h3><p>${escapeHtml(err.message)}. The rest of the app still works without AI.</p></div>`);
+      }
+    }
+
+    async function generateAiVariant() {
+      if (!ui.currentPack) return;
+      const pack = ui.currentPack;
+      const response = collectCurrentResponse();
+      const result = pack.active.evaluate(response);
+      const working = $("workingInput") ? $("workingInput").value : "";
+      $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback warn"><h3>AI diagnosis</h3><p>Analysing the attempt…</p></div>`);
+      try {
+        const system = "You are an expert KS2 arithmetic coach. Return JSON only. Choose one local skill id from the allowed list, give a short coaching note, and suggest whether the next local item should be easier, same or harder.";
+        const allowedSkills = Object.keys(SKILLS).join(", ");
+        const user = `
+Allowed skill ids:
+${allowedSkills}
+
+Question:
+${pack.active.stemHtml.replace(/<[^>]+>/g, " ")}
+
+Learner response:
+${JSON.stringify(response)}
+
+Working:
+${working}
+
+Correct answer:
+${result.answerText}
+
+Likely misconception:
+${result.misconception || "none"}
+
+Return JSON only:
+{
+  "skillId": "one allowed skill id",
+  "coachNote": "max 45 words",
+  "challenge": "easier or same or harder"
+}
+        `;
+        const text = await callAI(system, user, 0.2);
+        const data = extractJsonBlock(text) || {};
+        const nextSkill = SKILLS[data.skillId] ? data.skillId : (pack.skillIds[0] || Object.keys(SKILLS)[0]);
+        const coachNote = String(data.coachNote || "Keep the method tight, then try one more question with fresh numbers.").trim();
+        $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback good"><h3>AI diagnosis</h3><p>${escapeHtml(coachNote)}</p></div>`);
+        if (!ui.session) {
+          ui.session = {
+            mode: "skill",
+            goal: "20q",
+            focusSkillId: nextSkill,
+            startedAt: nowMs(),
+            answered: 0,
+            correct: 0,
+            dueStart: learnerDueCount(),
+            targetQuestions: 20
+          };
+        } else {
+          ui.session.focusSkillId = nextSkill;
+        }
+        const nextPack = buildPack("skill", nextSkill);
+        if (String(data.challenge || "").toLowerCase() === "easier") nextPack.difficulty = Math.max(0, (nextPack.difficulty || 1) - 1);
+        if (String(data.challenge || "").toLowerCase() === "harder") nextPack.difficulty = Math.min(2, (nextPack.difficulty || 1) + 1);
+        ui.currentPack = nextPack;
+        renderCurrentPack();
+        renderSessionMeta();
+      } catch (err) {
+        $("feedbackArea").insertAdjacentHTML("beforeend", `<div class="feedback bad"><h3>AI diagnosis failed</h3><p>${escapeHtml(err.message)}. Try a different provider, model, or use the built-in adaptive review.</p></div>`);
+      }
+    }
+
+    function buildRuleBasedParentSummary() {
+      const learner = currentLearner();
+      const total = learner.events.length;
+      const recent = learner.events.slice(-30);
+      const acc = total ? Math.round((learner.events.filter(e => e.correct).length / total) * 100) : 0;
+      const weak = weakSkillIds().slice(0, 3).map(id => SKILLS[id].name);
+      const misconceptionTop = Object.entries(learner.misconceptions)
+        .sort((a, b) => b[1].count - a[1].count)
+        .slice(0, 2)
+        .map(([id]) => MISCONCEPTIONS[id] || id);
+      const recentAvgSec = recent.length ? Math.round(average(recent.map(e => e.durationSec || 0))) : 0;
+
+      let text = `${learner.name} has completed ${total} logged arithmetic question${total === 1 ? "" : "s"} with overall accuracy around ${acc}%. `;
+      if (weak.length) text += `The main weak spots at the moment are ${weak.join(", ")}. `;
+      if (misconceptionTop.length) text += `The error patterns showing up most are ${misconceptionTop.join(" and ")}. `;
+      if (recentAvgSec) text += `Recent average time per question is about ${recentAvgSec} seconds. `;
+      text += `Best next move: keep daily Smart Review going, use Speed Drill for facts and simple fluency, and use Error Clinic when a pattern keeps reappearing.`;
+      return text;
+    }
+
+    async function buildAiParentSummary() {
+      const learner = currentLearner();
+      const events = learner.events.slice(-40);
+      const weak = weakSkillIds().slice(0, 5).map(id => SKILLS[id].name);
+      const misc = Object.entries(learner.misconceptions).sort((a,b) => b[1].count - a[1].count).slice(0,5).map(([id, obj]) => ({ id, label: MISCONCEPTIONS[id] || id, count: obj.count }));
+      const system = "You write concise, practical parent summaries for KS2 arithmetic practice in England. Use plain UK English. Keep it to one short paragraph plus three very short next steps.";
+      const user = `
+Learner: ${learner.name}
+Weak skills: ${JSON.stringify(weak)}
+Recent misconception counts: ${JSON.stringify(misc)}
+Recent arithmetic events: ${JSON.stringify(events.map(e => ({
+  skillIds: e.skillIds,
+  correct: e.correct,
+  score: e.score,
+  maxScore: e.maxScore,
+  misconception: e.misconception,
+  durationSec: e.durationSec
+})))}
+
+Write a practical parent summary focused on arithmetic fluency, speed, and likely weak procedures.
+      `;
+      return callAI(system, user, 0.2);
+    }
+
+
+    
+function renderAnalytics() {
+  const learner = currentLearner();
+  const total = learner.events.length;
+  const correct = learner.events.filter(e => e.correct).length;
+  const accuracy = total ? Math.round((correct / total) * 100) : 0;
+  const avgSec = total ? Math.round(average(learner.events.map(e => e.durationSec || 0))) : 0;
+  $("anaTotalQuestions").textContent = total;
+  $("anaAccuracy").textContent = `${accuracy}%`;
+  $("anaDue").textContent = learnerDueCount();
+  $("anaSecured").textContent = Object.keys(SKILLS).map(id => statusFromNode(learner.skills[id] || defaultNode())).filter(s => s === "secured").length;
+  $("anaAvgTime").textContent = avgSec ? `${avgSec}s` : "—";
+
+  $("parentSummary").textContent = buildRuleBasedParentSummary();
+
+  const miscEntries = Object.entries(learner.misconceptions).sort((a,b) => b[1].count - a[1].count);
+  if (!miscEntries.length) {
+    $("misconceptionList").innerHTML = "<p class='subtle'>No misconception data yet.</p>";
+  } else {
+    $("misconceptionList").innerHTML = miscEntries.map(([id, obj]) => `
+      <div class="skill-row">
+        <div><strong>${escapeHtml(MISCONCEPTIONS[id] || id)}</strong></div>
+        <div class="bar"><span style="width:${Math.min(100, obj.count * 12)}%"></span></div>
+        <div>${obj.count}</div>
+        <div class="tiny">${escapeHtml(formatDateTime(obj.lastSeenAt ? new Date(obj.lastSeenAt).getTime() : null))}</div>
+      </div>
+    `).join("");
+  }
+
+  const wrongEvents = learner.events.filter(e => !e.correct).slice(-12).reverse();
+  if (!$("recentMistakesList")) {
+    // markup guard
+  } else if (!wrongEvents.length) {
+    $("recentMistakesList").innerHTML = "<p class='subtle'>No recent mistakes logged.</p>";
+  } else {
+    $("recentMistakesList").innerHTML = wrongEvents.map(event => {
+      const skills = (event.skillIds || []).map(id => SKILLS[id]?.name || id).join(", ");
+      return `
+        <details>
+          <summary>${escapeHtml(TEMPLATE_MAP[event.templateId]?.label || event.templateId)} - ${event.score}/${event.maxScore}</summary>
+          <div class="tiny" style="margin-top:8px;">Skills: ${escapeHtml(skills)} | ${escapeHtml(new Date(event.timestamp).toLocaleString("en-GB"))}</div>
+          ${event.misconception ? `<div class="tiny" style="margin-top:6px;">Likely issue: ${escapeHtml(MISCONCEPTIONS[event.misconception] || event.misconception)}</div>` : ""}
+        </details>
+      `;
+    }).join("");
+  }
+
+  const strandMap = {};
+  Object.entries(SKILLS).forEach(([id, skill]) => {
+    if (!strandMap[skill.domain]) strandMap[skill.domain] = [];
+    const node = learner.skills[id] || defaultNode();
+    strandMap[skill.domain].push(node.strength || 0.25);
+  });
+  const strandHtml = Object.entries(strandMap).map(([domain, values]) => {
+    const pct = Math.round(average(values) * 100);
+    return `
+      <div class="skill-row">
+        <div><strong>${escapeHtml(domain)}</strong></div>
+        <div class="bar"><span style="width:${pct}%"></span></div>
+        <div>${pct}%</div>
+        <div class="${pct >= 82 ? "status-secured" : pct >= 60 ? "status-learning" : pct >= 42 ? "status-due" : "status-weak"}">${pct >= 82 ? "Strong" : pct >= 60 ? "Building" : pct >= 42 ? "Needs review" : "Weak"}</div>
+      </div>
+    `;
+  }).join("");
+  if ($("strandAnalytics")) $("strandAnalytics").innerHTML = strandHtml || "<p class='subtle'>No strand data yet.</p>";
+
+  const skillHtml = Object.entries(SKILLS).map(([id, skill]) => {
+    const node = learner.skills[id] || defaultNode();
+    const strength = Math.round((node.strength || 0) * 100);
+    const status = statusFromNode(node);
+    return `
+      <div class="skill-row">
+        <div>
+          <strong>${escapeHtml(skill.name)}</strong>
+          <div class="tiny">${escapeHtml(skill.domain)}</div>
+        </div>
+        <div class="bar"><span style="width:${strength}%"></span></div>
+        <div>${strength}%</div>
+        <div class="status-${status}">${humanStatus(status)}</div>
+      </div>`;
+  }).join("");
+  $("skillAnalytics").innerHTML = skillHtml;
+
+  const recent = getRecentEvents(20);
+  if (!recent.length) {
+    $("recentActivity").innerHTML = "<p class='subtle'>No activity yet.</p>";
+  } else {
+    $("recentActivity").innerHTML = recent.map(e => {
+      const skills = (e.skillIds || []).map(id => SKILLS[id]?.name || id).join(", ");
+      return `
+        <details>
+          <summary>${e.correct ? "Correct" : "Review"} - ${escapeHtml(TEMPLATE_MAP[e.templateId]?.label || e.templateId)} - ${escapeHtml(new Date(e.timestamp).toLocaleString("en-GB"))}</summary>
+          <div class="tiny" style="margin-top:8px;">Skills: ${escapeHtml(skills)} | Score: ${e.score}/${e.maxScore} | Support: ${e.supportLevel} | Time: ${e.durationSec || 0}s</div>
+          ${e.misconception ? `<div class="tiny" style="margin-top:6px;">Likely issue: ${escapeHtml(MISCONCEPTIONS[e.misconception] || e.misconception)}</div>` : ""}
+        </details>
+      `;
+    }).join("");
+  }
+
+  toggleAiButtons(aiEnabled());
+}
+
+function initialiseUiAfterStateChange() {
+  ui.session = null;
+  ui.currentPack = null;
+  ui.satsSet = null;
+  renderHeader();
+  renderSkillSelect();
+  renderSettings();
+  renderProfiles();
+  renderAnalytics();
+  renderSessionMeta();
+  $("questionMeta").innerHTML = `<span class="chip neutral">Ready</span>`;
+  $("questionStem").innerHTML = `<p>Choose a mode and start a session. Smart Review is the default for daily use because it mixes due, weak and new arithmetic skills instead of marching in a fixed order.</p>`;
+  $("questionVisual").innerHTML = "";
+  $("responseArea").innerHTML = "";
+  $("feedbackArea").innerHTML = "";
+  $("submitAnswerBtn").classList.add("hidden");
+  $("retryBtn").classList.add("hidden");
+  $("showWorkedBtn").classList.add("hidden");
+  $("useFadedBtn").classList.add("hidden");
+  $("nextQuestionBtn").textContent = "Next question";
+  $("finishSetBtn").classList.add("hidden");
+  updateModeControls();
+}
+
+
+    
+function savePracticeSettings() {
+  const learner = currentLearner();
+  learner.settings.allowTeachingItems = $("allowTeachingItems").value === "yes";
+  learner.settings.speechRate = clamp(Number($("speechRateInput").value || 1), 0.6, 1.4);
+  learner.settings.showDomainBeforeAnswer = $("showDomainBeforeAnswer").value === "yes";
+  saveState();
+  renderSessionMeta();
+  renderCurrentMaybe();
+}
+
+function renderCurrentMaybe() {
+  if (ui.satsSet && !ui.satsSet.finished) renderMiniSet();
+  else if (ui.currentPack) renderCurrentPack();
+}
+
+function saveAiSettings() {
+  const ai = state.globalSettings.ai;
+  ai.provider = $("aiProviderSelect").value;
+  ai.model = $("aiModelInput").value.trim();
+  setAIKey($("aiKeyInput").value.trim(), $("rememberAiKey").value === "yes");
+  saveState();
+  toggleAiButtons(aiEnabled());
+  alert("AI settings saved.");
+}
+
+async function testAiConnection() {
+  try {
+    const text = await callAI("Reply with only: connection ok", "connection ok", 0);
+    alert(`AI response: ${text.slice(0, 120)}`);
+  } catch (err) {
+    alert(`AI test failed: ${err.message}`);
+  }
+}
+
+function exportJson(filename, data) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importJsonData(parsed) {
+  if (parsed.learners && parsed.currentLearnerId) {
+    state = parsed;
+    state = loadStateFromObject(state);
+    saveState();
+    initialiseUiAfterStateChange();
+    alert("Imported full app data.");
+    return;
+  }
+  if (parsed.id && parsed.name && parsed.skills !== undefined) {
+    const learner = normaliseLearner(parsed);
+    learner.id = learner.id || uid();
+    state.learners[learner.id] = learner;
+    state.currentLearnerId = learner.id;
+    saveState();
+    initialiseUiAfterStateChange();
+    alert("Imported learner profile.");
+    return;
+  }
+  throw new Error("JSON format not recognised.");
+}
+
+function loadStateFromObject(obj) {
+  const parsed = JSON.parse(JSON.stringify(obj));
+  if (!parsed.learners || !Object.keys(parsed.learners).length) return defaultAppState();
+  parsed.version = APP_VERSION;
+  if (!parsed.globalSettings) parsed.globalSettings = { ai: { provider:"off", model:"", rememberKey:false, storedKey:"" } };
+  if (!parsed.globalSettings.ai) parsed.globalSettings.ai = { provider:"off", model:"", rememberKey:false, storedKey:"" };
+  for (const learnerId of Object.keys(parsed.learners)) {
+    parsed.learners[learnerId] = normaliseLearner(parsed.learners[learnerId]);
+  }
+  if (!parsed.currentLearnerId || !parsed.learners[parsed.currentLearnerId]) {
+    parsed.currentLearnerId = Object.keys(parsed.learners)[0];
+  }
+  return parsed;
+}
+
+function createLearner() {
+  const name = $("newLearnerName").value.trim();
+  if (!name) {
+    alert("Enter a learner name first.");
+    return;
+  }
+  const learner = makeLearner(name);
+  state.learners[learner.id] = learner;
+  state.currentLearnerId = learner.id;
+  $("newLearnerName").value = "";
+  saveState();
+  initialiseUiAfterStateChange();
+}
+
+function renameCurrentLearner() {
+  const learner = currentLearner();
+  const next = prompt("Rename learner", learner.name);
+  if (!next) return;
+  learner.name = next.trim() || learner.name;
+  saveState();
+  initialiseUiAfterStateChange();
+}
+
+function deleteCurrentLearner() {
+  if (Object.keys(state.learners).length <= 1) {
+    alert("Keep at least one learner profile.");
+    return;
+  }
+  const learner = currentLearner();
+  if (!confirm(`Delete ${learner.name}? This cannot be undone.`)) return;
+  delete state.learners[learner.id];
+  state.currentLearnerId = Object.keys(state.learners)[0];
+  saveState();
+  initialiseUiAfterStateChange();
+}
+
+function resetCurrentLearner() {
+  const learner = currentLearner();
+  if (!confirm(`Reset all progress for ${learner.name}?`)) return;
+  const fresh = makeLearner(learner.name);
+  fresh.id = learner.id;
+  state.learners[learner.id] = fresh;
+  saveState();
+  initialiseUiAfterStateChange();
+}
+
+function resetAllData() {
+  if (!confirm("Reset all app data?")) return;
+  state = defaultAppState();
+  sessionStorage.removeItem(SESSION_AI_KEY);
+  saveState();
+  initialiseUiAfterStateChange();
+}
+
+async function handleAiParentSummary() {
+  if (!aiEnabled()) {
+    alert("AI is not configured.");
+    return;
+  }
+  const target = $("parentSummary");
+  const old = target.textContent;
+  target.textContent = "Generating AI parent summary…";
+  try {
+    const text = await buildAiParentSummary();
+    target.innerHTML = nl2br(text);
+  } catch (err) {
+    target.textContent = old;
+    alert(`AI summary failed: ${err.message}`);
+  }
+}
+
+
+function bindEvents() {
+      document.addEventListener("keydown", handlePracticeEnterShortcut);
+
+      document.querySelectorAll("#tabButtons button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          ui.activeTab = btn.dataset.tab;
+          renderTabs();
+          if (ui.activeTab === "analytics") renderAnalytics();
+        });
+      });
+
+      $("currentLearnerSelect").addEventListener("change", (e) => {
+        state.currentLearnerId = e.target.value;
+        saveState();
+        initialiseUiAfterStateChange();
+      });
+
+      $("modeSelect").addEventListener("change", () => {
+        renderSessionMeta();
+      });
+
+      $("startSessionBtn").addEventListener("click", startSession);
+      $("nextQuestionBtn").addEventListener("click", handleNextQuestionClick);
+      $("submitAnswerBtn").addEventListener("click", submitCurrentAnswer);
+      $("retryBtn").addEventListener("click", prepareRetry);
+      $("showWorkedBtn").addEventListener("click", showWorkedNow);
+      $("useFadedBtn").addEventListener("click", useFadedSupport);
+      $("readAloudBtn").addEventListener("click", readCurrentQuestionAloud);
+      $("finishSetBtn").addEventListener("click", () => finishMiniSet(false));
+
+      $("miniPaperNav").addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-set-index]");
+        if (!btn || !ui.satsSet || ui.satsSet.finished) return;
+        saveCurrentMiniSetResponse();
+        ui.satsSet.index = Number(btn.dataset.setIndex);
+        renderMiniSet();
+        renderSessionMeta();
+      });
+
+      $("allowTeachingItems").addEventListener("change", savePracticeSettings);
+      $("speechRateInput").addEventListener("change", savePracticeSettings);
+      $("showDomainBeforeAnswer").addEventListener("change", savePracticeSettings);
+      $("saveAiSettingsBtn").addEventListener("click", saveAiSettings);
+      $("testAiBtn").addEventListener("click", testAiConnection);
+
+      $("createLearnerBtn").addEventListener("click", createLearner);
+      $("renameLearnerBtn").addEventListener("click", renameCurrentLearner);
+      $("deleteLearnerBtn").addEventListener("click", deleteCurrentLearner);
+      $("resetLearnerBtn").addEventListener("click", resetCurrentLearner);
+      $("resetAllBtn").addEventListener("click", resetAllData);
+
+      $("exportCurrentBtn").addEventListener("click", () => {
+        exportJson(`${currentLearner().name.replace(/\s+/g, "_").toLowerCase()}_ks2_arithmetic.json`, currentLearner());
+      });
+      $("exportAllBtn").addEventListener("click", () => {
+        exportJson(`ks2_arithmetic_app_data.json`, state);
+      });
+      $("importBtn").addEventListener("click", () => $("importFileInput").click());
+      $("importFileInput").addEventListener("change", async (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        try {
+          const text = await file.text();
+          const parsed = JSON.parse(text);
+          importJsonData(parsed);
+          e.target.value = "";
+        } catch (err) {
+          alert(`Import failed: ${err.message}`);
+        }
+      });
+
+      $("aiExplainBtn").addEventListener("click", explainWithAI);
+      $("aiVariantBtn").addEventListener("click", generateAiVariant);
+      $("aiParentSummaryBtn").addEventListener("click", handleAiParentSummary);
+    }
+
+    function initialise() {
+      renderHeader();
+      renderTabs();
+      renderSkillSelect();
+      renderSettings();
+      renderProfiles();
+      renderAnalytics();
+      renderSessionMeta();
+      bindEvents();
+      if (ui.timerInterval) clearInterval(ui.timerInterval);
+      ui.timerInterval = setInterval(maybeTimerTick, 1000);
+      toggleAiButtons(aiEnabled());
+    }
+
+    initialise();
+  
+  </script>
+</body>
+</html>
