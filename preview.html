@@ -649,6 +649,13 @@
         <div class="audio-settings">
           <div class="stack-label">Audio</div>
           <div class="inline-row">
+            <select id="audioEngineSelect" aria-label="Audio engine">
+              <option value="browser">Browser UK TTS</option>
+              <option value="gemini">Gemini TTS</option>
+              <option value="openai">OpenAI TTS</option>
+              <option value="elevenlabs">ElevenLabs TTS</option>
+            </select>
+            <select id="audioModelSelect" aria-label="Audio model"></select>
             <select id="voiceSelect" aria-label="Voice selection"></select>
             <div class="range-wrap">
               <span class="muted">Rate</span>
@@ -656,10 +663,15 @@
               <span id="rateValue" class="muted">1.05×</span>
             </div>
           </div>
-          <div class="search-row" style="margin-top:10px;">
-            <input id="apiKeyInput" type="password" autocomplete="off" spellcheck="false" placeholder="Gemini API key (saved only in this browser)" />
+          <div id="apiKeyWrap" style="margin-top:10px;">
+            <div class="search-row">
+              <input id="apiKeyInput" type="password" autocomplete="off" spellcheck="false" placeholder="API key (saved only in this browser)" />
+            </div>
+            <div id="apiKeyBackupWrap" class="search-row hidden" style="margin-top:8px;">
+              <input id="apiKeyBackupInput" type="password" autocomplete="off" spellcheck="false" placeholder="Backup Gemini API key (saved only in this browser)" />
+            </div>
           </div>
-          <div id="audioNote" class="note">Gemini TTS. Key stored locally.</div>
+          <div id="audioNote" class="note">Browser UK TTS ready.</div>
         </div>
       </div>
 
@@ -785,8 +797,13 @@
       resetProfileBtn: document.getElementById("resetProfileBtn"),
       yearFilter: document.getElementById("yearFilter"),
       sessionSize: document.getElementById("sessionSize"),
+      audioEngineSelect: document.getElementById("audioEngineSelect"),
+      audioModelSelect: document.getElementById("audioModelSelect"),
       voiceSelect: document.getElementById("voiceSelect"),
+      apiKeyWrap: document.getElementById("apiKeyWrap"),
+      apiKeyBackupWrap: document.getElementById("apiKeyBackupWrap"),
       apiKeyInput: document.getElementById("apiKeyInput"),
+      apiKeyBackupInput: document.getElementById("apiKeyBackupInput"),
       rateRange: document.getElementById("rateRange"),
       rateValue: document.getElementById("rateValue"),
       autoSpeak: document.getElementById("autoSpeak"),
@@ -861,7 +878,21 @@
     const WORD_BY_SLUG = Object.fromEntries(WORDS.map(w => [w.slug, w]));
     const GEMINI_TTS_MODEL = "gemini-3.1-flash-tts-preview";
     const GEMINI_API_KEY_STORAGE_KEY = "ks2-spelling-gemini-api-key";
+    const GEMINI_BACKUP_API_KEY_STORAGE_KEY = "ks2-spelling-gemini-api-key-backup";
+    const GEMINI_QUOTA_STORAGE_KEY = "ks2-spelling-gemini-quota-state";
+    const OPENAI_API_KEY_STORAGE_KEY = "ks2-spelling-openai-api-key";
+    const ELEVENLABS_API_KEY_STORAGE_KEY = "ks2-spelling-elevenlabs-api-key";
+    const AUDIO_ENGINE_STORAGE_KEY = "ks2-spelling-audio-engine";
+    const BROWSER_VOICE_STORAGE_KEY = "ks2-spelling-browser-voice";
+    const GEMINI_VOICE_STORAGE_KEY = "ks2-spelling-gemini-voice";
+    const OPENAI_VOICE_STORAGE_KEY = "ks2-spelling-openai-voice";
+    const ELEVENLABS_VOICE_STORAGE_KEY = "ks2-spelling-elevenlabs-voice";
+    const ELEVENLABS_MODEL_STORAGE_KEY = "ks2-spelling-elevenlabs-model";
     const GEMINI_TTS_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_TTS_MODEL}:generateContent`;
+    const OPENAI_TTS_ENDPOINT = "https://api.openai.com/v1/audio/speech";
+    const OPENAI_TTS_MODEL = "gpt-4o-mini-tts";
+    const ELEVENLABS_TTS_ENDPOINT = "https://api.elevenlabs.io/v1/text-to-speech";
+    const ELEVENLABS_VOICES_ENDPOINT = "https://api.elevenlabs.io/v2/voices";
     const GEMINI_TTS_VOICES = [
       ["Schedar", "Even"],
       ["Iapetus", "Clear"],
@@ -869,6 +900,22 @@
       ["Achird", "Friendly"],
       ["Sulafat", "Warm"]
     ];
+    const OPENAI_TTS_VOICES = [
+      ["alloy", "Balanced"],
+      ["ash", "Warm"],
+      ["coral", "Bright"],
+      ["sage", "Measured"],
+      ["shimmer", "Light"],
+      ["verse", "Narrative"]
+    ];
+    const ELEVENLABS_TTS_MODELS = [
+      ["eleven_flash_v2_5", "Flash v2.5"],
+      ["eleven_turbo_v2_5", "Turbo v2.5"],
+      ["eleven_v3", "Eleven v3"]
+    ];
+    const ELEVENLABS_DEFAULT_VOICE_ID = "JBFqnCBsd6RMkjVDRZzb";
+    const GEMINI_LOCAL_RPM_LIMIT = 10;
+    const GEMINI_LOCAL_RPD_LIMIT = 100;
 
     let state = loadState();
     let session = null;
@@ -876,10 +923,16 @@
     let activeAudioUrl = "";
     let activeSpeakRequest = 0;
     let speakAbortController = null;
+    let geminiBackoffUntil = 0;
+    let geminiBackoffReason = "";
     const audioPlayer = new Audio();
     const AUDIO_CACHE_LIMIT = 18;
+    const GEMINI_FETCH_TIMEOUT_MS = 20000;
     const audioBlobCache = new Map();
-    const audioWarmupPendingCache = new Map();
+    const audioPendingCache = new Map();
+    let elevenLabsVoices = [];
+    let elevenLabsVoicesKey = "";
+    let elevenLabsVoicesPromise = null;
 
     function todayDay() {
       return Math.floor(Date.now() / DAY_MS);
@@ -933,21 +986,310 @@
       }
     }
 
-    function loadGeminiApiKey() {
+    function loadStoredValue(key) {
       try {
-        return localStorage.getItem(GEMINI_API_KEY_STORAGE_KEY) || "";
+        return localStorage.getItem(key) || "";
       } catch (err) {
         return "";
       }
     }
 
-    function saveGeminiApiKey(value) {
+    function saveStoredValue(key, value) {
       try {
-        if (value) localStorage.setItem(GEMINI_API_KEY_STORAGE_KEY, value);
-        else localStorage.removeItem(GEMINI_API_KEY_STORAGE_KEY);
+        if (value) localStorage.setItem(key, value);
+        else localStorage.removeItem(key);
+      } catch (err) {
+        // ignore storage failures for optional UI preferences
+      }
+    }
+
+    function browserSupportsSpeech() {
+      return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+    }
+
+    function currentAudioEngine() {
+      const selected = dom.audioEngineSelect.value;
+      return ["browser", "gemini", "openai", "elevenlabs"].includes(selected)
+        ? selected
+        : "browser";
+    }
+
+    function prefersGemini() {
+      return currentAudioEngine() === "gemini";
+    }
+
+    function prefersBrowser() {
+      return currentAudioEngine() === "browser";
+    }
+
+    function prefersOpenAi() {
+      return currentAudioEngine() === "openai";
+    }
+
+    function prefersElevenLabs() {
+      return currentAudioEngine() === "elevenlabs";
+    }
+
+    function providerLabel(provider = currentAudioEngine()) {
+      if (provider === "gemini") return "Gemini";
+      if (provider === "openai") return "OpenAI";
+      if (provider === "elevenlabs") return "ElevenLabs";
+      return "Browser";
+    }
+
+    function providerApiKeyStorageKey(provider = currentAudioEngine()) {
+      if (provider === "gemini") return GEMINI_API_KEY_STORAGE_KEY;
+      if (provider === "openai") return OPENAI_API_KEY_STORAGE_KEY;
+      if (provider === "elevenlabs") return ELEVENLABS_API_KEY_STORAGE_KEY;
+      return "";
+    }
+
+    function providerVoiceStorageKey(provider = currentAudioEngine()) {
+      if (provider === "browser") return BROWSER_VOICE_STORAGE_KEY;
+      if (provider === "gemini") return GEMINI_VOICE_STORAGE_KEY;
+      if (provider === "openai") return OPENAI_VOICE_STORAGE_KEY;
+      if (provider === "elevenlabs") return ELEVENLABS_VOICE_STORAGE_KEY;
+      return "";
+    }
+
+    function providerModelStorageKey(provider = currentAudioEngine()) {
+      if (provider === "elevenlabs") return ELEVENLABS_MODEL_STORAGE_KEY;
+      return "";
+    }
+
+    function providerNeedsApiKey(provider = currentAudioEngine()) {
+      return provider !== "browser";
+    }
+
+    function providerApiKeyPlaceholder(provider = currentAudioEngine()) {
+      if (provider === "gemini") return "Primary Gemini API key (saved only in this browser)";
+      if (provider === "openai") return "OpenAI API key (saved only in this browser)";
+      if (provider === "elevenlabs") return "ElevenLabs API key (saved only in this browser)";
+      return "";
+    }
+
+    function loadProviderApiKey(provider = currentAudioEngine()) {
+      const storageKey = providerApiKeyStorageKey(provider);
+      return storageKey ? loadStoredValue(storageKey) : "";
+    }
+
+    function saveProviderApiKey(provider, value) {
+      const storageKey = providerApiKeyStorageKey(provider);
+      if (!storageKey) return;
+      try {
+        if (value) localStorage.setItem(storageKey, value);
+        else localStorage.removeItem(storageKey);
       } catch (err) {
         dom.audioNote.textContent = "Key not saved.";
       }
+    }
+
+    function secondaryApiKeyPlaceholder(provider = currentAudioEngine()) {
+      if (provider === "gemini") return "Backup Gemini API key (used after 429 or local cap)";
+      return "";
+    }
+
+    function loadGeminiBackupApiKey() {
+      return loadStoredValue(GEMINI_BACKUP_API_KEY_STORAGE_KEY);
+    }
+
+    function saveGeminiBackupApiKey(value) {
+      try {
+        if (value) localStorage.setItem(GEMINI_BACKUP_API_KEY_STORAGE_KEY, value);
+        else localStorage.removeItem(GEMINI_BACKUP_API_KEY_STORAGE_KEY);
+      } catch (err) {
+        dom.audioNote.textContent = "Key not saved.";
+      }
+    }
+
+    function loadGeminiApiKeys() {
+      const primary = loadProviderApiKey("gemini").trim();
+      const backup = loadGeminiBackupApiKey().trim();
+      const keys = [];
+      if (primary) keys.push({ apiKey: primary, slot: "primary" });
+      if (backup && backup !== primary) keys.push({ apiKey: backup, slot: "backup" });
+      return keys;
+    }
+
+    function loadAudioEngine() {
+      const stored = loadStoredValue(AUDIO_ENGINE_STORAGE_KEY);
+      if (stored === "browser" || stored === "gemini" || stored === "openai" || stored === "elevenlabs") return stored;
+      return browserSupportsSpeech() ? "browser" : "gemini";
+    }
+
+    function providerModelOptions(provider = currentAudioEngine()) {
+      if (provider === "browser") return [["browser-device", "Device voice"]];
+      if (provider === "gemini") return [[GEMINI_TTS_MODEL, "gemini-3.1-flash-tts-preview"]];
+      if (provider === "openai") return [[OPENAI_TTS_MODEL, "gpt-4o-mini-tts"]];
+      return ELEVENLABS_TTS_MODELS;
+    }
+
+    function defaultVoiceForProvider(provider = currentAudioEngine()) {
+      if (provider === "gemini") return "Schedar";
+      if (provider === "openai") return "alloy";
+      if (provider === "elevenlabs") return ELEVENLABS_DEFAULT_VOICE_ID;
+      return "";
+    }
+
+    function currentAudioModel(provider = currentAudioEngine()) {
+      const options = providerModelOptions(provider);
+      const currentValue = dom.audioModelSelect.value;
+      const storageKey = providerModelStorageKey(provider);
+      const storedValue = storageKey ? loadStoredValue(storageKey) : "";
+      if (options.some(([value]) => value === currentValue)) return currentValue;
+      if (options.some(([value]) => value === storedValue)) return storedValue;
+      return options[0][0];
+    }
+
+    function scoreElevenLabsVoice(voice) {
+      const accent = String(voice.accent || "");
+      const language = String(voice.language || "");
+      let score = 0;
+      if (/british/i.test(accent)) score += 120;
+      if (/uk|british/i.test(voice.name)) score += 90;
+      if (voice.category === "premade") score += 40;
+      if (/^en/i.test(language)) score += 20;
+      return score;
+    }
+
+    function normaliseElevenLabsVoice(voice) {
+      const labels = voice && voice.labels ? voice.labels : {};
+      return {
+        voiceId: voice.voice_id,
+        name: voice.name || "Voice",
+        category: voice.category || "library",
+        accent: labels.accent || "",
+        language: labels.language || "",
+        description: labels.descriptive || labels.use_case || ""
+      };
+    }
+
+    function scoreBrowserVoice(voice) {
+      let score = 0;
+      if (/Google UK English Female/i.test(voice.name)) score += 120;
+      else if (/Google UK English Male/i.test(voice.name)) score += 110;
+      else if (/Google UK English/i.test(voice.name)) score += 100;
+      if (/^en-GB$/i.test(voice.lang)) score += 40;
+      if (/british|united kingdom/i.test(voice.name)) score += 35;
+      if (/Google/i.test(voice.name)) score += 10;
+      if (/^en/i.test(voice.lang)) score += 5;
+      return score;
+    }
+
+    function listBrowserVoices() {
+      if (!browserSupportsSpeech()) return [];
+
+      const allVoices = window.speechSynthesis.getVoices().slice();
+      const preferred = allVoices.filter(voice => scoreBrowserVoice(voice) > 0);
+      const pool = preferred.length ? preferred : allVoices.filter(voice => /^en/i.test(voice.lang));
+
+      return pool
+        .sort((a, b) => scoreBrowserVoice(b) - scoreBrowserVoice(a) || a.name.localeCompare(b.name))
+        .filter((voice, index, array) => array.findIndex(item => item.voiceURI === voice.voiceURI) === index);
+    }
+
+    function selectedBrowserVoice() {
+      const voices = listBrowserVoices();
+      if (!voices.length) return null;
+      const voiceUri = dom.voiceSelect.value || loadStoredValue(BROWSER_VOICE_STORAGE_KEY);
+      return voices.find(voice => voice.voiceURI === voiceUri) || voices[0];
+    }
+
+    function browserVoiceReadyText() {
+      const voice = selectedBrowserVoice();
+      if (!voice) return "Browser speech unavailable.";
+      if (/Google UK English/i.test(voice.name)) return "Google UK browser TTS ready.";
+      if (/^en-GB$/i.test(voice.lang)) return "Browser UK TTS ready.";
+      return "Browser English TTS ready.";
+    }
+
+    async function fetchElevenLabsVoices(apiKey) {
+      const requestController = new AbortController();
+      const timeoutId = window.setTimeout(() => requestController.abort(), GEMINI_FETCH_TIMEOUT_MS);
+      try {
+        const response = await fetch(ELEVENLABS_VOICES_ENDPOINT, {
+          headers: {
+            "xi-api-key": apiKey
+          },
+          signal: requestController.signal
+        });
+        const rawText = await response.text();
+        let payload = null;
+        try {
+          payload = rawText ? JSON.parse(rawText) : null;
+        } catch (err) {
+          payload = null;
+        }
+
+        if (!response.ok) {
+          const message = payload && payload.detail && payload.detail.message
+            ? payload.detail.message
+            : `ElevenLabs voices failed with status ${response.status}.`;
+          throw createGeminiError(message, response.status, payload);
+        }
+
+        return Array.isArray(payload && payload.voices)
+          ? payload.voices.map(normaliseElevenLabsVoice)
+          : [];
+      } catch (err) {
+        if (requestController.signal.aborted) {
+          throw createGeminiError("ElevenLabs voices timed out.", 408, null);
+        }
+        throw err;
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
+    }
+
+    async function ensureElevenLabsVoices(apiKey) {
+      if (!apiKey) return [];
+      if (elevenLabsVoicesKey === apiKey && elevenLabsVoices.length) {
+        return elevenLabsVoices;
+      }
+      if (elevenLabsVoicesPromise) {
+        return elevenLabsVoicesPromise;
+      }
+
+      elevenLabsVoicesPromise = fetchElevenLabsVoices(apiKey)
+        .then(voices => {
+          const sorted = voices
+            .slice()
+            .sort((a, b) => scoreElevenLabsVoice(b) - scoreElevenLabsVoice(a) || a.name.localeCompare(b.name));
+          elevenLabsVoices = sorted;
+          elevenLabsVoicesKey = apiKey;
+          return sorted;
+        })
+        .finally(() => {
+          elevenLabsVoicesPromise = null;
+        });
+
+      return elevenLabsVoicesPromise;
+    }
+
+    function populateAudioModels() {
+      const provider = currentAudioEngine();
+      const currentModelValue = dom.audioModelSelect.value;
+      const options = providerModelOptions(provider);
+      const storageKey = providerModelStorageKey(provider);
+      const storedValue = storageKey ? loadStoredValue(storageKey) : "";
+      dom.audioModelSelect.innerHTML = options
+        .map(([value, label]) => `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`)
+        .join("");
+      dom.audioModelSelect.value = options.some(([value]) => value === currentModelValue)
+        ? currentModelValue
+        : (options.some(([value]) => value === storedValue) ? storedValue : options[0][0]);
+      dom.audioModelSelect.disabled = options.length <= 1;
+    }
+
+    async function refreshAudioProviderUi() {
+      const provider = currentAudioEngine();
+      dom.apiKeyInput.value = loadProviderApiKey(provider);
+      dom.apiKeyInput.placeholder = providerApiKeyPlaceholder(provider);
+      dom.apiKeyBackupWrap.classList.toggle("hidden", provider !== "gemini");
+      dom.apiKeyBackupInput.value = provider === "gemini" ? loadGeminiBackupApiKey() : "";
+      dom.apiKeyBackupInput.placeholder = secondaryApiKeyPlaceholder(provider);
+      populateAudioModels();
+      await populateVoices();
     }
 
     function currentProfile() {
@@ -994,11 +1336,252 @@
       }
     }
 
+    function parseRetryDelayMs(value) {
+      const match = String(value || "").match(/^([0-9]+(?:\.[0-9]+)?)s$/i);
+      return match ? Math.round(Number(match[1]) * 1000) : 0;
+    }
+
+    function formatDurationShort(ms) {
+      const totalMinutes = Math.max(1, Math.ceil(ms / 60000));
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      if (hours && minutes) return `${hours}h ${minutes}m`;
+      if (hours) return `${hours}h`;
+      return `${minutes}m`;
+    }
+
+    function hashString(value) {
+      let hash = 2166136261;
+      for (let i = 0; i < value.length; i += 1) {
+        hash ^= value.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return (hash >>> 0).toString(36);
+    }
+
+    function geminiQuotaEntryId(apiKey, slot) {
+      return `${slot}-${hashString(apiKey)}`;
+    }
+
+    function geminiMinuteWindow(now = Date.now()) {
+      return Math.floor(now / 60000);
+    }
+
+    function geminiPacificDayKey(now = Date.now()) {
+      try {
+        return new Intl.DateTimeFormat("en-CA", {
+          timeZone: "America/Los_Angeles",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        }).format(new Date(now));
+      } catch (err) {
+        return new Date(now).toISOString().slice(0, 10);
+      }
+    }
+
+    function geminiRetryUntilNextDay(now = Date.now()) {
+      const currentDay = geminiPacificDayKey(now);
+      for (let step = 60000; step <= 36 * 60 * 60 * 1000; step += 60000) {
+        if (geminiPacificDayKey(now + step) !== currentDay) {
+          return step;
+        }
+      }
+      return 12 * 60 * 60 * 1000;
+    }
+
+    function loadGeminiQuotaState() {
+      const raw = loadStoredValue(GEMINI_QUOTA_STORAGE_KEY);
+      if (!raw) return {};
+      try {
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch (err) {
+        return {};
+      }
+    }
+
+    function saveGeminiQuotaState(state) {
+      saveStoredValue(GEMINI_QUOTA_STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function ensureGeminiQuotaEntry(state, apiKey, slot, now = Date.now()) {
+      const entryId = geminiQuotaEntryId(apiKey, slot);
+      const minuteWindow = geminiMinuteWindow(now);
+      const dayKey = geminiPacificDayKey(now);
+      const entry = state[entryId] || {
+        minuteWindow,
+        minuteCount: 0,
+        dayKey,
+        dayCount: 0,
+        remoteBackoffUntil: 0
+      };
+
+      if (entry.minuteWindow !== minuteWindow) {
+        entry.minuteWindow = minuteWindow;
+        entry.minuteCount = 0;
+      }
+      if (entry.dayKey !== dayKey) {
+        entry.dayKey = dayKey;
+        entry.dayCount = 0;
+      }
+      if (Number(entry.remoteBackoffUntil) < now) {
+        entry.remoteBackoffUntil = 0;
+      }
+
+      state[entryId] = entry;
+      return entry;
+    }
+
+    function geminiKeyLimitStatus(apiKey, slot, now = Date.now()) {
+      const state = loadGeminiQuotaState();
+      const entry = ensureGeminiQuotaEntry(state, apiKey, slot, now);
+      saveGeminiQuotaState(state);
+
+      if (entry.remoteBackoffUntil > now) {
+        return {
+          ok: false,
+          retryDelayMs: entry.remoteBackoffUntil - now,
+          reason: `${providerLabel("gemini")} quota hit.`
+        };
+      }
+      if (entry.minuteCount >= GEMINI_LOCAL_RPM_LIMIT) {
+        return {
+          ok: false,
+          retryDelayMs: ((entry.minuteWindow + 1) * 60000) - now,
+          reason: `Gemini local cap ${GEMINI_LOCAL_RPM_LIMIT} RPM.`
+        };
+      }
+      if (entry.dayCount >= GEMINI_LOCAL_RPD_LIMIT) {
+        return {
+          ok: false,
+          retryDelayMs: geminiRetryUntilNextDay(now),
+          reason: `Gemini local cap ${GEMINI_LOCAL_RPD_LIMIT} RPD.`
+        };
+      }
+
+      return { ok: true, retryDelayMs: 0, reason: "" };
+    }
+
+    function reserveGeminiKeyUsage(apiKey, slot, now = Date.now()) {
+      const state = loadGeminiQuotaState();
+      const entry = ensureGeminiQuotaEntry(state, apiKey, slot, now);
+      entry.minuteCount += 1;
+      entry.dayCount += 1;
+      saveGeminiQuotaState(state);
+    }
+
+    function setGeminiKeyBackoff(apiKey, slot, retryDelayMs, now = Date.now()) {
+      const state = loadGeminiQuotaState();
+      const entry = ensureGeminiQuotaEntry(state, apiKey, slot, now);
+      const delayMs = Math.max(retryDelayMs || 0, 60000);
+      entry.remoteBackoffUntil = Math.max(Number(entry.remoteBackoffUntil) || 0, now + delayMs);
+      saveGeminiQuotaState(state);
+    }
+
+    function clearGeminiKeyBackoff(apiKey, slot, now = Date.now()) {
+      const state = loadGeminiQuotaState();
+      const entry = ensureGeminiQuotaEntry(state, apiKey, slot, now);
+      entry.remoteBackoffUntil = 0;
+      saveGeminiQuotaState(state);
+    }
+
+    function createGeminiError(message, statusCode, payload) {
+      const error = new Error(message);
+      error.statusCode = Number(statusCode) || 0;
+      error.errorStatus = payload && payload.error && payload.error.status
+        ? String(payload.error.status)
+        : "";
+      const retryInfo = payload && payload.error && Array.isArray(payload.error.details)
+        ? payload.error.details.find(detail => detail && detail["@type"] === "type.googleapis.com/google.rpc.RetryInfo")
+        : null;
+      error.retryDelayMs = retryInfo && retryInfo.retryDelay
+        ? parseRetryDelayMs(retryInfo.retryDelay)
+        : 0;
+      return error;
+    }
+
+    function makeAbortError() {
+      try {
+        return new DOMException("Aborted", "AbortError");
+      } catch (err) {
+        const abortError = new Error("Aborted");
+        abortError.name = "AbortError";
+        return abortError;
+      }
+    }
+
+    function isAbortError(error) {
+      return Boolean(error && error.name === "AbortError");
+    }
+
+    function isGeminiQuotaError(error) {
+      const message = String(error && error.message || "");
+      const statusCode = Number(error && error.statusCode) || 0;
+      const errorStatus = String(error && error.errorStatus || "");
+      return statusCode === 429
+        || /RESOURCE_EXHAUSTED/i.test(errorStatus)
+        || /quota exceeded|current quota|retry in/i.test(message);
+    }
+
+    function geminiBackoffActive() {
+      return geminiBackoffUntil > Date.now();
+    }
+
+    function clearGeminiBackoff() {
+      geminiBackoffUntil = 0;
+      geminiBackoffReason = "";
+    }
+
+    function setGeminiBackoff(error) {
+      if (!isGeminiQuotaError(error)) return;
+      const retryDelayMs = Math.max(Number(error && error.retryDelayMs) || 0, 5 * 60 * 1000);
+      geminiBackoffUntil = Date.now() + retryDelayMs;
+      geminiBackoffReason = `Gemini quota hit. Retry in ~${formatDurationShort(retryDelayMs)}.`;
+    }
+
+    function withAbortSignal(promise, signal) {
+      if (!signal) return promise;
+      if (signal.aborted) return Promise.reject(makeAbortError());
+
+      return new Promise((resolve, reject) => {
+        const onAbort = () => reject(makeAbortError());
+        signal.addEventListener("abort", onAbort, { once: true });
+        promise.then(
+          value => {
+            signal.removeEventListener("abort", onAbort);
+            resolve(value);
+          },
+          error => {
+            signal.removeEventListener("abort", onAbort);
+            reject(error);
+          }
+        );
+      });
+    }
+
+    function providerErrorText(provider, error) {
+      if (provider === "gemini" && geminiBackoffActive()) {
+        return geminiBackoffReason || "Gemini quota hit.";
+      }
+      const message = String(error && error.message || "").replace(/\s+/g, " ").trim();
+      if (provider === "gemini" && isGeminiQuotaError(error)) return geminiBackoffReason || "Gemini quota hit.";
+      if (/timed out/i.test(message)) return `${providerLabel(provider)} timed out.`;
+      if (/paid_plan_required/i.test(message)) return `${providerLabel(provider)} paid voice.`;
+      if (/quota exceeded|current quota|resource_exhausted/i.test(message)) return `${providerLabel(provider)} quota hit.`;
+      if (!message) return `${providerLabel(provider)} error.`;
+      const compact = message.length > 72 ? `${message.slice(0, 69)}...` : message;
+      return `${providerLabel(provider)}: ${compact}`;
+    }
+
     function stopAudioPlayback() {
       activeSpeakRequest += 1;
       if (speakAbortController) {
         speakAbortController.abort();
         speakAbortController = null;
+      }
+      if (browserSupportsSpeech()) {
+        window.speechSynthesis.cancel();
       }
       audioPlayer.pause();
       audioPlayer.removeAttribute("src");
@@ -1062,11 +1645,15 @@
       return new Blob([buffer], { type: "audio/wav" });
     }
 
-    function buildSpeechPrompt(word, sentence, slow) {
+    function buildDictationTranscript(word, sentence) {
       const cleanSentence = String(sentence || "").trim();
-      const transcript = cleanSentence
+      return cleanSentence
         ? `The word is ${word.word}. ${cleanSentence} The word is ${word.word}.`
         : `The word is ${word.word}. The word is ${word.word}.`;
+    }
+
+    function buildSpeechPrompt(word, sentence, slow) {
+      const transcript = buildDictationTranscript(word, sentence);
       const paceDirection = slow
         ? "Speak slowly but crisply, with light spacing between phrases."
         : "Speak clearly at a brisk classroom dictation pace.";
@@ -1084,12 +1671,11 @@
       ].join("\n");
     }
 
-    function makeSpeechCacheKey(promptText, voiceName) {
-      return `${voiceName}||${promptText}`;
+    function makeSpeechCacheKey(provider, modelName, voiceName, sourceText) {
+      return `${provider}||${modelName}||${voiceName}||${sourceText}`;
     }
 
-    async function fetchGeminiSpeech(promptText, voiceName, signal) {
-      const apiKey = dom.apiKeyInput.value.trim();
+    async function fetchGeminiSpeechWithKey(promptText, voiceName, apiKey) {
       const body = {
         contents: [{ parts: [{ text: promptText }] }],
         generationConfig: {
@@ -1104,92 +1690,305 @@
         }
       };
 
-      const requestPromise = (async () => {
-        let lastError = null;
-        for (let attempt = 0; attempt < 2; attempt += 1) {
-          const response = await fetch(`${GEMINI_TTS_ENDPOINT}?key=${encodeURIComponent(apiKey)}`, {
+      let lastError = null;
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        const requestController = new AbortController();
+        const timeoutId = window.setTimeout(() => requestController.abort(), GEMINI_FETCH_TIMEOUT_MS);
+        let response = null;
+        let payload = null;
+
+        try {
+          response = await fetch(`${GEMINI_TTS_ENDPOINT}?key=${encodeURIComponent(apiKey)}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
             body: JSON.stringify(body),
-            signal
+            signal: requestController.signal
           });
 
-          let payload = null;
           try {
             payload = await response.json();
           } catch (err) {
             payload = null;
           }
-
-          const parts = payload && payload.candidates && payload.candidates[0] && payload.candidates[0].content && Array.isArray(payload.candidates[0].content.parts)
-            ? payload.candidates[0].content.parts
-            : [];
-          const inlineData = parts.length
-            ? parts.find(part => part.inlineData && part.inlineData.data)
-            : null;
-
-          if (response.ok && inlineData && inlineData.inlineData) {
-            const audioBlob = pcmToWavBlob(inlineData.inlineData.data, inlineData.inlineData.mimeType);
-            return audioBlob;
-          }
-
-          const errorMessage = payload && payload.error && payload.error.message
-            ? payload.error.message
-            : (payload && payload.candidates && payload.candidates[0] && payload.candidates[0].content
-              ? "Gemini TTS returned no audio."
-              : `Gemini TTS failed with status ${response.status}.`);
-          lastError = new Error(errorMessage);
-
-          if (signal.aborted || attempt === 1 || response.status < 500) {
+        } catch (err) {
+          const timedOut = requestController.signal.aborted;
+          lastError = createGeminiError(
+            timedOut ? "Gemini TTS timed out." : (err && err.message ? err.message : "Gemini TTS failed."),
+            timedOut ? 408 : 0,
+            payload
+          );
+          if (attempt === 1) {
             throw lastError;
           }
+          continue;
+        } finally {
+          window.clearTimeout(timeoutId);
         }
 
-        throw lastError || new Error("Gemini TTS failed.");
-      })();
+        const parts = payload && payload.candidates && payload.candidates[0] && payload.candidates[0].content && Array.isArray(payload.candidates[0].content.parts)
+          ? payload.candidates[0].content.parts
+          : [];
+        const inlineData = parts.length
+          ? parts.find(part => part.inlineData && part.inlineData.data)
+          : null;
+
+        if (response.ok && inlineData && inlineData.inlineData) {
+          clearGeminiBackoff();
+          return pcmToWavBlob(inlineData.inlineData.data, inlineData.inlineData.mimeType);
+        }
+
+        const errorMessage = payload && payload.error && payload.error.message
+          ? payload.error.message
+          : (payload && payload.candidates && payload.candidates[0] && payload.candidates[0].content
+            ? "Gemini TTS returned no audio."
+            : `Gemini TTS failed with status ${response.status}.`);
+        lastError = createGeminiError(errorMessage, response.status, payload);
+
+        if (attempt === 1 || response.status < 500) {
+          throw lastError;
+        }
+      }
+
+      throw lastError || createGeminiError("Gemini TTS failed.", 0, null);
+    }
+
+    async function fetchGeminiSpeech(promptText, voiceName) {
+      const geminiKeys = loadGeminiApiKeys();
+      if (!geminiKeys.length) {
+        throw createGeminiError("Add Gemini key.", 401, null);
+      }
+
+      let lastError = null;
+      let earliestRetryMs = 0;
+      let quotaBlocked = false;
+
+      for (const entry of geminiKeys) {
+        const localStatus = geminiKeyLimitStatus(entry.apiKey, entry.slot);
+        if (!localStatus.ok) {
+          quotaBlocked = true;
+          if (!earliestRetryMs || localStatus.retryDelayMs < earliestRetryMs) {
+            earliestRetryMs = localStatus.retryDelayMs;
+          }
+          continue;
+        }
+
+        reserveGeminiKeyUsage(entry.apiKey, entry.slot);
+
+        try {
+          const audioBlob = await fetchGeminiSpeechWithKey(promptText, voiceName, entry.apiKey);
+          clearGeminiKeyBackoff(entry.apiKey, entry.slot);
+          clearGeminiBackoff();
+          return audioBlob;
+        } catch (error) {
+          lastError = error;
+          if (isGeminiQuotaError(error)) {
+            quotaBlocked = true;
+            const retryDelayMs = Number(error && error.retryDelayMs) || geminiRetryUntilNextDay();
+            setGeminiKeyBackoff(entry.apiKey, entry.slot, retryDelayMs);
+            if (!earliestRetryMs || retryDelayMs < earliestRetryMs) {
+              earliestRetryMs = retryDelayMs;
+            }
+            continue;
+          }
+          throw error;
+        }
+      }
+
+      if (quotaBlocked) {
+        const retryDelayMs = Math.max(earliestRetryMs || 0, 60000);
+        geminiBackoffUntil = Date.now() + retryDelayMs;
+        geminiBackoffReason = `Gemini cap hit. Retry in ~${formatDurationShort(retryDelayMs)}.`;
+        throw createGeminiError(geminiBackoffReason, 429, {
+          error: { status: "RESOURCE_EXHAUSTED" }
+        });
+      }
+
+      throw lastError || createGeminiError("Gemini TTS failed.", 0, null);
     }
 
     async function requestGeminiSpeech(promptText, voiceName, signal) {
-      const cacheKey = makeSpeechCacheKey(promptText, voiceName);
+      const cacheKey = makeSpeechCacheKey("gemini", GEMINI_TTS_MODEL, voiceName, promptText);
+
+      return requestCachedSpeechAudio(cacheKey, () => {
+        return fetchGeminiSpeech(promptText, voiceName)
+          .then(audioBlob => {
+            return audioBlob;
+          })
+          .catch(error => {
+            if (isGeminiQuotaError(error) && !geminiBackoffActive()) {
+              setGeminiBackoff(error);
+            }
+            throw error;
+          });
+      }, signal);
+    }
+
+    async function requestCachedSpeechAudio(cacheKey, fetcher, signal) {
       if (audioBlobCache.has(cacheKey)) {
         return audioBlobCache.get(cacheKey);
       }
 
-      const audioBlob = await fetchGeminiSpeech(promptText, voiceName, signal);
-      cacheAudioBlob(cacheKey, audioBlob);
-      return audioBlob;
+      let pendingPromise = audioPendingCache.get(cacheKey);
+      if (!pendingPromise) {
+        pendingPromise = Promise.resolve()
+          .then(fetcher)
+          .then(audioBlob => {
+            cacheAudioBlob(cacheKey, audioBlob);
+            return audioBlob;
+          })
+          .finally(() => {
+            audioPendingCache.delete(cacheKey);
+          });
+        audioPendingCache.set(cacheKey, pendingPromise);
+      }
+
+      return withAbortSignal(pendingPromise, signal);
+    }
+
+    async function buildHttpAudioError(provider, response) {
+      const rawText = await response.text();
+      let payload = null;
+      try {
+        payload = rawText ? JSON.parse(rawText) : null;
+      } catch (err) {
+        payload = null;
+      }
+
+      const message = payload && payload.error && payload.error.message
+        ? payload.error.message
+        : payload && payload.detail && payload.detail.message
+          ? payload.detail.message
+          : (rawText || `${providerLabel(provider)} failed with status ${response.status}.`);
+      return createGeminiError(String(message).replace(/\s+/g, " ").trim(), response.status, payload);
+    }
+
+    async function fetchBinaryAudio(provider, url, headers, body) {
+      const requestController = new AbortController();
+      const timeoutId = window.setTimeout(() => requestController.abort(), GEMINI_FETCH_TIMEOUT_MS);
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(body),
+          signal: requestController.signal
+        });
+        if (!response.ok) {
+          throw await buildHttpAudioError(provider, response);
+        }
+
+        const audioBlob = await response.blob();
+        if (!audioBlob || !audioBlob.size) {
+          throw createGeminiError(`${providerLabel(provider)} returned no audio.`, response.status, null);
+        }
+        return audioBlob;
+      } catch (err) {
+        if (requestController.signal.aborted) {
+          throw createGeminiError(`${providerLabel(provider)} timed out.`, 408, null);
+        }
+        throw err;
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
+    }
+
+    async function fetchOpenAiSpeech(transcript, voiceName, modelName) {
+      const apiKey = loadProviderApiKey("openai");
+      return fetchBinaryAudio("openai", OPENAI_TTS_ENDPOINT, {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`
+      }, {
+        model: modelName,
+        voice: voiceName,
+        input: transcript,
+        format: "mp3"
+      });
+    }
+
+    async function requestOpenAiSpeech(transcript, voiceName, modelName, signal) {
+      const cacheKey = makeSpeechCacheKey("openai", modelName, voiceName, transcript);
+      return requestCachedSpeechAudio(cacheKey, () => fetchOpenAiSpeech(transcript, voiceName, modelName), signal);
+    }
+
+    async function fetchElevenLabsSpeech(transcript, voiceId, modelName) {
+      const apiKey = loadProviderApiKey("elevenlabs");
+      return fetchBinaryAudio("elevenlabs", `${ELEVENLABS_TTS_ENDPOINT}/${encodeURIComponent(voiceId)}?output_format=mp3_44100_128`, {
+        "Content-Type": "application/json",
+        "xi-api-key": apiKey
+      }, {
+        text: transcript,
+        model_id: modelName
+      });
+    }
+
+    async function requestElevenLabsSpeech(transcript, voiceId, modelName, signal) {
+      const cacheKey = makeSpeechCacheKey("elevenlabs", modelName, voiceId, transcript);
+      return requestCachedSpeechAudio(cacheKey, () => fetchElevenLabsSpeech(transcript, voiceId, modelName), signal);
+    }
+
+    async function speakBrowserText(text, rate, voiceUri) {
+      if (!browserSupportsSpeech()) {
+        throw new Error("Browser speech unavailable.");
+      }
+
+      window.speechSynthesis.cancel();
+
+      return new Promise((resolve, reject) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        const voices = listBrowserVoices();
+        const voice = voices.find(item => item.voiceURI === voiceUri) || voices[0] || null;
+
+        utterance.lang = voice && voice.lang ? voice.lang : "en-GB";
+        utterance.rate = rate;
+        utterance.pitch = 1;
+        if (voice) utterance.voice = voice;
+
+        utterance.onend = () => resolve();
+        utterance.onerror = () => reject(new Error("Browser speech unavailable."));
+        window.speechSynthesis.speak(utterance);
+      });
     }
 
     function warmupSpeech(word, sentence, slow = false) {
-      if (!speechReady || !word) return;
+      if (!speechReady || !word || !prefersGemini() || geminiBackoffActive()) return;
       const promptText = buildSpeechPrompt(word, sentence, slow);
       const selectedVoice = dom.voiceSelect.value || "Schedar";
-      const cacheKey = makeSpeechCacheKey(promptText, selectedVoice);
-      if (audioBlobCache.has(cacheKey) || audioWarmupPendingCache.has(cacheKey)) return;
-
-      const warmupPromise = fetchGeminiSpeech(promptText, selectedVoice, new AbortController().signal)
-        .then(audioBlob => {
-          cacheAudioBlob(cacheKey, audioBlob);
-          return audioBlob;
-        })
-        .catch(() => null)
-        .finally(() => {
-          audioWarmupPendingCache.delete(cacheKey);
-        });
-
-      audioWarmupPendingCache.set(cacheKey, warmupPromise);
+      requestGeminiSpeech(promptText, selectedVoice).catch(() => null);
     }
 
     function syncAudioControls() {
-      const hasKey = Boolean(dom.apiKeyInput.value.trim());
-      speechReady = hasKey;
-      dom.playBtn.disabled = !hasKey;
-      dom.playSlowBtn.disabled = !hasKey;
-      dom.audioNote.textContent = hasKey
-        ? "TTS ready."
-        : "Add API key.";
+      const provider = currentAudioEngine();
+      const hasKey = provider === "gemini"
+        ? Boolean(dom.apiKeyInput.value.trim() || dom.apiKeyBackupInput.value.trim())
+        : (providerNeedsApiKey(provider) ? Boolean(dom.apiKeyInput.value.trim()) : true);
+      const hasVoice = provider === "browser"
+        ? listBrowserVoices().length > 0
+        : Boolean(dom.voiceSelect.value);
+      speechReady = hasKey && hasVoice;
+      dom.apiKeyWrap.classList.toggle("hidden", !providerNeedsApiKey(provider));
+      dom.apiKeyBackupWrap.classList.toggle("hidden", provider !== "gemini");
+      dom.playBtn.disabled = !speechReady;
+      dom.playSlowBtn.disabled = !speechReady;
+      if (provider === "browser") {
+        dom.audioNote.textContent = browserVoiceReadyText();
+        return;
+      }
+      if (!hasKey) {
+        dom.audioNote.textContent = `Add ${providerLabel(provider)} key.`;
+        return;
+      }
+      if (!hasVoice) {
+        dom.audioNote.textContent = provider === "elevenlabs" && elevenLabsVoicesPromise
+          ? "Loading voices..."
+          : `Select ${providerLabel(provider)} voice.`;
+        return;
+      }
+      if (provider === "gemini" && geminiBackoffActive()) {
+        dom.audioNote.textContent = geminiBackoffReason;
+        return;
+      }
+      dom.audioNote.textContent = `${providerLabel(provider)} ready.`;
     }
 
     function normalize(value) {
@@ -2183,6 +2982,25 @@
       dom.statusLine.textContent = "Session ended. Choose a new round when ready.";
     }
 
+    async function requestSelectedProviderSpeech(word, sentence, slow, signal) {
+      const provider = currentAudioEngine();
+      const transcript = buildDictationTranscript(word, sentence);
+      if (provider === "gemini") {
+        const promptText = buildSpeechPrompt(word, sentence, slow);
+        const voiceName = dom.voiceSelect.value || defaultVoiceForProvider("gemini");
+        return requestGeminiSpeech(promptText, voiceName, signal);
+      }
+      if (provider === "openai") {
+        const voiceName = dom.voiceSelect.value || defaultVoiceForProvider("openai");
+        return requestOpenAiSpeech(transcript, voiceName, currentAudioModel("openai"), signal);
+      }
+      if (provider === "elevenlabs") {
+        const voiceId = dom.voiceSelect.value || defaultVoiceForProvider("elevenlabs");
+        return requestElevenLabsSpeech(transcript, voiceId, currentAudioModel("elevenlabs"), signal);
+      }
+      throw new Error("Remote audio unavailable.");
+    }
+
     async function speakWord(word, slow = false, sentence = null) {
       if (!speechReady) {
         syncAudioControls();
@@ -2192,30 +3010,49 @@
       stopAudioPlayback();
       const requestId = activeSpeakRequest;
       const promptSentence = sentence || (currentPrompt() ? currentPrompt().sentence : word.sentence);
-      const promptText = buildSpeechPrompt(word, promptSentence, slow);
-      const selectedVoice = dom.voiceSelect.value || "Schedar";
+      const transcript = buildDictationTranscript(word, promptSentence);
       const baseRate = Number(dom.rateRange.value || 1.05);
+      const playbackRate = slow ? Math.max(0.92, baseRate - 0.12) : baseRate;
 
       dom.playBtn.disabled = true;
       dom.playSlowBtn.disabled = true;
-      dom.audioNote.textContent = "Loading audio...";
+
+      if (prefersBrowser()) {
+        dom.audioNote.textContent = "Speaking...";
+        try {
+          await speakBrowserText(transcript, playbackRate, dom.voiceSelect.value);
+          if (requestId !== activeSpeakRequest) return;
+          dom.audioNote.textContent = browserVoiceReadyText();
+        } catch (err) {
+          if (requestId !== activeSpeakRequest) return;
+          dom.audioNote.textContent = "Browser speech unavailable.";
+        } finally {
+          if (requestId === activeSpeakRequest) {
+            syncAudioControls();
+          }
+        }
+        return;
+      }
+
+      const provider = currentAudioEngine();
+      dom.audioNote.textContent = `Loading ${providerLabel(provider)}...`;
       speakAbortController = new AbortController();
 
       try {
-        const audioBlob = await requestGeminiSpeech(promptText, selectedVoice, speakAbortController.signal);
+        const audioBlob = await requestSelectedProviderSpeech(word, promptSentence, slow, speakAbortController.signal);
         if (requestId !== activeSpeakRequest) return;
 
         revokeActiveAudioUrl();
         activeAudioUrl = URL.createObjectURL(audioBlob);
         audioPlayer.src = activeAudioUrl;
-        audioPlayer.playbackRate = slow ? Math.max(0.92, baseRate - 0.12) : baseRate;
+        audioPlayer.playbackRate = playbackRate;
         await audioPlayer.play();
-        dom.audioNote.textContent = "TTS ready.";
+        dom.audioNote.textContent = `${providerLabel(provider)} ready.`;
       } catch (err) {
-        if (requestId !== activeSpeakRequest || (speakAbortController && speakAbortController.signal.aborted)) {
+        if (requestId !== activeSpeakRequest || isAbortError(err) || (speakAbortController && speakAbortController.signal.aborted)) {
           return;
         }
-        dom.audioNote.textContent = "Audio error.";
+        dom.audioNote.textContent = providerErrorText(provider, err);
       } finally {
         if (requestId === activeSpeakRequest) {
           speakAbortController = null;
@@ -2224,14 +3061,75 @@
       }
     }
 
-    function populateVoices() {
+    async function populateVoices() {
+      const provider = currentAudioEngine();
       const currentVoice = dom.voiceSelect.value;
-      dom.voiceSelect.innerHTML = GEMINI_TTS_VOICES.map(([name, descriptor]) => {
-        const label = `${name} (${descriptor})`;
-        return `<option value="${escapeHtml(name)}">${escapeHtml(label)}</option>`;
-      }).join("");
-      dom.voiceSelect.value = GEMINI_TTS_VOICES.some(([name]) => name === currentVoice) ? currentVoice : "Schedar";
-      dom.apiKeyInput.value = loadGeminiApiKey();
+      if (provider === "gemini") {
+        const storedVoice = loadStoredValue(GEMINI_VOICE_STORAGE_KEY);
+        dom.voiceSelect.innerHTML = GEMINI_TTS_VOICES.map(([name, descriptor]) => {
+          const label = `${name} (${descriptor})`;
+          return `<option value="${escapeHtml(name)}">${escapeHtml(label)}</option>`;
+        }).join("");
+        dom.voiceSelect.value = GEMINI_TTS_VOICES.some(([name]) => name === currentVoice)
+          ? currentVoice
+          : (GEMINI_TTS_VOICES.some(([name]) => name === storedVoice) ? storedVoice : "Schedar");
+      } else if (provider === "openai") {
+        const storedVoice = loadStoredValue(OPENAI_VOICE_STORAGE_KEY);
+        dom.voiceSelect.innerHTML = OPENAI_TTS_VOICES.map(([name, descriptor]) => {
+          const label = `${name} (${descriptor})`;
+          return `<option value="${escapeHtml(name)}">${escapeHtml(label)}</option>`;
+        }).join("");
+        dom.voiceSelect.value = OPENAI_TTS_VOICES.some(([name]) => name === currentVoice)
+          ? currentVoice
+          : (OPENAI_TTS_VOICES.some(([name]) => name === storedVoice) ? storedVoice : "alloy");
+      } else if (provider === "elevenlabs") {
+        const providerAtStart = provider;
+        const apiKey = loadProviderApiKey("elevenlabs");
+        if (!apiKey) {
+          dom.voiceSelect.innerHTML = `<option value="${escapeHtml(ELEVENLABS_DEFAULT_VOICE_ID)}">George (British premade)</option>`;
+          dom.voiceSelect.value = ELEVENLABS_DEFAULT_VOICE_ID;
+          syncAudioControls();
+          return;
+        }
+
+        dom.voiceSelect.innerHTML = `<option value="">Loading voices...</option>`;
+        syncAudioControls();
+
+        try {
+          const voices = await ensureElevenLabsVoices(apiKey);
+          if (currentAudioEngine() !== providerAtStart) return;
+          const storedVoice = loadStoredValue(ELEVENLABS_VOICE_STORAGE_KEY);
+          const voiceOptions = voices.length
+            ? voices
+            : [normaliseElevenLabsVoice({ voice_id: ELEVENLABS_DEFAULT_VOICE_ID, name: "George", category: "premade", labels: { accent: "british", language: "en" } })];
+          dom.voiceSelect.innerHTML = voiceOptions.map(voice => {
+            const parts = [];
+            if (voice.accent) parts.push(voice.accent);
+            parts.push(voice.category);
+            const label = `${voice.name} (${parts.filter(Boolean).join(" · ")})`;
+            return `<option value="${escapeHtml(voice.voiceId)}">${escapeHtml(label)}</option>`;
+          }).join("");
+          dom.voiceSelect.value = voiceOptions.some(voice => voice.voiceId === currentVoice)
+            ? currentVoice
+            : (voiceOptions.some(voice => voice.voiceId === storedVoice) ? storedVoice : (voiceOptions[0] ? voiceOptions[0].voiceId : ELEVENLABS_DEFAULT_VOICE_ID));
+        } catch (err) {
+          if (currentAudioEngine() !== providerAtStart) return;
+          dom.voiceSelect.innerHTML = `<option value="${escapeHtml(ELEVENLABS_DEFAULT_VOICE_ID)}">George (British premade)</option>`;
+          dom.voiceSelect.value = ELEVENLABS_DEFAULT_VOICE_ID;
+          dom.audioNote.textContent = providerErrorText("elevenlabs", err);
+          syncAudioControls();
+          return;
+        }
+      } else {
+        const browserVoices = listBrowserVoices();
+        const storedVoice = loadStoredValue(BROWSER_VOICE_STORAGE_KEY);
+        dom.voiceSelect.innerHTML = browserVoices.length
+          ? browserVoices.map(voice => `<option value="${escapeHtml(voice.voiceURI)}">${escapeHtml(`${voice.name} (${voice.lang})`)}</option>`).join("")
+          : `<option value="">Best available browser voice</option>`;
+        dom.voiceSelect.value = browserVoices.some(voice => voice.voiceURI === currentVoice)
+          ? currentVoice
+          : (browserVoices.some(voice => voice.voiceURI === storedVoice) ? storedVoice : (browserVoices[0] ? browserVoices[0].voiceURI : ""));
+      }
       syncAudioControls();
     }
 
@@ -2256,7 +3154,7 @@
       renderProfiles();
       renderStats();
       renderWordBank();
-      populateVoices();
+      refreshAudioProviderUi();
       dom.rateValue.textContent = `${Number(dom.rateRange.value).toFixed(2)}×`;
     }
 
@@ -2306,8 +3204,36 @@
     });
 
     dom.drillMistakesBtn.addEventListener("click", startMistakeDrillFromSummary);
+    dom.audioEngineSelect.addEventListener("change", () => {
+      stopAudioPlayback();
+      saveStoredValue(AUDIO_ENGINE_STORAGE_KEY, currentAudioEngine());
+      refreshAudioProviderUi();
+    });
+    dom.audioModelSelect.addEventListener("change", () => {
+      const storageKey = providerModelStorageKey(currentAudioEngine());
+      if (storageKey) {
+        saveStoredValue(storageKey, dom.audioModelSelect.value);
+      }
+      syncAudioControls();
+    });
+    dom.voiceSelect.addEventListener("change", () => {
+      const storageKey = providerVoiceStorageKey(currentAudioEngine());
+      if (storageKey) saveStoredValue(storageKey, dom.voiceSelect.value);
+      syncAudioControls();
+    });
     dom.apiKeyInput.addEventListener("input", () => {
-      saveGeminiApiKey(dom.apiKeyInput.value.trim());
+      const provider = currentAudioEngine();
+      saveProviderApiKey(provider, dom.apiKeyInput.value.trim());
+      clearGeminiBackoff();
+      if (provider === "elevenlabs") {
+        elevenLabsVoices = [];
+        elevenLabsVoicesKey = "";
+      }
+      refreshAudioProviderUi();
+    });
+    dom.apiKeyBackupInput.addEventListener("input", () => {
+      saveGeminiBackupApiKey(dom.apiKeyBackupInput.value.trim());
+      clearGeminiBackoff();
       syncAudioControls();
     });
 
@@ -2372,6 +3298,15 @@
       dom.rateValue.textContent = `${Number(dom.rateRange.value).toFixed(2)}×`;
     });
 
+    if (browserSupportsSpeech()) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        if (prefersBrowser()) refreshAudioProviderUi();
+      };
+    }
+
+    dom.audioEngineSelect.value = loadAudioEngine();
+    dom.apiKeyInput.value = loadProviderApiKey(currentAudioEngine());
+    dom.apiKeyBackupInput.value = loadGeminiBackupApiKey();
     window.addEventListener("beforeunload", () => {
       stopAudioPlayback();
     });

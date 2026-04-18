@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KS2 Study — Unified Shell</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Nunito:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+    background: #F6F5F1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  button { font-family: inherit; }
+  input, select, textarea { font-family: inherit; }
+  input:focus, textarea:focus, select:focus, button:focus-visible {
+    outline: 2px solid #1D2B3A;
+    outline-offset: 2px;
+  }
+  ::selection { background: #1D2B3A; color: #fff; }
+
+  /* Custom scrollbars in scrollable panes */
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-thumb { background: #E5E1D6; border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; }
+  *::-webkit-scrollbar-thumb:hover { background: #7A8697; border: 2px solid transparent; background-clip: padding-box; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.5; }
+  }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Data: word banks from the original Spelling file -->
+  <script src="vendor/sentence-bank-01.js"></script>
+  <script src="vendor/word-meta.js"></script>
+
+  <script type="text/babel" src="src/tokens.jsx"></script>
+  <script type="text/babel" src="src/icons.jsx"></script>
+  <script type="text/babel" src="src/primitives.jsx"></script>
+  <script type="text/babel" src="src/shell.jsx"></script>
+  <script type="text/babel" src="src/profile.jsx"></script>
+  <script type="text/babel" src="src/monsters.jsx"></script>
+  <script src="src/monster-engine.jsx"></script>
+  <script type="text/babel" src="src/monster-overlay.jsx"></script>
+  <script type="text/babel" src="src/collection.jsx"></script>
+  <script type="text/babel" src="src/dashboard.jsx"></script>
+  <script src="src/spelling-engine.jsx"></script>
+  <script type="text/babel" src="src/spelling-game.jsx"></script>
+  <script type="text/babel" src="src/questions.jsx"></script>
+  <script type="text/babel" src="src/practice.jsx"></script>
+  <script type="text/babel" src="src/tabs.jsx"></script>
+  <script type="text/babel" src="src/app.jsx"></script>
+</body>
+</html>
