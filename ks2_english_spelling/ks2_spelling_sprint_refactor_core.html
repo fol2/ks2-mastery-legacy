@@ -1,0 +1,3529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KS2 Spelling Sprint</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --panel:#ffffff;
+      --text:#163047;
+      --muted:#5b7286;
+      --line:#d7e2ec;
+      --accent:#2563eb;
+      --accent-soft:#dbeafe;
+      --good:#166534;
+      --good-soft:#dcfce7;
+      --warn:#92400e;
+      --warn-soft:#fef3c7;
+      --bad:#991b1b;
+      --bad-soft:#fee2e2;
+      --new:#64748b;
+      --chip-new:#e2e8f0;
+      --shadow:0 8px 24px rgba(15, 23, 42, 0.08);
+      --radius:18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, #eef4ff 0, #eef4ff 18%, transparent 19%) top left/420px 420px no-repeat,
+        radial-gradient(circle at bottom right, #effcf6 0, #effcf6 14%, transparent 15%) bottom right/420px 420px no-repeat,
+        var(--bg);
+      min-height:100vh;
+    }
+
+    .app{
+      max-width:1120px;
+      margin:0 auto;
+      padding:20px 16px 40px;
+    }
+
+    .hero{
+      background:linear-gradient(135deg, #1d4ed8, #2563eb 55%, #3b82f6);
+      color:#fff;
+      border-radius:24px;
+      padding:26px 24px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .hero h1{
+      margin:0 0 8px;
+      font-size:clamp(1.7rem, 2vw + 1rem, 2.5rem);
+      line-height:1.1;
+    }
+
+    .hero p{
+      margin:8px 0 0;
+      max-width:780px;
+      line-height:1.55;
+      color:rgba(255,255,255,0.92);
+    }
+
+    .hero .tagline{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .hero .tag{
+      background:rgba(255,255,255,0.14);
+      border:1px solid rgba(255,255,255,0.18);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:0.92rem;
+      letter-spacing:0.01em;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-top:16px;
+    }
+
+    .panel h2{
+      margin:0 0 12px;
+      font-size:1.15rem;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .controls-grid{
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+      align-items:end;
+    }
+
+    .field label,
+    .stack-label{
+      display:block;
+      font-weight:700;
+      margin-bottom:6px;
+      font-size:0.95rem;
+    }
+
+    select,
+    input[type="text"],
+    input[type="password"],
+    input[type="search"]{
+      width:100%;
+      border:1px solid #c9d7e4;
+      background:#fff;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:1rem;
+      color:var(--text);
+    }
+
+    select:focus,
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="search"]:focus{
+      outline:3px solid rgba(37, 99, 235, 0.16);
+      border-color:var(--accent);
+    }
+
+    .inline-row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .inline-row > *{
+      flex:1 1 auto;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      background:var(--accent);
+      color:#fff;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform 0.05s ease, filter 0.15s ease, background 0.15s ease;
+    }
+
+    button:hover{ filter:brightness(0.98); }
+    button:active{ transform:translateY(1px); }
+    button:disabled{
+      opacity:0.55;
+      cursor:not-allowed;
+      transform:none;
+      filter:none;
+    }
+
+    .button-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .secondary{
+      background:#0f766e;
+    }
+
+    .warning{
+      background:#ea580c;
+    }
+
+    .ghost{
+      background:#fff;
+      color:var(--text);
+      border:1px solid #c9d7e4;
+    }
+
+    .soft{
+      background:#eff6ff;
+      color:#1d4ed8;
+      border:1px solid #bfdbfe;
+    }
+
+    .tiny{
+      padding:8px 10px;
+      font-size:0.92rem;
+      border-radius:10px;
+    }
+
+    .toggle-row{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+      align-items:center;
+    }
+
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--text);
+      font-size:0.96rem;
+    }
+
+    .toggle input{
+      width:18px;
+      height:18px;
+    }
+
+    .stats{
+      grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+      margin-top:14px;
+    }
+
+    .stat{
+      background:#f8fbff;
+      border:1px solid #dbe7f0;
+      border-radius:16px;
+      padding:14px;
+      min-height:98px;
+    }
+
+    .stat .label{
+      font-size:0.92rem;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .stat .value{
+      font-size:1.55rem;
+      font-weight:800;
+      line-height:1;
+      margin-bottom:6px;
+    }
+
+    .stat .sub{
+      font-size:0.9rem;
+      color:var(--muted);
+    }
+
+    .split{
+      display:grid;
+      grid-template-columns:minmax(0, 1.1fr) minmax(290px, 0.9fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    .practice-shell{
+      display:none;
+    }
+
+    .practice-shell.active{
+      display:block;
+    }
+
+    .practice-meta{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+      margin-bottom:12px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:var(--accent-soft);
+      color:#1d4ed8;
+      font-weight:800;
+      font-size:0.92rem;
+    }
+
+    .badge.good{
+      background:var(--good-soft);
+      color:var(--good);
+    }
+
+    .badge.warn{
+      background:var(--warn-soft);
+      color:var(--warn);
+    }
+
+    .progress-wrap{
+      margin-top:8px;
+    }
+
+    .progress-bar{
+      height:12px;
+      width:100%;
+      background:#e8eef5;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid #d2dde7;
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, #2563eb, #60a5fa);
+      transition:width 0.2s ease;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .family-line{
+      color:var(--muted);
+      font-size:0.95rem;
+      margin-bottom:12px;
+    }
+
+    .word-stage{
+      font-size:0.95rem;
+      font-weight:700;
+      margin-bottom:10px;
+      color:#1d4ed8;
+    }
+
+    .cloze{
+      font-size:clamp(1.05rem, 1vw + 0.95rem, 1.35rem);
+      line-height:1.55;
+      padding:14px;
+      border-radius:16px;
+      background:#f8fbff;
+      border:1px solid #dbe7f0;
+      min-height:82px;
+      margin-bottom:14px;
+    }
+
+    .audio-buttons{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .audio-settings{
+      padding:14px;
+      border-radius:16px;
+      background:#fcfdff;
+      border:1px solid var(--line);
+    }
+
+    .range-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:200px;
+    }
+
+    .range-wrap input[type="range"]{
+      width:100%;
+    }
+
+    .answer-row{
+      display:flex;
+      gap:10px;
+      align-items:stretch;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .answer-row input{
+      flex:1 1 240px;
+      min-width:220px;
+      font-size:1.08rem;
+    }
+
+    .feedback{
+      margin-top:14px;
+      border-radius:16px;
+      padding:14px;
+      border:1px solid transparent;
+      line-height:1.5;
+    }
+
+    .feedback.success{
+      background:var(--good-soft);
+      border-color:#bbf7d0;
+      color:var(--good);
+    }
+
+    .feedback.error{
+      background:var(--bad-soft);
+      border-color:#fecaca;
+      color:var(--bad);
+    }
+
+    .feedback.info{
+      background:#eff6ff;
+      border-color:#bfdbfe;
+      color:#1d4ed8;
+    }
+
+    .answer-big{
+      font-size:1.35rem;
+      font-weight:900;
+      letter-spacing:0.02em;
+      margin:8px 0;
+      color:#111827;
+    }
+
+    .family-words{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:8px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:0.92rem;
+      border:1px solid transparent;
+      background:var(--chip-new);
+      color:#334155;
+      cursor:pointer;
+      user-select:none;
+      text-decoration:none;
+    }
+
+    .pill:hover{
+      filter:brightness(0.98);
+    }
+
+    .pill.new{
+      background:var(--chip-new);
+      color:#475569;
+      border-color:#cbd5e1;
+    }
+
+    .pill.learning{
+      background:#dbeafe;
+      color:#1d4ed8;
+      border-color:#bfdbfe;
+    }
+
+    .pill.due{
+      background:#fef3c7;
+      color:#92400e;
+      border-color:#fde68a;
+    }
+
+    .pill.secure{
+      background:#dcfce7;
+      color:#166534;
+      border-color:#bbf7d0;
+    }
+
+    .pill.trouble{
+      background:#fee2e2;
+      color:#991b1b;
+      border-color:#fecaca;
+    }
+
+    .word-groups{
+      display:grid;
+      gap:14px;
+    }
+
+    .word-group{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      background:#fcfdff;
+    }
+
+    .word-group h3{
+      margin:0 0 6px;
+      font-size:1rem;
+    }
+
+    .word-bank{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    details summary{
+      cursor:pointer;
+      font-weight:800;
+      list-style:none;
+    }
+
+    details summary::-webkit-details-marker{
+      display:none;
+    }
+
+    .summary-grid{
+      grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
+      margin-top:10px;
+    }
+
+    .mistake-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .helper-box{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fcfdff;
+    }
+
+    .helper-box h3{
+      margin:0 0 8px;
+      font-size:1rem;
+    }
+
+    .helper-box p{
+      margin:8px 0 0;
+      line-height:1.55;
+    }
+
+    .callout{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      color:var(--muted);
+      line-height:1.5;
+    }
+
+    .search-row{
+      margin-top:12px;
+    }
+
+    .hidden{
+      display:none !important;
+    }
+
+    .note{
+      font-size:0.92rem;
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    .footer-note{
+      margin-top:16px;
+      color:var(--muted);
+      font-size:0.92rem;
+      line-height:1.55;
+    }
+
+    @media (max-width: 860px){
+      .split{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      .hero{
+        padding:22px 18px;
+      }
+      .panel{
+        padding:15px;
+      }
+      .answer-row{
+        flex-direction:column;
+      }
+      .inline-row{
+        flex-direction:column;
+        align-items:stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="hero">
+      <h1>KS2 Spelling Sprint</h1>
+      <p>This app is built for fast, repeatable KS2 spelling practice. It makes children hear the word in a sentence, spell it from memory, fix mistakes straight away, and then see weak words again later. Progress is saved separately for each learner on this browser.</p>
+      <div class="tagline">
+        <span class="tag">SATs-style dictation</span>
+        <span class="tag">Spaced review</span>
+        <span class="tag">Trouble-word drill</span>
+        <span class="tag">Two learner profiles by default</span>
+        <span class="tag">Works offline</span>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Dashboard</h2>
+      <div class="grid controls-grid">
+        <div class="field">
+          <label for="profileSelect">Learner</label>
+          <div class="inline-row">
+            <select id="profileSelect"></select>
+            <button id="addProfileBtn" class="ghost tiny" type="button">Add</button>
+            <button id="renameProfileBtn" class="ghost tiny" type="button">Rename</button>
+            <button id="resetProfileBtn" class="ghost tiny" type="button">Reset</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="yearFilter">Word bank</label>
+          <select id="yearFilter">
+            <option value="all">Years 3-4 and 5-6</option>
+            <option value="3-4">Years 3-4 only</option>
+            <option value="5-6">Years 5-6 only</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="sessionSize">Smart / Trouble session size</label>
+          <select id="sessionSize">
+            <option value="10">10 words</option>
+            <option value="20" selected>20 words</option>
+            <option value="40">40 words</option>
+            <option value="all">All available words</option>
+          </select>
+        </div>
+
+        <div class="audio-settings">
+          <div class="stack-label">Audio</div>
+          <div class="inline-row">
+            <select id="audioEngineSelect" aria-label="Audio engine">
+              <option value="browser">Browser UK TTS</option>
+              <option value="gemini">Gemini TTS</option>
+              <option value="openai">OpenAI TTS</option>
+              <option value="elevenlabs">ElevenLabs TTS</option>
+            </select>
+            <select id="audioModelSelect" aria-label="Audio model"></select>
+            <select id="voiceSelect" aria-label="Voice selection"></select>
+            <div class="range-wrap">
+              <span class="muted">Rate</span>
+              <input id="rateRange" type="range" min="0.9" max="1.25" step="0.05" value="1.05" />
+              <span id="rateValue" class="muted">1.05×</span>
+            </div>
+          </div>
+          <div id="apiKeyWrap" style="margin-top:10px;">
+            <div class="search-row">
+              <input id="apiKeyInput" type="password" autocomplete="off" spellcheck="false" placeholder="API key (saved only in this browser)" />
+            </div>
+            <div id="apiKeyBackupWrap" class="search-row hidden" style="margin-top:8px;">
+              <input id="apiKeyBackupInput" type="password" autocomplete="off" spellcheck="false" placeholder="Backup Gemini API key (saved only in this browser)" />
+            </div>
+          </div>
+          <div id="audioNote" class="note">Browser UK TTS ready.</div>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <label class="toggle"><input id="autoSpeak" type="checkbox" checked /> Auto-play each word</label>
+        <label class="toggle"><input id="showCloze" type="checkbox" checked /> Show the sentence with a blank</label>
+      </div>
+
+      <div class="button-row">
+        <button id="smartBtn" type="button">Start smart review</button>
+        <button id="troubleBtn" class="secondary" type="button">Start trouble drill</button>
+        <button id="testBtn" class="warning" type="button">Start SATs 20 test</button>
+      </div>
+
+      <div id="statusLine" class="callout">Best routine: short daily sessions. Use Smart Review most days, Trouble Drill for misses, and SATs 20 for readiness checks.</div>
+
+      <div id="statsGrid" class="grid stats"></div>
+    </section>
+
+    <section id="practiceShell" class="practice-shell">
+      <div class="split">
+        <div>
+          <div class="panel">
+            <div class="practice-meta">
+              <div id="modeBadge" class="badge">Practice</div>
+              <div id="progressText" class="muted">Ready</div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+            </div>
+
+            <div class="card" style="margin-top:14px;">
+              <div id="familyLine" class="family-line">Set</div>
+              <div id="wordStage" class="word-stage">Stage</div>
+              <div id="clozeText" class="cloze">Press a start button above.</div>
+
+              <div class="audio-buttons">
+                <button id="playBtn" class="soft" type="button">Play word</button>
+                <button id="playSlowBtn" class="ghost" type="button">Play slowly</button>
+                <button id="skipBtn" class="ghost" type="button">Skip for now</button>
+              </div>
+
+              <div class="answer-row">
+                <input id="answerInput" type="text" autocomplete="off" spellcheck="false" placeholder="Type the spelling here" />
+                <button id="submitBtn" type="button">Submit</button>
+                <button id="endSessionBtn" class="ghost" type="button">End session</button>
+              </div>
+
+              <div id="feedbackArea" class="hidden"></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel">
+            <h2>How this round works</h2>
+            <div class="helper-box">
+              <h3 id="roundTitle">Smart review</h3>
+              <p id="roundText">You hear a word, spell it from memory, and weak words come back later in the same session.</p>
+            </div>
+            <div class="callout" id="liveHint">
+              Play the word, listen to the whole sentence, then type the spelling. Press Enter to submit.
+            </div>
+            <div class="footer-note" id="sessionFooterNote">
+              Wrong words are corrected immediately and repeated soon after. New words need more than one correct spelling in the same round before they are counted as secure for today.
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>This learner right now</h2>
+            <div id="liveMiniStats" class="grid summary-grid"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="summaryPanel" class="panel hidden">
+      <h2>Session summary</h2>
+      <div id="summaryStats" class="grid summary-grid"></div>
+      <div id="summaryText" class="callout" style="margin-top:12px;"></div>
+      <div id="mistakesWrap" class="hidden" style="margin-top:14px;">
+        <strong>Words to revisit</strong>
+        <div id="mistakeList" class="mistake-list"></div>
+      </div>
+      <div class="button-row">
+        <button id="drillMistakesBtn" type="button">Drill mistakes now</button>
+        <button id="backHomeBtn" class="ghost" type="button">Back to dashboard</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <details open>
+        <summary>Word bank and progress</summary>
+        <div class="search-row">
+          <input id="wordSearch" type="search" placeholder="Search for a word" />
+        </div>
+        <div id="wordGroups" class="word-groups" style="margin-top:14px;"></div>
+        <div class="footer-note">
+          This version includes the statutory Years 3-4 and Years 5-6 word-list entries, expanded into individual practice spellings where the official list shows variants such as accident(ally), possess(ion) or equip (-ped, -ment).
+        </div>
+      </details>
+    </section>
+  </div>
+
+  <script src="sentence-bank-01.js"></script>
+  <script src="sentence-bank-02.js"></script>
+  <script src="sentence-bank-03.js"></script>
+  <script src="sentence-bank-04.js"></script>
+  <script src="sentence-bank-05.js"></script>
+  <script src="sentence-bank-06.js"></script>
+  <script>
+    const RAW_WORDS = [{"year": "3-4", "family": "accident(ally)", "word": "accident", "sentence": "We saw an accident on the road."}, {"year": "3-4", "family": "accident(ally)", "word": "accidentally", "sentence": "I accidentally knocked the cup over."}, {"year": "3-4", "family": "actual(ly)", "word": "actual", "sentence": "The story is based on actual events."}, {"year": "3-4", "family": "actual(ly)", "word": "actually", "sentence": "I actually knew the answer."}, {"year": "3-4", "family": "address", "word": "address", "sentence": "Please write your home address clearly."}, {"year": "3-4", "family": "answer", "word": "answer", "sentence": "I knew the answer at once."}, {"year": "3-4", "family": "appear", "word": "appear", "sentence": "Stars appear when the sky gets dark."}, {"year": "3-4", "family": "arrive", "word": "arrive", "sentence": "We will arrive before lunch."}, {"year": "3-4", "family": "believe", "word": "believe", "sentence": "I believe you are telling the truth."}, {"year": "3-4", "family": "bicycle", "word": "bicycle", "sentence": "Her bicycle is leaning against the wall."}, {"year": "3-4", "family": "breath", "word": "breath", "sentence": "Take a deep breath before you dive."}, {"year": "3-4", "family": "breathe", "word": "breathe", "sentence": "It is easier to breathe in fresh air."}, {"year": "3-4", "family": "build", "word": "build", "sentence": "We used blocks to build a tall tower."}, {"year": "3-4", "family": "busy/business", "word": "busy", "sentence": "The shop was busy on Saturday morning."}, {"year": "3-4", "family": "busy/business", "word": "business", "sentence": "The family business sells fresh bread."}, {"year": "3-4", "family": "calendar", "word": "calendar", "sentence": "I marked the date on the calendar."}, {"year": "3-4", "family": "caught", "word": "caught", "sentence": "The goalkeeper caught the ball."}, {"year": "3-4", "family": "centre", "word": "centre", "sentence": "We met in the centre of town."}, {"year": "3-4", "family": "century", "word": "century", "sentence": "The castle was built a century ago."}, {"year": "3-4", "family": "certain", "word": "certain", "sentence": "I am certain that this is mine."}, {"year": "3-4", "family": "circle", "word": "circle", "sentence": "Please draw a neat circle."}, {"year": "3-4", "family": "complete", "word": "complete", "sentence": "Try to complete the puzzle."}, {"year": "3-4", "family": "consider", "word": "consider", "sentence": "Please consider both sides of the argument."}, {"year": "3-4", "family": "continue", "word": "continue", "sentence": "We will continue after the break."}, {"year": "3-4", "family": "decide", "word": "decide", "sentence": "You need to decide which game to play."}, {"year": "3-4", "family": "describe", "word": "describe", "sentence": "Can you describe the animal you saw."}, {"year": "3-4", "family": "different", "word": "different", "sentence": "My two socks are different colours."}, {"year": "3-4", "family": "difficult", "word": "difficult", "sentence": "That was a difficult question."}, {"year": "3-4", "family": "disappear", "word": "disappear", "sentence": "The rabbit can disappear into its hole quickly."}, {"year": "3-4", "family": "early", "word": "early", "sentence": "We left early to avoid traffic."}, {"year": "3-4", "family": "earth", "word": "earth", "sentence": "Plants grow in rich earth."}, {"year": "3-4", "family": "eight/eighth", "word": "eight", "sentence": "There are eight apples in the bowl."}, {"year": "3-4", "family": "eight/eighth", "word": "eighth", "sentence": "She came eighth in the race."}, {"year": "3-4", "family": "enough", "word": "enough", "sentence": "We have enough chairs for everyone."}, {"year": "3-4", "family": "exercise", "word": "exercise", "sentence": "Daily exercise helps you stay healthy."}, {"year": "3-4", "family": "experience", "word": "experience", "sentence": "It was my first experience of camping."}, {"year": "3-4", "family": "experiment", "word": "experiment", "sentence": "The class did a science experiment."}, {"year": "3-4", "family": "extreme", "word": "extreme", "sentence": "The weather was extreme during the storm."}, {"year": "3-4", "family": "famous", "word": "famous", "sentence": "That actor is famous around the world."}, {"year": "3-4", "family": "favourite", "word": "favourite", "sentence": "Blue is my favourite colour."}, {"year": "3-4", "family": "February", "word": "February", "sentence": "My birthday is in February."}, {"year": "3-4", "family": "forward(s)", "word": "forward", "sentence": "Take one step forward."}, {"year": "3-4", "family": "forward(s)", "word": "forwards", "sentence": "The duck swam forwards across the pond."}, {"year": "3-4", "family": "fruit", "word": "fruit", "sentence": "We packed fresh fruit for the picnic."}, {"year": "3-4", "family": "grammar", "word": "grammar", "sentence": "Good grammar makes writing clearer."}, {"year": "3-4", "family": "group", "word": "group", "sentence": "Our group worked on the poster together."}, {"year": "3-4", "family": "guard", "word": "guard", "sentence": "A guard stood by the gate."}, {"year": "3-4", "family": "guide", "word": "guide", "sentence": "The map will guide us home."}, {"year": "3-4", "family": "heard", "word": "heard", "sentence": "I heard a strange noise outside."}, {"year": "3-4", "family": "heart", "word": "heart", "sentence": "My heart beat faster as I ran."}, {"year": "3-4", "family": "height", "word": "height", "sentence": "We measured the height of the plant."}, {"year": "3-4", "family": "history", "word": "history", "sentence": "We learned about Roman history."}, {"year": "3-4", "family": "imagine", "word": "imagine", "sentence": "Imagine living in a tree house."}, {"year": "3-4", "family": "increase", "word": "increase", "sentence": "The price may increase next month."}, {"year": "3-4", "family": "important", "word": "important", "sentence": "It is important to listen carefully."}, {"year": "3-4", "family": "interest", "word": "interest", "sentence": "Space is a special interest of his."}, {"year": "3-4", "family": "island", "word": "island", "sentence": "They sailed to a small island."}, {"year": "3-4", "family": "knowledge", "word": "knowledge", "sentence": "Her knowledge of animals is impressive."}, {"year": "3-4", "family": "learn", "word": "learn", "sentence": "We learn something new every day."}, {"year": "3-4", "family": "length", "word": "length", "sentence": "Measure the length of the table."}, {"year": "3-4", "family": "library", "word": "library", "sentence": "We borrowed books from the library."}, {"year": "3-4", "family": "material", "word": "material", "sentence": "This bag is made from strong material."}, {"year": "3-4", "family": "medicine", "word": "medicine", "sentence": "The doctor gave her medicine."}, {"year": "3-4", "family": "mention", "word": "mention", "sentence": "Please do not mention the surprise."}, {"year": "3-4", "family": "minute", "word": "minute", "sentence": "Wait a minute while I tie my shoe."}, {"year": "3-4", "family": "natural", "word": "natural", "sentence": "Honey is a natural sweetener."}, {"year": "3-4", "family": "naughty", "word": "naughty", "sentence": "The puppy was naughty and chewed the slipper."}, {"year": "3-4", "family": "notice", "word": "notice", "sentence": "Did you notice the rainbow."}, {"year": "3-4", "family": "occasion(ally)", "word": "occasion", "sentence": "The party was a special occasion."}, {"year": "3-4", "family": "occasion(ally)", "word": "occasionally", "sentence": "We occasionally eat dinner in the garden."}, {"year": "3-4", "family": "often", "word": "often", "sentence": "We often visit the park after school."}, {"year": "3-4", "family": "opposite", "word": "opposite", "sentence": "The shop is opposite the station."}, {"year": "3-4", "family": "ordinary", "word": "ordinary", "sentence": "It was an ordinary school day."}, {"year": "3-4", "family": "particular", "word": "particular", "sentence": "She was looking for one particular book."}, {"year": "3-4", "family": "peculiar", "word": "peculiar", "sentence": "There was a peculiar smell in the room."}, {"year": "3-4", "family": "perhaps", "word": "perhaps", "sentence": "Perhaps it will snow tonight."}, {"year": "3-4", "family": "popular", "word": "popular", "sentence": "Football is popular at our school."}, {"year": "3-4", "family": "position", "word": "position", "sentence": "Move your chair into position."}, {"year": "3-4", "family": "possess(ion)", "word": "possess", "sentence": "Very few animals possess wings and fur."}, {"year": "3-4", "family": "possess(ion)", "word": "possession", "sentence": "The medal was his most valued possession."}, {"year": "3-4", "family": "possible", "word": "possible", "sentence": "Is it possible to finish today."}, {"year": "3-4", "family": "potatoes", "word": "potatoes", "sentence": "We planted potatoes in the garden."}, {"year": "3-4", "family": "pressure", "word": "pressure", "sentence": "The team felt pressure before the final."}, {"year": "3-4", "family": "probably", "word": "probably", "sentence": "It will probably rain later."}, {"year": "3-4", "family": "promise", "word": "promise", "sentence": "I promise to be on time."}, {"year": "3-4", "family": "purpose", "word": "purpose", "sentence": "The purpose of the trip was to learn."}, {"year": "3-4", "family": "quarter", "word": "quarter", "sentence": "A quarter of the cake was left."}, {"year": "3-4", "family": "question", "word": "question", "sentence": "She asked a thoughtful question."}, {"year": "3-4", "family": "recent", "word": "recent", "sentence": "That is a recent photograph."}, {"year": "3-4", "family": "regular", "word": "regular", "sentence": "He is a regular visitor to the cafe."}, {"year": "3-4", "family": "reign", "word": "reign", "sentence": "The king began his reign at a young age."}, {"year": "3-4", "family": "remember", "word": "remember", "sentence": "Please remember your lunch box."}, {"year": "3-4", "family": "sentence", "word": "sentence", "sentence": "Write each answer in a full sentence."}, {"year": "3-4", "family": "separate", "word": "separate", "sentence": "Keep the white socks separate from the dark ones."}, {"year": "3-4", "family": "special", "word": "special", "sentence": "Today is special because it is your birthday."}, {"year": "3-4", "family": "straight", "word": "straight", "sentence": "Draw a straight line with a ruler."}, {"year": "3-4", "family": "strange", "word": "strange", "sentence": "I heard a strange sound in the attic."}, {"year": "3-4", "family": "strength", "word": "strength", "sentence": "It takes strength to lift that box."}, {"year": "3-4", "family": "suppose", "word": "suppose", "sentence": "I suppose we could walk instead."}, {"year": "3-4", "family": "surprise", "word": "surprise", "sentence": "The gift was a lovely surprise."}, {"year": "3-4", "family": "therefore", "word": "therefore", "sentence": "It was raining and therefore the match was cancelled."}, {"year": "3-4", "family": "though/although", "word": "though", "sentence": "I was tired though I kept working."}, {"year": "3-4", "family": "though/although", "word": "although", "sentence": "Although it was cold we went outside."}, {"year": "3-4", "family": "thought", "word": "thought", "sentence": "I thought the film was funny."}, {"year": "3-4", "family": "through", "word": "through", "sentence": "We walked through the tunnel."}, {"year": "3-4", "family": "various", "word": "various", "sentence": "The museum has various old coins."}, {"year": "3-4", "family": "weight", "word": "weight", "sentence": "The weight of the bag surprised me."}, {"year": "3-4", "family": "woman/women", "word": "woman", "sentence": "The woman smiled at the baby."}, {"year": "3-4", "family": "woman/women", "word": "women", "sentence": "The women waved from the balcony."}, {"year": "5-6", "family": "accommodate", "word": "accommodate", "sentence": "This hotel can accommodate fifty guests."}, {"year": "5-6", "family": "accompany", "word": "accompany", "sentence": "An adult must accompany you on the trip."}, {"year": "5-6", "family": "according", "word": "according", "sentence": "According to the map we are nearly there."}, {"year": "5-6", "family": "achieve", "word": "achieve", "sentence": "You can achieve your goal with practice."}, {"year": "5-6", "family": "aggressive", "word": "aggressive", "sentence": "The aggressive dog barked loudly."}, {"year": "5-6", "family": "amateur", "word": "amateur", "sentence": "She is an amateur photographer."}, {"year": "5-6", "family": "ancient", "word": "ancient", "sentence": "We saw ancient ruins on holiday."}, {"year": "5-6", "family": "apparent", "word": "apparent", "sentence": "It was apparent that he was tired."}, {"year": "5-6", "family": "appreciate", "word": "appreciate", "sentence": "I appreciate your kind help."}, {"year": "5-6", "family": "attached", "word": "attached", "sentence": "The label was attached to the bag."}, {"year": "5-6", "family": "available", "word": "available", "sentence": "The next seat is available now."}, {"year": "5-6", "family": "average", "word": "average", "sentence": "The average score was quite high."}, {"year": "5-6", "family": "awkward", "word": "awkward", "sentence": "It was awkward carrying the huge box."}, {"year": "5-6", "family": "bargain", "word": "bargain", "sentence": "The coat was a real bargain."}, {"year": "5-6", "family": "bruise", "word": "bruise", "sentence": "He had a bruise on his knee."}, {"year": "5-6", "family": "category", "word": "category", "sentence": "Place the toy in the correct category."}, {"year": "5-6", "family": "cemetery", "word": "cemetery", "sentence": "The old cemetery was very quiet."}, {"year": "5-6", "family": "committee", "word": "committee", "sentence": "The school committee met after lunch."}, {"year": "5-6", "family": "communicate", "word": "communicate", "sentence": "We use email to communicate quickly."}, {"year": "5-6", "family": "community", "word": "community", "sentence": "The whole community joined the parade."}, {"year": "5-6", "family": "competition", "word": "competition", "sentence": "She won the art competition."}, {"year": "5-6", "family": "conscience", "word": "conscience", "sentence": "His conscience told him to return the wallet."}, {"year": "5-6", "family": "conscious", "word": "conscious", "sentence": "I was conscious of the noise behind me."}, {"year": "5-6", "family": "controversy", "word": "controversy", "sentence": "The rule change caused some controversy."}, {"year": "5-6", "family": "convenience", "word": "convenience", "sentence": "For convenience we packed the night before."}, {"year": "5-6", "family": "correspond", "word": "correspond", "sentence": "The numbers should correspond to the names."}, {"year": "5-6", "family": "criticise (critic + ise)", "word": "criticise", "sentence": "It is easy to criticise from the side-lines."}, {"year": "5-6", "family": "curiosity", "word": "curiosity", "sentence": "Her curiosity made her open the box."}, {"year": "5-6", "family": "definite", "word": "definite", "sentence": "There was a definite change in the weather."}, {"year": "5-6", "family": "desperate", "word": "desperate", "sentence": "We were desperate to find shelter."}, {"year": "5-6", "family": "determined", "word": "determined", "sentence": "She felt determined to improve."}, {"year": "5-6", "family": "develop", "word": "develop", "sentence": "Seeds develop best in warm soil."}, {"year": "5-6", "family": "dictionary", "word": "dictionary", "sentence": "Use a dictionary to check the meaning."}, {"year": "5-6", "family": "disastrous", "word": "disastrous", "sentence": "The flood had disastrous effects on the village."}, {"year": "5-6", "family": "embarrass", "word": "embarrass", "sentence": "Please do not embarrass your brother."}, {"year": "5-6", "family": "environment", "word": "environment", "sentence": "We should protect the environment."}, {"year": "5-6", "family": "equip (-ped, -ment)", "word": "equip", "sentence": "Good boots equip you for rough ground."}, {"year": "5-6", "family": "equip (-ped, -ment)", "word": "equipped", "sentence": "The classroom was equipped with new computers."}, {"year": "5-6", "family": "equip (-ped, -ment)", "word": "equipment", "sentence": "The team packed all the safety equipment."}, {"year": "5-6", "family": "especially", "word": "especially", "sentence": "I especially enjoy reading mystery books."}, {"year": "5-6", "family": "exaggerate", "word": "exaggerate", "sentence": "Do not exaggerate the size of the fish."}, {"year": "5-6", "family": "excellent", "word": "excellent", "sentence": "You did an excellent job."}, {"year": "5-6", "family": "existence", "word": "existence", "sentence": "The dinosaur bones proved its existence."}, {"year": "5-6", "family": "explanation", "word": "explanation", "sentence": "His explanation made sense to everyone."}, {"year": "5-6", "family": "familiar", "word": "familiar", "sentence": "That tune sounds familiar to me."}, {"year": "5-6", "family": "foreign", "word": "foreign", "sentence": "We tried foreign food at the market."}, {"year": "5-6", "family": "forty", "word": "forty", "sentence": "There were forty chairs in the hall."}, {"year": "5-6", "family": "frequently", "word": "frequently", "sentence": "We frequently visit our grandparents."}, {"year": "5-6", "family": "government", "word": "government", "sentence": "The government announced a new plan."}, {"year": "5-6", "family": "guarantee", "word": "guarantee", "sentence": "I cannot guarantee sunny weather."}, {"year": "5-6", "family": "harass", "word": "harass", "sentence": "It is wrong to harass others online."}, {"year": "5-6", "family": "hindrance", "word": "hindrance", "sentence": "The broken gate was a hindrance to progress."}, {"year": "5-6", "family": "identity", "word": "identity", "sentence": "The passport proved her identity."}, {"year": "5-6", "family": "immediate(ly)", "word": "immediate", "sentence": "We need an immediate response."}, {"year": "5-6", "family": "immediate(ly)", "word": "immediately", "sentence": "Please come here immediately."}, {"year": "5-6", "family": "individual", "word": "individual", "sentence": "Each individual plant needs water."}, {"year": "5-6", "family": "interfere", "word": "interfere", "sentence": "Do not interfere with the experiment."}, {"year": "5-6", "family": "interrupt", "word": "interrupt", "sentence": "Please do not interrupt the speaker."}, {"year": "5-6", "family": "language", "word": "language", "sentence": "French is a beautiful language."}, {"year": "5-6", "family": "leisure", "word": "leisure", "sentence": "Reading is one of my leisure activities."}, {"year": "5-6", "family": "lightning", "word": "lightning", "sentence": "A flash of lightning lit the sky."}, {"year": "5-6", "family": "marvellous", "word": "marvellous", "sentence": "We had a marvellous day at the beach."}, {"year": "5-6", "family": "mischievous", "word": "mischievous", "sentence": "The mischievous cat stole a biscuit."}, {"year": "5-6", "family": "muscle", "word": "muscle", "sentence": "You use a muscle to lift your arm."}, {"year": "5-6", "family": "necessary", "word": "necessary", "sentence": "A helmet is necessary for safety."}, {"year": "5-6", "family": "neighbour", "word": "neighbour", "sentence": "Our neighbour brought over some cake."}, {"year": "5-6", "family": "nuisance", "word": "nuisance", "sentence": "The dripping tap became a nuisance."}, {"year": "5-6", "family": "occupy", "word": "occupy", "sentence": "The boxes occupy too much space."}, {"year": "5-6", "family": "occur", "word": "occur", "sentence": "Mistakes can occur when we rush."}, {"year": "5-6", "family": "opportunity", "word": "opportunity", "sentence": "This trip is a great opportunity."}, {"year": "5-6", "family": "parliament", "word": "parliament", "sentence": "A new law was discussed in parliament."}, {"year": "5-6", "family": "persuade", "word": "persuade", "sentence": "Can you persuade him to join us."}, {"year": "5-6", "family": "physical", "word": "physical", "sentence": "Swimming gives you physical exercise."}, {"year": "5-6", "family": "prejudice", "word": "prejudice", "sentence": "We should challenge prejudice when we see it."}, {"year": "5-6", "family": "privilege", "word": "privilege", "sentence": "It was a privilege to meet the author."}, {"year": "5-6", "family": "profession", "word": "profession", "sentence": "Teaching is a rewarding profession."}, {"year": "5-6", "family": "programme", "word": "programme", "sentence": "The school printed a programme for the play."}, {"year": "5-6", "family": "pronunciation", "word": "pronunciation", "sentence": "Her pronunciation was clear and careful."}, {"year": "5-6", "family": "queue", "word": "queue", "sentence": "We had to queue for the tickets."}, {"year": "5-6", "family": "recognise", "word": "recognise", "sentence": "I did not recognise him at first."}, {"year": "5-6", "family": "recommend", "word": "recommend", "sentence": "I recommend the chocolate cake."}, {"year": "5-6", "family": "relevant", "word": "relevant", "sentence": "Please include only relevant facts."}, {"year": "5-6", "family": "restaurant", "word": "restaurant", "sentence": "We ate dinner at a small restaurant."}, {"year": "5-6", "family": "rhyme", "word": "rhyme", "sentence": "These two words rhyme."}, {"year": "5-6", "family": "rhythm", "word": "rhythm", "sentence": "The drummer kept a steady rhythm."}, {"year": "5-6", "family": "sacrifice", "word": "sacrifice", "sentence": "The team had to sacrifice comfort to win."}, {"year": "5-6", "family": "secretary", "word": "secretary", "sentence": "The secretary answered the phone."}, {"year": "5-6", "family": "shoulder", "word": "shoulder", "sentence": "She carried the bag on one shoulder."}, {"year": "5-6", "family": "signature", "word": "signature", "sentence": "Please add your signature at the bottom."}, {"year": "5-6", "family": "sincere(ly)", "word": "sincere", "sentence": "His apology sounded sincere."}, {"year": "5-6", "family": "sincere(ly)", "word": "sincerely", "sentence": "I sincerely hope you recover soon."}, {"year": "5-6", "family": "soldier", "word": "soldier", "sentence": "The soldier stood very still."}, {"year": "5-6", "family": "stomach", "word": "stomach", "sentence": "My stomach rumbled before lunch."}, {"year": "5-6", "family": "sufficient", "word": "sufficient", "sentence": "We had sufficient time to finish."}, {"year": "5-6", "family": "suggest", "word": "suggest", "sentence": "I suggest we leave now."}, {"year": "5-6", "family": "symbol", "word": "symbol", "sentence": "The crown is a symbol of power."}, {"year": "5-6", "family": "system", "word": "system", "sentence": "The school has a new computer system."}, {"year": "5-6", "family": "temperature", "word": "temperature", "sentence": "The temperature dropped after sunset."}, {"year": "5-6", "family": "thorough", "word": "thorough", "sentence": "The teacher gave the work a thorough check."}, {"year": "5-6", "family": "twelfth", "word": "twelfth", "sentence": "His birthday is on the twelfth of June."}, {"year": "5-6", "family": "variety", "word": "variety", "sentence": "The market sells a variety of fruit."}, {"year": "5-6", "family": "vegetable", "word": "vegetable", "sentence": "Carrot is my favourite vegetable."}, {"year": "5-6", "family": "vehicle", "word": "vehicle", "sentence": "The fire engine is a large vehicle."}, {"year": "5-6", "family": "yacht", "word": "yacht", "sentence": "We saw a white yacht on the sea."}];
+    const SENTENCE_BANK = window.KS2_SENTENCE_BANK || {};
+
+const APP_CONFIG = Object.freeze({
+  STORAGE_KEY: "ks2-spelling-sprint-v1",
+  UI_PREFS_KEY: "ks2-spelling-ui-prefs-v1",
+  DAY_MS: 24 * 60 * 60 * 1000,
+  STAGE_INTERVALS: [0, 1, 3, 7, 14, 30, 60],
+  SECURE_STAGE: 4,
+  CLOZE_PLACEHOLDER: "[ missing word ]",
+  GEMINI_TTS_MODEL: "gemini-3.1-flash-tts-preview",
+  GEMINI_API_KEY_STORAGE_KEY: "ks2-spelling-gemini-api-key",
+  GEMINI_BACKUP_API_KEY_STORAGE_KEY: "ks2-spelling-gemini-api-key-backup",
+  GEMINI_QUOTA_STORAGE_KEY: "ks2-spelling-gemini-quota-state",
+  OPENAI_API_KEY_STORAGE_KEY: "ks2-spelling-openai-api-key",
+  ELEVENLABS_API_KEY_STORAGE_KEY: "ks2-spelling-elevenlabs-api-key",
+  AUDIO_ENGINE_STORAGE_KEY: "ks2-spelling-audio-engine",
+  BROWSER_VOICE_STORAGE_KEY: "ks2-spelling-browser-voice",
+  GEMINI_VOICE_STORAGE_KEY: "ks2-spelling-gemini-voice",
+  OPENAI_VOICE_STORAGE_KEY: "ks2-spelling-openai-voice",
+  ELEVENLABS_VOICE_STORAGE_KEY: "ks2-spelling-elevenlabs-voice",
+  ELEVENLABS_MODEL_STORAGE_KEY: "ks2-spelling-elevenlabs-model",
+  OPENAI_TTS_MODEL: "gpt-4o-mini-tts",
+  OPENAI_TTS_ENDPOINT: "https://api.openai.com/v1/audio/speech",
+  ELEVENLABS_TTS_ENDPOINT: "https://api.elevenlabs.io/v1/text-to-speech",
+  ELEVENLABS_VOICES_ENDPOINT: "https://api.elevenlabs.io/v2/voices",
+  ELEVENLABS_DEFAULT_VOICE_ID: "JBFqnCBsd6RMkjVDRZzb",
+  AUDIO_CACHE_LIMIT: 18,
+  FETCH_TIMEOUT_MS: 20000,
+  GEMINI_LOCAL_RPM_LIMIT: 10,
+  GEMINI_LOCAL_RPD_LIMIT: 100
+});
+APP_CONFIG.GEMINI_TTS_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${APP_CONFIG.GEMINI_TTS_MODEL}:generateContent`;
+
+const GEMINI_TTS_VOICES = Object.freeze([
+  ["Schedar", "Even"],
+  ["Iapetus", "Clear"],
+  ["Kore", "Firm"],
+  ["Achird", "Friendly"],
+  ["Sulafat", "Warm"]
+]);
+const OPENAI_TTS_VOICES = Object.freeze([
+  ["alloy", "Balanced"],
+  ["ash", "Warm"],
+  ["coral", "Bright"],
+  ["sage", "Measured"],
+  ["shimmer", "Light"],
+  ["verse", "Narrative"]
+]);
+const ELEVENLABS_TTS_MODELS = Object.freeze([
+  ["eleven_flash_v2_5", "Flash v2.5"],
+  ["eleven_turbo_v2_5", "Turbo v2.5"],
+  ["eleven_v3", "Eleven v3"]
+]);
+
+const ACCEPTED_ALTERNATIVES = Object.freeze({
+  criticise: ["criticize"],
+  recognise: ["recognize"]
+});
+
+const UI_DEFAULTS = Object.freeze({
+  yearFilter: "all",
+  sessionSize: "20",
+  autoSpeak: true,
+  showCloze: true,
+  rate: "1.05"
+});
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+const dom = {
+  profileSelect: $("profileSelect"),
+  addProfileBtn: $("addProfileBtn"),
+  renameProfileBtn: $("renameProfileBtn"),
+  resetProfileBtn: $("resetProfileBtn"),
+  yearFilter: $("yearFilter"),
+  sessionSize: $("sessionSize"),
+  audioEngineSelect: $("audioEngineSelect"),
+  audioModelSelect: $("audioModelSelect"),
+  voiceSelect: $("voiceSelect"),
+  apiKeyWrap: $("apiKeyWrap"),
+  apiKeyBackupWrap: $("apiKeyBackupWrap"),
+  apiKeyInput: $("apiKeyInput"),
+  apiKeyBackupInput: $("apiKeyBackupInput"),
+  rateRange: $("rateRange"),
+  rateValue: $("rateValue"),
+  autoSpeak: $("autoSpeak"),
+  showCloze: $("showCloze"),
+  smartBtn: $("smartBtn"),
+  troubleBtn: $("troubleBtn"),
+  testBtn: $("testBtn"),
+  statusLine: $("statusLine"),
+  statsGrid: $("statsGrid"),
+  practiceShell: $("practiceShell"),
+  modeBadge: $("modeBadge"),
+  progressText: $("progressText"),
+  progressFill: $("progressFill"),
+  familyLine: $("familyLine"),
+  wordStage: $("wordStage"),
+  clozeText: $("clozeText"),
+  playBtn: $("playBtn"),
+  playSlowBtn: $("playSlowBtn"),
+  skipBtn: $("skipBtn"),
+  answerInput: $("answerInput"),
+  submitBtn: $("submitBtn"),
+  endSessionBtn: $("endSessionBtn"),
+  feedbackArea: $("feedbackArea"),
+  roundTitle: $("roundTitle"),
+  roundText: $("roundText"),
+  liveHint: $("liveHint"),
+  sessionFooterNote: $("sessionFooterNote"),
+  liveMiniStats: $("liveMiniStats"),
+  summaryPanel: $("summaryPanel"),
+  summaryStats: $("summaryStats"),
+  summaryText: $("summaryText"),
+  mistakesWrap: $("mistakesWrap"),
+  mistakeList: $("mistakeList"),
+  drillMistakesBtn: $("drillMistakesBtn"),
+  backHomeBtn: $("backHomeBtn"),
+  wordSearch: $("wordSearch"),
+  wordGroups: $("wordGroups"),
+  audioNote: $("audioNote")
+};
+
+const Utils = (() => {
+  const pendingUiTimers = new Set();
+
+  function schedule(callback, delay = 0) {
+    const timerId = window.setTimeout(() => {
+      pendingUiTimers.delete(timerId);
+      callback();
+    }, delay);
+    pendingUiTimers.add(timerId);
+    return timerId;
+  }
+
+  function clearScheduled() {
+    pendingUiTimers.forEach(timerId => window.clearTimeout(timerId));
+    pendingUiTimers.clear();
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function normalize(value) {
+    return String(value || "").trim().toLowerCase();
+  }
+
+  function todayDay() {
+    return Math.floor(Date.now() / APP_CONFIG.DAY_MS);
+  }
+
+  function makeId() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+    return `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+
+  function escapeRegExp(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function weightedPick(items, weightFn = item => item.weight) {
+    if (!items.length) return null;
+    const weights = items.map(item => Math.max(0, Number(weightFn(item)) || 0));
+    const total = weights.reduce((sum, value) => sum + value, 0);
+    if (total <= 0) return items[Math.floor(Math.random() * items.length)];
+    let roll = Math.random() * total;
+    for (let i = 0; i < items.length; i += 1) {
+      roll -= weights[i];
+      if (roll <= 0) return items[i];
+    }
+    return items[items.length - 1];
+  }
+
+  function shuffleInPlace(array) {
+    for (let i = array.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function parseRetryDelayMs(value) {
+    const match = String(value || "").match(/^([0-9]+(?:\.[0-9]+)?)s$/i);
+    return match ? Math.round(Number(match[1]) * 1000) : 0;
+  }
+
+  function formatDurationShort(ms) {
+    const totalMinutes = Math.max(1, Math.ceil(ms / 60000));
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours && minutes) return `${hours}h ${minutes}m`;
+    if (hours) return `${hours}h`;
+    return `${minutes}m`;
+  }
+
+  function hashString(value) {
+    let hash = 2166136261;
+    for (let i = 0; i < value.length; i += 1) {
+      hash ^= value.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    return (hash >>> 0).toString(36);
+  }
+
+  function isTypingElement(target) {
+    if (!target) return false;
+    const tag = String(target.tagName || "").toUpperCase();
+    return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+  }
+
+  function keyboardHintText() {
+    return "Enter submits · Esc replays · Shift+Esc plays slowly · Alt+K focuses the answer box.";
+  }
+
+  function loadJson(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : fallback;
+    } catch (err) {
+      return fallback;
+    }
+  }
+
+  function saveJson(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function loadStoredValue(key) {
+    try {
+      return localStorage.getItem(key) || "";
+    } catch (err) {
+      return "";
+    }
+  }
+
+  function saveStoredValue(key, value) {
+    try {
+      if (value) localStorage.setItem(key, value);
+      else localStorage.removeItem(key);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  return {
+    schedule,
+    clearScheduled,
+    escapeHtml,
+    normalize,
+    todayDay,
+    makeId,
+    escapeRegExp,
+    weightedPick,
+    shuffleInPlace,
+    parseRetryDelayMs,
+    formatDurationShort,
+    hashString,
+    isTypingElement,
+    keyboardHintText,
+    loadJson,
+    saveJson,
+    loadStoredValue,
+    saveStoredValue
+  };
+})();
+
+const UiPrefs = (() => {
+  let prefs = Object.assign({}, UI_DEFAULTS, Utils.loadJson(APP_CONFIG.UI_PREFS_KEY, {}));
+
+  function get() {
+    return Object.assign({}, prefs);
+  }
+
+  function set(partial) {
+    prefs = Object.assign({}, prefs, partial || {});
+    Utils.saveJson(APP_CONFIG.UI_PREFS_KEY, prefs);
+    return get();
+  }
+
+  function applyToDom() {
+    const current = get();
+    if (dom.yearFilter) dom.yearFilter.value = current.yearFilter;
+    if (dom.sessionSize) dom.sessionSize.value = current.sessionSize;
+    if (dom.autoSpeak) dom.autoSpeak.checked = Boolean(current.autoSpeak);
+    if (dom.showCloze) dom.showCloze.checked = Boolean(current.showCloze);
+    if (dom.rateRange) dom.rateRange.value = String(current.rate || UI_DEFAULTS.rate);
+  }
+
+  return { get, set, applyToDom };
+})();
+
+const WordRepository = (() => {
+  const familyMap = {};
+  RAW_WORDS.forEach(item => {
+    const key = `${item.year}||${item.family}`;
+    familyMap[key] = familyMap[key] || [];
+    familyMap[key].push(item.word);
+  });
+
+  const words = RAW_WORDS.map(item => {
+    const slug = item.word.toLowerCase();
+    const key = `${item.year}||${item.family}`;
+    const sentences = Array.isArray(SENTENCE_BANK[slug]) && SENTENCE_BANK[slug].length
+      ? SENTENCE_BANK[slug].map(sentence => String(sentence || "").trim()).filter(Boolean)
+      : Array.isArray(item.sentences)
+        ? item.sentences.map(sentence => String(sentence || "").trim()).filter(Boolean)
+        : [String(item.sentence || "").trim()].filter(Boolean);
+
+    return {
+      ...item,
+      slug,
+      yearLabel: item.year === "3-4" ? "Years 3-4" : "Years 5-6",
+      familyWords: familyMap[key].slice(),
+      sentence: sentences[0] || "",
+      sentences,
+      accepted: [slug, ...(ACCEPTED_ALTERNATIVES[slug] || [])]
+    };
+  });
+
+  const bySlug = Object.fromEntries(words.map(word => [word.slug, word]));
+
+  function filterByYear(yearFilter) {
+    return words.filter(word => yearFilter === "all" ? true : word.year === yearFilter);
+  }
+
+  function groups() {
+    return [
+      { key: "3-4", title: "Years 3-4", words: words.filter(word => word.year === "3-4") },
+      { key: "5-6", title: "Years 5-6", words: words.filter(word => word.year === "5-6") }
+    ];
+  }
+
+  function stageLabel(stage) {
+    if (stage >= APP_CONFIG.SECURE_STAGE) return "Secure";
+    if (stage <= 0) return "New / due today";
+    const interval = APP_CONFIG.STAGE_INTERVALS[Math.min(stage, APP_CONFIG.STAGE_INTERVALS.length - 1)];
+    return `Next review in ${interval} day${interval === 1 ? "" : "s"}`;
+  }
+
+  function buildCloze(sentence, word) {
+    const pattern = new RegExp(`\\b${Utils.escapeRegExp(word)}\\b`, "i");
+    return String(sentence || "").replace(pattern, APP_CONFIG.CLOZE_PLACEHOLDER);
+  }
+
+  function shuffledSentenceOrder(length, lastIndex = null) {
+    const order = Array.from({ length }, (_, index) => index);
+    Utils.shuffleInPlace(order);
+    if (lastIndex !== null && order.length > 1 && order[0] === lastIndex) {
+      const swapIndex = 1 + Math.floor(Math.random() * (order.length - 1));
+      [order[0], order[swapIndex]] = [order[swapIndex], order[0]];
+    }
+    return order;
+  }
+
+  return {
+    words,
+    bySlug,
+    filterByYear,
+    groups,
+    stageLabel,
+    buildCloze,
+    shuffledSentenceOrder
+  };
+})();
+
+const Store = (() => {
+  function defaultProgress() {
+    return {
+      stage: 0,
+      attempts: 0,
+      correct: 0,
+      wrong: 0,
+      dueDay: Utils.todayDay(),
+      lastDay: null,
+      lastResult: null
+    };
+  }
+
+  function makeProfile(name) {
+    return { id: Utils.makeId(), name, progress: {} };
+  }
+
+  function makeDefaultState() {
+    const profileOne = makeProfile("Child 1");
+    const profileTwo = makeProfile("Child 2");
+    return { version: 2, profiles: [profileOne, profileTwo], currentProfileId: profileOne.id };
+  }
+
+  function normaliseProgressMap(progressMap) {
+    const clean = {};
+    const source = progressMap && typeof progressMap === "object" ? progressMap : {};
+    Object.entries(source).forEach(([slug, progress]) => {
+      clean[slug] = Object.assign(defaultProgress(), progress || {});
+    });
+    return clean;
+  }
+
+  function normaliseProfile(profile, fallbackName = "Learner") {
+    return {
+      id: profile && profile.id ? String(profile.id) : Utils.makeId(),
+      name: profile && profile.name ? String(profile.name) : fallbackName,
+      progress: normaliseProgressMap(profile && profile.progress)
+    };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(APP_CONFIG.STORAGE_KEY);
+      if (!raw) return makeDefaultState();
+      const parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.profiles) || !parsed.profiles.length) return makeDefaultState();
+      const profiles = parsed.profiles.map((profile, index) => normaliseProfile(profile, `Child ${index + 1}`));
+      const currentProfileId = profiles.some(profile => profile.id === parsed.currentProfileId)
+        ? parsed.currentProfileId
+        : profiles[0].id;
+      return { version: 2, profiles, currentProfileId };
+    } catch (err) {
+      return makeDefaultState();
+    }
+  }
+
+  let state = loadState();
+
+  function save() {
+    try {
+      localStorage.setItem(APP_CONFIG.STORAGE_KEY, JSON.stringify(state));
+      return true;
+    } catch (err) {
+      dom.audioNote.textContent = "Save failed.";
+      return false;
+    }
+  }
+
+  function getState() {
+    return state;
+  }
+
+  function snapshot() {
+    return JSON.parse(JSON.stringify(state));
+  }
+
+  function profiles() {
+    return state.profiles.slice();
+  }
+
+  function currentProfile() {
+    return state.profiles.find(profile => profile.id === state.currentProfileId) || state.profiles[0];
+  }
+
+  function setCurrentProfile(profileId) {
+    if (state.profiles.some(profile => profile.id === profileId)) {
+      state.currentProfileId = profileId;
+      save();
+    }
+  }
+
+  function addProfile(name) {
+    const profile = makeProfile(name);
+    state.profiles.push(profile);
+    state.currentProfileId = profile.id;
+    save();
+    return profile;
+  }
+
+  function renameCurrent(name) {
+    const profile = currentProfile();
+    profile.name = name;
+    save();
+  }
+
+  function resetCurrent() {
+    const profile = currentProfile();
+    profile.progress = {};
+    save();
+  }
+
+  function getProgress(slug) {
+    const progress = currentProfile().progress[slug];
+    return progress ? Object.assign(defaultProgress(), progress) : defaultProgress();
+  }
+
+  function setProgress(slug, progress) {
+    currentProfile().progress[slug] = Object.assign(defaultProgress(), progress || {});
+    save();
+  }
+
+  function mutateProgress(slug, updater) {
+    const next = Object.assign(defaultProgress(), currentProfile().progress[slug] || {});
+    const updated = updater(next) || next;
+    currentProfile().progress[slug] = Object.assign(defaultProgress(), updated);
+    save();
+    return currentProfile().progress[slug];
+  }
+
+  return {
+    defaultProgress,
+    getState,
+    snapshot,
+    profiles,
+    currentProfile,
+    setCurrentProfile,
+    addProfile,
+    renameCurrent,
+    resetCurrent,
+    getProgress,
+    setProgress,
+    mutateProgress,
+    save
+  };
+})();
+
+const AudioService = (() => {
+  let speechReady = false;
+  let activeAudioUrl = "";
+  let activeSpeakToken = 0;
+  let speakAbortController = null;
+  let geminiBackoffUntil = 0;
+  let geminiBackoffReason = "";
+  let refreshToken = 0;
+  let elevenLabsVoices = [];
+  let elevenLabsVoicesKey = "";
+  let elevenLabsVoicesPromise = null;
+  const audioPlayer = new Audio();
+  const audioBlobCache = new Map();
+  const audioPendingCache = new Map();
+
+  function browserSupportsSpeech() {
+    return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  }
+
+  function currentEngine() {
+    const selected = dom.audioEngineSelect.value;
+    return ["browser", "gemini", "openai", "elevenlabs"].includes(selected) ? selected : "browser";
+  }
+
+  function providerLabel(provider = currentEngine()) {
+    if (provider === "gemini") return "Gemini";
+    if (provider === "openai") return "OpenAI";
+    if (provider === "elevenlabs") return "ElevenLabs";
+    return "Browser";
+  }
+
+  function providerApiKeyStorageKey(provider = currentEngine()) {
+    if (provider === "gemini") return APP_CONFIG.GEMINI_API_KEY_STORAGE_KEY;
+    if (provider === "openai") return APP_CONFIG.OPENAI_API_KEY_STORAGE_KEY;
+    if (provider === "elevenlabs") return APP_CONFIG.ELEVENLABS_API_KEY_STORAGE_KEY;
+    return "";
+  }
+
+  function providerVoiceStorageKey(provider = currentEngine()) {
+    if (provider === "browser") return APP_CONFIG.BROWSER_VOICE_STORAGE_KEY;
+    if (provider === "gemini") return APP_CONFIG.GEMINI_VOICE_STORAGE_KEY;
+    if (provider === "openai") return APP_CONFIG.OPENAI_VOICE_STORAGE_KEY;
+    if (provider === "elevenlabs") return APP_CONFIG.ELEVENLABS_VOICE_STORAGE_KEY;
+    return "";
+  }
+
+  function providerModelStorageKey(provider = currentEngine()) {
+    if (provider === "elevenlabs") return APP_CONFIG.ELEVENLABS_MODEL_STORAGE_KEY;
+    return "";
+  }
+
+  function providerNeedsApiKey(provider = currentEngine()) {
+    return provider !== "browser";
+  }
+
+  function providerApiKeyPlaceholder(provider = currentEngine()) {
+    if (provider === "gemini") return "Primary Gemini API key (saved only in this browser)";
+    if (provider === "openai") return "OpenAI API key (saved only in this browser)";
+    if (provider === "elevenlabs") return "ElevenLabs API key (saved only in this browser)";
+    return "";
+  }
+
+  function secondaryApiKeyPlaceholder(provider = currentEngine()) {
+    return provider === "gemini" ? "Backup Gemini API key (used after 429 or local cap)" : "";
+  }
+
+  function loadProviderApiKey(provider = currentEngine()) {
+    const storageKey = providerApiKeyStorageKey(provider);
+    return storageKey ? Utils.loadStoredValue(storageKey) : "";
+  }
+
+  function saveProviderApiKey(provider, value) {
+    const storageKey = providerApiKeyStorageKey(provider);
+    if (!storageKey) return;
+    if (!Utils.saveStoredValue(storageKey, value)) {
+      dom.audioNote.textContent = "Key not saved.";
+    }
+  }
+
+  function loadGeminiBackupApiKey() {
+    return Utils.loadStoredValue(APP_CONFIG.GEMINI_BACKUP_API_KEY_STORAGE_KEY);
+  }
+
+  function saveGeminiBackupApiKey(value) {
+    if (!Utils.saveStoredValue(APP_CONFIG.GEMINI_BACKUP_API_KEY_STORAGE_KEY, value)) {
+      dom.audioNote.textContent = "Key not saved.";
+    }
+  }
+
+  function loadGeminiApiKeys() {
+    const primary = loadProviderApiKey("gemini").trim();
+    const backup = loadGeminiBackupApiKey().trim();
+    const keys = [];
+    if (primary) keys.push({ apiKey: primary, slot: "primary" });
+    if (backup && backup !== primary) keys.push({ apiKey: backup, slot: "backup" });
+    return keys;
+  }
+
+  function loadAudioEngine() {
+    const stored = Utils.loadStoredValue(APP_CONFIG.AUDIO_ENGINE_STORAGE_KEY);
+    if (["browser", "gemini", "openai", "elevenlabs"].includes(stored)) return stored;
+    return browserSupportsSpeech() ? "browser" : "gemini";
+  }
+
+  function providerModelOptions(provider = currentEngine()) {
+    if (provider === "browser") return [["browser-device", "Device voice"]];
+    if (provider === "gemini") return [[APP_CONFIG.GEMINI_TTS_MODEL, APP_CONFIG.GEMINI_TTS_MODEL]];
+    if (provider === "openai") return [[APP_CONFIG.OPENAI_TTS_MODEL, APP_CONFIG.OPENAI_TTS_MODEL]];
+    return ELEVENLABS_TTS_MODELS.slice();
+  }
+
+  function defaultVoiceForProvider(provider = currentEngine()) {
+    if (provider === "gemini") return "Schedar";
+    if (provider === "openai") return "alloy";
+    if (provider === "elevenlabs") return APP_CONFIG.ELEVENLABS_DEFAULT_VOICE_ID;
+    return "";
+  }
+
+  function currentAudioModel(provider = currentEngine()) {
+    const options = providerModelOptions(provider);
+    const currentValue = dom.audioModelSelect.value;
+    const storageKey = providerModelStorageKey(provider);
+    const storedValue = storageKey ? Utils.loadStoredValue(storageKey) : "";
+    if (options.some(([value]) => value === currentValue)) return currentValue;
+    if (options.some(([value]) => value === storedValue)) return storedValue;
+    return options[0][0];
+  }
+
+  function scoreElevenLabsVoice(voice) {
+    const accent = String(voice.accent || "");
+    const language = String(voice.language || "");
+    let score = 0;
+    if (/british/i.test(accent)) score += 120;
+    if (/uk|british/i.test(voice.name)) score += 90;
+    if (voice.category === "premade") score += 40;
+    if (/^en/i.test(language)) score += 20;
+    return score;
+  }
+
+  function normaliseElevenLabsVoice(voice) {
+    const labels = voice && voice.labels ? voice.labels : {};
+    return {
+      voiceId: voice.voice_id,
+      name: voice.name || "Voice",
+      category: voice.category || "library",
+      accent: labels.accent || "",
+      language: labels.language || "",
+      description: labels.descriptive || labels.use_case || ""
+    };
+  }
+
+  function scoreBrowserVoice(voice) {
+    const name = String(voice && voice.name || "");
+    const lang = String(voice && voice.lang || "");
+    let score = 0;
+    if (/^en-GB$/i.test(lang)) score += 130;
+    if (/UK|British/i.test(name)) score += 70;
+    if (/Google/i.test(name)) score += 20;
+    if (/^en/i.test(lang)) score += 10;
+    return score;
+  }
+
+  function listBrowserVoices() {
+    if (!browserSupportsSpeech()) return [];
+    const allVoices = window.speechSynthesis.getVoices().slice();
+    const preferred = allVoices.filter(voice => scoreBrowserVoice(voice) > 0);
+    const pool = preferred.length ? preferred : allVoices.filter(voice => /^en/i.test(voice.lang));
+    return pool
+      .sort((a, b) => scoreBrowserVoice(b) - scoreBrowserVoice(a) || a.name.localeCompare(b.name))
+      .filter((voice, index, array) => array.findIndex(item => item.voiceURI === voice.voiceURI) === index);
+  }
+
+  function selectedBrowserVoice() {
+    const voices = listBrowserVoices();
+    if (!voices.length) return null;
+    const voiceUri = dom.voiceSelect.value || Utils.loadStoredValue(APP_CONFIG.BROWSER_VOICE_STORAGE_KEY);
+    return voices.find(voice => voice.voiceURI === voiceUri) || voices[0];
+  }
+
+  function browserVoiceReadyText() {
+    const voice = selectedBrowserVoice();
+    if (!voice) return "Browser speech unavailable.";
+    if (/Google UK English/i.test(voice.name)) return "Google UK browser TTS ready.";
+    if (/^en-GB$/i.test(voice.lang)) return "Browser UK TTS ready.";
+    return "Browser English TTS ready.";
+  }
+
+  async function fetchElevenLabsVoices(apiKey) {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), APP_CONFIG.FETCH_TIMEOUT_MS);
+    try {
+      const response = await fetch(APP_CONFIG.ELEVENLABS_VOICES_ENDPOINT, {
+        headers: { "xi-api-key": apiKey },
+        signal: controller.signal
+      });
+      const rawText = await response.text();
+      let payload = null;
+      try {
+        payload = rawText ? JSON.parse(rawText) : null;
+      } catch (err) {
+        payload = null;
+      }
+      if (!response.ok) {
+        const message = payload && payload.detail && payload.detail.message
+          ? payload.detail.message
+          : `ElevenLabs voices failed with status ${response.status}.`;
+        throw createGeminiError(message, response.status, payload);
+      }
+      return Array.isArray(payload && payload.voices)
+        ? payload.voices.map(normaliseElevenLabsVoice)
+        : [];
+    } catch (err) {
+      if (controller.signal.aborted) {
+        throw createGeminiError("ElevenLabs voices timed out.", 408, null);
+      }
+      throw err;
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  }
+
+  async function ensureElevenLabsVoices(apiKey) {
+    if (!apiKey) return [];
+    if (elevenLabsVoicesKey === apiKey && elevenLabsVoices.length) return elevenLabsVoices;
+    if (elevenLabsVoicesPromise) return elevenLabsVoicesPromise;
+    elevenLabsVoicesPromise = fetchElevenLabsVoices(apiKey)
+      .then(voices => {
+        elevenLabsVoices = voices.sort((a, b) => scoreElevenLabsVoice(b) - scoreElevenLabsVoice(a) || a.name.localeCompare(b.name));
+        elevenLabsVoicesKey = apiKey;
+        return elevenLabsVoices;
+      })
+      .finally(() => {
+        elevenLabsVoicesPromise = null;
+      });
+    return elevenLabsVoicesPromise;
+  }
+
+  function populateAudioModels() {
+    const provider = currentEngine();
+    const currentModelValue = dom.audioModelSelect.value;
+    const options = providerModelOptions(provider);
+    const storageKey = providerModelStorageKey(provider);
+    const storedValue = storageKey ? Utils.loadStoredValue(storageKey) : "";
+    dom.audioModelSelect.innerHTML = options
+      .map(([value, label]) => `<option value="${Utils.escapeHtml(value)}">${Utils.escapeHtml(label)}</option>`)
+      .join("");
+    dom.audioModelSelect.value = options.some(([value]) => value === currentModelValue)
+      ? currentModelValue
+      : (options.some(([value]) => value === storedValue) ? storedValue : options[0][0]);
+    dom.audioModelSelect.disabled = options.length <= 1;
+  }
+
+  async function populateVoices(token = refreshToken) {
+    const provider = currentEngine();
+    const currentVoice = dom.voiceSelect.value;
+
+    if (provider === "gemini") {
+      const storedVoice = Utils.loadStoredValue(APP_CONFIG.GEMINI_VOICE_STORAGE_KEY);
+      dom.voiceSelect.innerHTML = GEMINI_TTS_VOICES.map(([name, descriptor]) => {
+        const label = `${name} (${descriptor})`;
+        return `<option value="${Utils.escapeHtml(name)}">${Utils.escapeHtml(label)}</option>`;
+      }).join("");
+      dom.voiceSelect.value = GEMINI_TTS_VOICES.some(([name]) => name === currentVoice)
+        ? currentVoice
+        : (GEMINI_TTS_VOICES.some(([name]) => name === storedVoice) ? storedVoice : "Schedar");
+      syncAudioControls();
+      return;
+    }
+
+    if (provider === "openai") {
+      const storedVoice = Utils.loadStoredValue(APP_CONFIG.OPENAI_VOICE_STORAGE_KEY);
+      dom.voiceSelect.innerHTML = OPENAI_TTS_VOICES.map(([name, descriptor]) => {
+        const label = `${name} (${descriptor})`;
+        return `<option value="${Utils.escapeHtml(name)}">${Utils.escapeHtml(label)}</option>`;
+      }).join("");
+      dom.voiceSelect.value = OPENAI_TTS_VOICES.some(([name]) => name === currentVoice)
+        ? currentVoice
+        : (OPENAI_TTS_VOICES.some(([name]) => name === storedVoice) ? storedVoice : "alloy");
+      syncAudioControls();
+      return;
+    }
+
+    if (provider === "elevenlabs") {
+      const providerAtStart = provider;
+      const localToken = token;
+      const apiKey = loadProviderApiKey("elevenlabs");
+      if (!apiKey) {
+        dom.voiceSelect.innerHTML = `<option value="${Utils.escapeHtml(APP_CONFIG.ELEVENLABS_DEFAULT_VOICE_ID)}">George (British premade)</option>`;
+        dom.voiceSelect.value = APP_CONFIG.ELEVENLABS_DEFAULT_VOICE_ID;
+        syncAudioControls();
+        return;
+      }
+      dom.voiceSelect.innerHTML = `<option value="">Loading voices...</option>`;
+      syncAudioControls();
+      try {
+        const voices = await ensureElevenLabsVoices(apiKey);
+        if (currentEngine() !== providerAtStart || localToken !== refreshToken) return;
+        const storedVoice = Utils.loadStoredValue(APP_CONFIG.ELEVENLABS_VOICE_STORAGE_KEY);
+        const voiceOptions = voices.length
+          ? voices
+          : [normaliseElevenLabsVoice({ voice_id: APP_CONFIG.ELEVENLABS_DEFAULT_VOICE_ID, name: "George", category: "premade", labels: { accent: "british", language: "en" } })];
+        dom.voiceSelect.innerHTML = voiceOptions.map(voice => {
+          const parts = [];
+          if (voice.accent) parts.push(voice.accent);
+          parts.push(voice.category);
+          const label = `${voice.name} (${parts.filter(Boolean).join(" · ")})`;
+          return `<option value="${Utils.escapeHtml(voice.voiceId)}">${Utils.escapeHtml(label)}</option>`;
+        }).join("");
+        dom.voiceSelect.value = voiceOptions.some(voice => voice.voiceId === currentVoice)
+          ? currentVoice
+          : (voiceOptions.some(voice => voice.voiceId === storedVoice) ? storedVoice : voiceOptions[0].voiceId);
+      } catch (err) {
+        if (currentEngine() !== providerAtStart || localToken !== refreshToken) return;
+        dom.voiceSelect.innerHTML = `<option value="${Utils.escapeHtml(APP_CONFIG.ELEVENLABS_DEFAULT_VOICE_ID)}">George (British premade)</option>`;
+        dom.voiceSelect.value = APP_CONFIG.ELEVENLABS_DEFAULT_VOICE_ID;
+        dom.audioNote.textContent = providerErrorText("elevenlabs", err);
+      }
+      syncAudioControls();
+      return;
+    }
+
+    const browserVoices = listBrowserVoices();
+    const storedVoice = Utils.loadStoredValue(APP_CONFIG.BROWSER_VOICE_STORAGE_KEY);
+    dom.voiceSelect.innerHTML = browserVoices.length
+      ? browserVoices.map(voice => `<option value="${Utils.escapeHtml(voice.voiceURI)}">${Utils.escapeHtml(`${voice.name} (${voice.lang})`)}</option>`).join("")
+      : `<option value="">Best available browser voice</option>`;
+    dom.voiceSelect.value = browserVoices.some(voice => voice.voiceURI === currentVoice)
+      ? currentVoice
+      : (browserVoices.some(voice => voice.voiceURI === storedVoice) ? storedVoice : (browserVoices[0] ? browserVoices[0].voiceURI : ""));
+    syncAudioControls();
+  }
+
+  function syncAudioControls() {
+    const provider = currentEngine();
+    const hasKey = provider === "gemini"
+      ? Boolean(dom.apiKeyInput.value.trim() || dom.apiKeyBackupInput.value.trim())
+      : (providerNeedsApiKey(provider) ? Boolean(dom.apiKeyInput.value.trim()) : true);
+    const hasVoice = provider === "browser"
+      ? listBrowserVoices().length > 0
+      : Boolean(dom.voiceSelect.value);
+    speechReady = hasKey && hasVoice;
+    dom.apiKeyWrap.classList.toggle("hidden", !providerNeedsApiKey(provider));
+    dom.apiKeyBackupWrap.classList.toggle("hidden", provider !== "gemini");
+    dom.playBtn.disabled = !speechReady;
+    dom.playSlowBtn.disabled = !speechReady;
+    if (provider === "browser") {
+      dom.audioNote.textContent = browserVoiceReadyText();
+      return;
+    }
+    if (!hasKey) {
+      dom.audioNote.textContent = `Add ${providerLabel(provider)} key.`;
+      return;
+    }
+    if (!hasVoice) {
+      dom.audioNote.textContent = provider === "elevenlabs" && elevenLabsVoicesPromise
+        ? "Loading voices..."
+        : `Select ${providerLabel(provider)} voice.`;
+      return;
+    }
+    if (provider === "gemini" && geminiBackoffActive()) {
+      dom.audioNote.textContent = geminiBackoffReason;
+      return;
+    }
+    dom.audioNote.textContent = `${providerLabel(provider)} ready.`;
+  }
+
+  async function refreshProviderUi() {
+    refreshToken += 1;
+    const token = refreshToken;
+    const provider = currentEngine();
+    dom.apiKeyInput.value = loadProviderApiKey(provider);
+    dom.apiKeyInput.placeholder = providerApiKeyPlaceholder(provider);
+    dom.apiKeyBackupWrap.classList.toggle("hidden", provider !== "gemini");
+    dom.apiKeyBackupInput.value = provider === "gemini" ? loadGeminiBackupApiKey() : "";
+    dom.apiKeyBackupInput.placeholder = secondaryApiKeyPlaceholder(provider);
+    populateAudioModels();
+    await populateVoices(token);
+  }
+
+  function revokeActiveAudioUrl() {
+    if (!activeAudioUrl) return;
+    URL.revokeObjectURL(activeAudioUrl);
+    activeAudioUrl = "";
+  }
+
+  function cacheAudioBlob(cacheKey, audioBlob) {
+    if (audioBlobCache.has(cacheKey)) audioBlobCache.delete(cacheKey);
+    audioBlobCache.set(cacheKey, audioBlob);
+    while (audioBlobCache.size > APP_CONFIG.AUDIO_CACHE_LIMIT) {
+      const oldestKey = audioBlobCache.keys().next().value;
+      if (!oldestKey) break;
+      audioBlobCache.delete(oldestKey);
+    }
+  }
+
+  function geminiQuotaEntryId(apiKey, slot) {
+    return `${slot}-${Utils.hashString(apiKey)}`;
+  }
+
+  function geminiMinuteWindow(now = Date.now()) {
+    return Math.floor(now / 60000);
+  }
+
+  function geminiPacificDayKey(now = Date.now()) {
+    try {
+      return new Intl.DateTimeFormat("en-CA", {
+        timeZone: "America/Los_Angeles",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).format(new Date(now));
+    } catch (err) {
+      return new Date(now).toISOString().slice(0, 10);
+    }
+  }
+
+  function geminiRetryUntilNextDay(now = Date.now()) {
+    const currentDay = geminiPacificDayKey(now);
+    for (let step = 60000; step <= 36 * 60 * 60 * 1000; step += 60000) {
+      if (geminiPacificDayKey(now + step) !== currentDay) return step;
+    }
+    return 12 * 60 * 60 * 1000;
+  }
+
+  function loadGeminiQuotaState() {
+    return Utils.loadJson(APP_CONFIG.GEMINI_QUOTA_STORAGE_KEY, {});
+  }
+
+  function saveGeminiQuotaState(state) {
+    Utils.saveJson(APP_CONFIG.GEMINI_QUOTA_STORAGE_KEY, state);
+  }
+
+  function ensureGeminiQuotaEntry(state, apiKey, slot, now = Date.now()) {
+    const entryId = geminiQuotaEntryId(apiKey, slot);
+    const minuteWindow = geminiMinuteWindow(now);
+    const dayKey = geminiPacificDayKey(now);
+    const entry = state[entryId] || {
+      minuteWindow,
+      minuteCount: 0,
+      dayKey,
+      dayCount: 0,
+      remoteBackoffUntil: 0
+    };
+    if (entry.minuteWindow !== minuteWindow) {
+      entry.minuteWindow = minuteWindow;
+      entry.minuteCount = 0;
+    }
+    if (entry.dayKey !== dayKey) {
+      entry.dayKey = dayKey;
+      entry.dayCount = 0;
+    }
+    if (Number(entry.remoteBackoffUntil) < now) {
+      entry.remoteBackoffUntil = 0;
+    }
+    state[entryId] = entry;
+    return entry;
+  }
+
+  function geminiKeyLimitStatus(apiKey, slot, now = Date.now()) {
+    const state = loadGeminiQuotaState();
+    const entry = ensureGeminiQuotaEntry(state, apiKey, slot, now);
+    saveGeminiQuotaState(state);
+
+    if (entry.remoteBackoffUntil > now) {
+      return { ok: false, retryDelayMs: entry.remoteBackoffUntil - now, reason: `${providerLabel("gemini")} quota hit.` };
+    }
+    if (entry.minuteCount >= APP_CONFIG.GEMINI_LOCAL_RPM_LIMIT) {
+      return { ok: false, retryDelayMs: ((entry.minuteWindow + 1) * 60000) - now, reason: `Gemini local cap ${APP_CONFIG.GEMINI_LOCAL_RPM_LIMIT} RPM.` };
+    }
+    if (entry.dayCount >= APP_CONFIG.GEMINI_LOCAL_RPD_LIMIT) {
+      return { ok: false, retryDelayMs: geminiRetryUntilNextDay(now), reason: `Gemini local cap ${APP_CONFIG.GEMINI_LOCAL_RPD_LIMIT} RPD.` };
+    }
+    return { ok: true, retryDelayMs: 0, reason: "" };
+  }
+
+  function reserveGeminiKeyUsage(apiKey, slot, now = Date.now()) {
+    const state = loadGeminiQuotaState();
+    const entry = ensureGeminiQuotaEntry(state, apiKey, slot, now);
+    entry.minuteCount += 1;
+    entry.dayCount += 1;
+    saveGeminiQuotaState(state);
+  }
+
+  function setGeminiKeyBackoff(apiKey, slot, retryDelayMs, now = Date.now()) {
+    const state = loadGeminiQuotaState();
+    const entry = ensureGeminiQuotaEntry(state, apiKey, slot, now);
+    const delayMs = Math.max(retryDelayMs || 0, 60000);
+    entry.remoteBackoffUntil = Math.max(Number(entry.remoteBackoffUntil) || 0, now + delayMs);
+    saveGeminiQuotaState(state);
+  }
+
+  function clearGeminiKeyBackoff(apiKey, slot, now = Date.now()) {
+    const state = loadGeminiQuotaState();
+    const entry = ensureGeminiQuotaEntry(state, apiKey, slot, now);
+    entry.remoteBackoffUntil = 0;
+    saveGeminiQuotaState(state);
+  }
+
+  function createGeminiError(message, statusCode, payload) {
+    const error = new Error(message);
+    error.statusCode = Number(statusCode) || 0;
+    error.errorStatus = payload && payload.error && payload.error.status ? String(payload.error.status) : "";
+    const retryInfo = payload && payload.error && Array.isArray(payload.error.details)
+      ? payload.error.details.find(detail => detail && detail["@type"] === "type.googleapis.com/google.rpc.RetryInfo")
+      : null;
+    error.retryDelayMs = retryInfo && retryInfo.retryDelay
+      ? Utils.parseRetryDelayMs(retryInfo.retryDelay)
+      : 0;
+    return error;
+  }
+
+  function makeAbortError() {
+    try {
+      return new DOMException("Aborted", "AbortError");
+    } catch (err) {
+      const abortError = new Error("Aborted");
+      abortError.name = "AbortError";
+      return abortError;
+    }
+  }
+
+  function isAbortError(error) {
+    return Boolean(error && error.name === "AbortError");
+  }
+
+  function isGeminiQuotaError(error) {
+    const message = String(error && error.message || "");
+    const statusCode = Number(error && error.statusCode) || 0;
+    const errorStatus = String(error && error.errorStatus || "");
+    return statusCode === 429 || /RESOURCE_EXHAUSTED/i.test(errorStatus) || /quota exceeded|current quota|retry in/i.test(message);
+  }
+
+  function geminiBackoffActive() {
+    return geminiBackoffUntil > Date.now();
+  }
+
+  function clearGeminiBackoff() {
+    geminiBackoffUntil = 0;
+    geminiBackoffReason = "";
+  }
+
+  function setGeminiBackoff(error) {
+    if (!isGeminiQuotaError(error)) return;
+    const retryDelayMs = Math.max(Number(error && error.retryDelayMs) || 0, 5 * 60 * 1000);
+    geminiBackoffUntil = Date.now() + retryDelayMs;
+    geminiBackoffReason = `Gemini quota hit. Retry in ~${Utils.formatDurationShort(retryDelayMs)}.`;
+  }
+
+  function withAbortSignal(promise, signal) {
+    if (!signal) return promise;
+    if (signal.aborted) return Promise.reject(makeAbortError());
+    return new Promise((resolve, reject) => {
+      const onAbort = () => reject(makeAbortError());
+      signal.addEventListener("abort", onAbort, { once: true });
+      promise.then(
+        value => {
+          signal.removeEventListener("abort", onAbort);
+          resolve(value);
+        },
+        error => {
+          signal.removeEventListener("abort", onAbort);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  function providerErrorText(provider, error) {
+    if (provider === "gemini" && geminiBackoffActive()) {
+      return geminiBackoffReason || "Gemini quota hit.";
+    }
+    const message = String(error && error.message || "").replace(/\s+/g, " ").trim();
+    if (provider === "gemini" && isGeminiQuotaError(error)) return geminiBackoffReason || "Gemini quota hit.";
+    if (/timed out/i.test(message)) return `${providerLabel(provider)} timed out.`;
+    if (/paid_plan_required/i.test(message)) return `${providerLabel(provider)} paid voice.`;
+    if (/quota exceeded|current quota|resource_exhausted/i.test(message)) return `${providerLabel(provider)} quota hit.`;
+    if (!message) return `${providerLabel(provider)} error.`;
+    const compact = message.length > 72 ? `${message.slice(0, 69)}...` : message;
+    return `${providerLabel(provider)}: ${compact}`;
+  }
+
+  function stop() {
+    activeSpeakToken += 1;
+    if (speakAbortController) {
+      speakAbortController.abort();
+      speakAbortController = null;
+    }
+    if (browserSupportsSpeech()) {
+      window.speechSynthesis.cancel();
+    }
+    audioPlayer.pause();
+    audioPlayer.removeAttribute("src");
+    audioPlayer.load();
+    revokeActiveAudioUrl();
+    syncAudioControls();
+  }
+
+  function parseGeminiAudioMimeType(payload) {
+    const inlineData = payload && payload.candidates && payload.candidates[0] && payload.candidates[0].content && payload.candidates[0].content.parts && payload.candidates[0].content.parts[0] && payload.candidates[0].content.parts[0].inlineData;
+    return inlineData && inlineData.mimeType ? inlineData.mimeType : "audio/L16";
+  }
+
+  function decodeBase64(base64) {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  function writeAscii(view, offset, text) {
+    for (let i = 0; i < text.length; i += 1) view.setUint8(offset + i, text.charCodeAt(i));
+  }
+
+  function pcmToWavBlob(pcmData, sampleRate = 24000, channels = 1, bitsPerSample = 16) {
+    const dataSize = pcmData.byteLength;
+    const buffer = new ArrayBuffer(44 + dataSize);
+    const view = new DataView(buffer);
+    writeAscii(view, 0, "RIFF");
+    view.setUint32(4, 36 + dataSize, true);
+    writeAscii(view, 8, "WAVE");
+    writeAscii(view, 12, "fmt ");
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);
+    view.setUint16(22, channels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * channels * (bitsPerSample / 8), true);
+    view.setUint16(32, channels * (bitsPerSample / 8), true);
+    view.setUint16(34, bitsPerSample, true);
+    writeAscii(view, 36, "data");
+    view.setUint32(40, dataSize, true);
+    new Uint8Array(buffer, 44).set(new Uint8Array(pcmData.buffer, pcmData.byteOffset, pcmData.byteLength));
+    return new Blob([buffer], { type: "audio/wav" });
+  }
+
+  function buildDictationTranscript(word, sentence) {
+    const spokenWord = String(word.word || word || "").trim();
+    const spokenSentence = String(sentence || "").trim();
+    return spokenSentence
+      ? `The word is ${spokenWord}. ${spokenSentence}. The word is ${spokenWord}.`
+      : `The word is ${spokenWord}. The word is ${spokenWord}.`;
+  }
+
+  function buildSpeechPrompt(word, sentence, slow = false) {
+    const transcript = buildDictationTranscript(word, sentence);
+    return [
+      "Read this KS2 spelling dictation clearly in British English.",
+      "Say the target word, then the sentence, then the word again.",
+      slow ? "Speak a little more slowly and leave natural pauses." : "Use a calm classroom pace.",
+      "Do not add any extra commentary or spelling hints.",
+      transcript
+    ].join("\n\n");
+  }
+
+  function makeSpeechCacheKey(provider, model, voice, transcript) {
+    return `${provider}::${model}::${voice}::${Utils.hashString(transcript)}`;
+  }
+
+  async function fetchGeminiSpeechWithKey(promptText, voiceName, apiKey, slot) {
+    const now = Date.now();
+    const status = geminiKeyLimitStatus(apiKey, slot, now);
+    if (!status.ok) {
+      const error = createGeminiError(status.reason, 429, null);
+      error.retryDelayMs = status.retryDelayMs;
+      throw error;
+    }
+    reserveGeminiKeyUsage(apiKey, slot, now);
+    const requestController = new AbortController();
+    const timeoutId = window.setTimeout(() => requestController.abort(), APP_CONFIG.FETCH_TIMEOUT_MS);
+    try {
+      const response = await fetch(`${APP_CONFIG.GEMINI_TTS_ENDPOINT}?key=${encodeURIComponent(apiKey)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptText }] }],
+          generationConfig: { responseModalities: ["AUDIO"] },
+          speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } }
+        }),
+        signal: requestController.signal
+      });
+      const rawText = await response.text();
+      let payload = null;
+      try {
+        payload = rawText ? JSON.parse(rawText) : null;
+      } catch (err) {
+        payload = null;
+      }
+      if (!response.ok) {
+        const message = payload && payload.error && payload.error.message
+          ? payload.error.message
+          : `Gemini speech failed with status ${response.status}.`;
+        const error = createGeminiError(message, response.status, payload);
+        if (isGeminiQuotaError(error)) setGeminiKeyBackoff(apiKey, slot, error.retryDelayMs, now);
+        throw error;
+      }
+      clearGeminiKeyBackoff(apiKey, slot, now);
+      const inlineData = payload && payload.candidates && payload.candidates[0] && payload.candidates[0].content && payload.candidates[0].content.parts && payload.candidates[0].content.parts[0] && payload.candidates[0].content.parts[0].inlineData;
+      if (!inlineData || !inlineData.data) throw createGeminiError("Gemini speech returned no audio.", 500, payload);
+      const mimeType = parseGeminiAudioMimeType(payload);
+      const bytes = decodeBase64(inlineData.data);
+      if (/wav|mpeg|mp3|ogg|webm/i.test(mimeType)) {
+        return new Blob([bytes], { type: mimeType });
+      }
+      return pcmToWavBlob(bytes, 24000, 1, 16);
+    } catch (err) {
+      if (requestController.signal.aborted) {
+        throw createGeminiError("Gemini speech timed out.", 408, null);
+      }
+      throw err;
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  }
+
+  async function fetchGeminiSpeech(promptText, voiceName) {
+    const keys = loadGeminiApiKeys();
+    if (!keys.length) throw new Error("Add Gemini key.");
+    let lastError = null;
+    for (const keyEntry of keys) {
+      try {
+        return await fetchGeminiSpeechWithKey(promptText, voiceName, keyEntry.apiKey, keyEntry.slot);
+      } catch (err) {
+        lastError = err;
+        if (!isGeminiQuotaError(err)) break;
+      }
+    }
+    if (lastError && isGeminiQuotaError(lastError)) setGeminiBackoff(lastError);
+    throw lastError || new Error("Gemini speech failed.");
+  }
+
+  async function requestGeminiSpeech(promptText, voiceName, signal) {
+    const cacheKey = makeSpeechCacheKey("gemini", APP_CONFIG.GEMINI_TTS_MODEL, voiceName, promptText);
+    return requestCachedSpeechAudio(cacheKey, () => fetchGeminiSpeech(promptText, voiceName), signal);
+  }
+
+  async function requestCachedSpeechAudio(cacheKey, fetcher, signal) {
+    if (audioBlobCache.has(cacheKey)) return audioBlobCache.get(cacheKey);
+    if (audioPendingCache.has(cacheKey)) {
+      return withAbortSignal(audioPendingCache.get(cacheKey), signal);
+    }
+    const promise = Promise.resolve().then(fetcher).then(blob => {
+      cacheAudioBlob(cacheKey, blob);
+      audioPendingCache.delete(cacheKey);
+      return blob;
+    }).catch(err => {
+      audioPendingCache.delete(cacheKey);
+      throw err;
+    });
+    audioPendingCache.set(cacheKey, promise);
+    return withAbortSignal(promise, signal);
+  }
+
+  function buildHttpAudioError(provider, response, payload) {
+    const message = payload && payload.error && payload.error.message
+      ? payload.error.message
+      : `${providerLabel(provider)} failed with status ${response.status}.`;
+    return createGeminiError(message, response.status, payload);
+  }
+
+  async function fetchBinaryAudio(provider, endpoint, headers, body) {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), APP_CONFIG.FETCH_TIMEOUT_MS);
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(body),
+        signal: controller.signal
+      });
+      if (!response.ok) {
+        const rawText = await response.text();
+        let payload = null;
+        try { payload = rawText ? JSON.parse(rawText) : null; } catch (err) { payload = null; }
+        throw buildHttpAudioError(provider, response, payload);
+      }
+      return response.blob();
+    } catch (err) {
+      if (controller.signal.aborted) {
+        throw createGeminiError(`${providerLabel(provider)} timed out.`, 408, null);
+      }
+      throw err;
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
+  }
+
+  async function fetchOpenAiSpeech(transcript, voiceName, modelName) {
+    const apiKey = loadProviderApiKey("openai");
+    return fetchBinaryAudio("openai", APP_CONFIG.OPENAI_TTS_ENDPOINT, {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`
+    }, {
+      input: transcript,
+      model: modelName,
+      voice: voiceName,
+      format: "mp3"
+    });
+  }
+
+  async function requestOpenAiSpeech(transcript, voiceName, modelName, signal) {
+    const cacheKey = makeSpeechCacheKey("openai", modelName, voiceName, transcript);
+    return requestCachedSpeechAudio(cacheKey, () => fetchOpenAiSpeech(transcript, voiceName, modelName), signal);
+  }
+
+  async function fetchElevenLabsSpeech(transcript, voiceId, modelName) {
+    const apiKey = loadProviderApiKey("elevenlabs");
+    return fetchBinaryAudio("elevenlabs", `${APP_CONFIG.ELEVENLABS_TTS_ENDPOINT}/${encodeURIComponent(voiceId)}?output_format=mp3_44100_128`, {
+      "Content-Type": "application/json",
+      "xi-api-key": apiKey
+    }, {
+      text: transcript,
+      model_id: modelName
+    });
+  }
+
+  async function requestElevenLabsSpeech(transcript, voiceId, modelName, signal) {
+    const cacheKey = makeSpeechCacheKey("elevenlabs", modelName, voiceId, transcript);
+    return requestCachedSpeechAudio(cacheKey, () => fetchElevenLabsSpeech(transcript, voiceId, modelName), signal);
+  }
+
+  async function speakBrowserText(text, rate, voiceUri) {
+    if (!browserSupportsSpeech()) throw new Error("Browser speech unavailable.");
+    window.speechSynthesis.cancel();
+    return new Promise((resolve, reject) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voices = listBrowserVoices();
+      const voice = voices.find(item => item.voiceURI === voiceUri) || voices[0] || null;
+      utterance.lang = voice && voice.lang ? voice.lang : "en-GB";
+      utterance.rate = rate;
+      utterance.pitch = 1;
+      if (voice) utterance.voice = voice;
+      utterance.onend = () => resolve();
+      utterance.onerror = () => reject(new Error("Browser speech unavailable."));
+      window.speechSynthesis.speak(utterance);
+    });
+  }
+
+  function warmup(word, sentence, slow = false) {
+    if (!speechReady || !word || currentEngine() !== "gemini" || geminiBackoffActive()) return;
+    const promptText = buildSpeechPrompt(word, sentence, slow);
+    const selectedVoice = dom.voiceSelect.value || "Schedar";
+    requestGeminiSpeech(promptText, selectedVoice).catch(() => null);
+  }
+
+  async function requestSelectedProviderSpeech(word, sentence, slow, signal) {
+    const provider = currentEngine();
+    const transcript = buildDictationTranscript(word, sentence);
+    if (provider === "gemini") {
+      const promptText = buildSpeechPrompt(word, sentence, slow);
+      const voiceName = dom.voiceSelect.value || defaultVoiceForProvider("gemini");
+      return requestGeminiSpeech(promptText, voiceName, signal);
+    }
+    if (provider === "openai") {
+      const voiceName = dom.voiceSelect.value || defaultVoiceForProvider("openai");
+      return requestOpenAiSpeech(transcript, voiceName, currentAudioModel("openai"), signal);
+    }
+    if (provider === "elevenlabs") {
+      const voiceId = dom.voiceSelect.value || defaultVoiceForProvider("elevenlabs");
+      return requestElevenLabsSpeech(transcript, voiceId, currentAudioModel("elevenlabs"), signal);
+    }
+    throw new Error("Remote audio unavailable.");
+  }
+
+  async function play(word, slow = false, sentence = null) {
+    if (!speechReady) {
+      syncAudioControls();
+      return;
+    }
+    stop();
+    const requestToken = activeSpeakToken;
+    const promptSentence = sentence || word.sentence;
+    const transcript = buildDictationTranscript(word, promptSentence);
+    const baseRate = Number(dom.rateRange.value || UI_DEFAULTS.rate);
+    const playbackRate = slow ? Math.max(0.92, baseRate - 0.12) : baseRate;
+    dom.playBtn.disabled = true;
+    dom.playSlowBtn.disabled = true;
+
+    if (currentEngine() === "browser") {
+      dom.audioNote.textContent = "Speaking...";
+      try {
+        await speakBrowserText(transcript, playbackRate, dom.voiceSelect.value);
+        if (requestToken !== activeSpeakToken) return;
+        dom.audioNote.textContent = browserVoiceReadyText();
+      } catch (err) {
+        if (requestToken !== activeSpeakToken) return;
+        dom.audioNote.textContent = "Browser speech unavailable.";
+      } finally {
+        if (requestToken === activeSpeakToken) syncAudioControls();
+      }
+      return;
+    }
+
+    const provider = currentEngine();
+    dom.audioNote.textContent = `Loading ${providerLabel(provider)}...`;
+    speakAbortController = new AbortController();
+    try {
+      const audioBlob = await requestSelectedProviderSpeech(word, promptSentence, slow, speakAbortController.signal);
+      if (requestToken !== activeSpeakToken) return;
+      revokeActiveAudioUrl();
+      activeAudioUrl = URL.createObjectURL(audioBlob);
+      audioPlayer.src = activeAudioUrl;
+      audioPlayer.playbackRate = playbackRate;
+      await audioPlayer.play();
+      dom.audioNote.textContent = `${providerLabel(provider)} ready.`;
+    } catch (err) {
+      if (requestToken !== activeSpeakToken || isAbortError(err) || (speakAbortController && speakAbortController.signal.aborted)) return;
+      dom.audioNote.textContent = providerErrorText(provider, err);
+    } finally {
+      if (requestToken === activeSpeakToken) {
+        speakAbortController = null;
+        syncAudioControls();
+      }
+    }
+  }
+
+  function init() {
+    dom.audioEngineSelect.value = loadAudioEngine();
+    dom.apiKeyInput.value = loadProviderApiKey(currentEngine());
+    dom.apiKeyBackupInput.value = loadGeminiBackupApiKey();
+    refreshProviderUi();
+    if (browserSupportsSpeech()) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        if (currentEngine() === "browser") refreshProviderUi();
+      };
+    }
+  }
+
+  function canPlay() {
+    return speechReady;
+  }
+
+  function resetElevenLabsCache() {
+    elevenLabsVoices = [];
+    elevenLabsVoicesKey = "";
+    elevenLabsVoicesPromise = null;
+  }
+
+  return {
+    init,
+    stop,
+    play,
+    warmup,
+    canPlay,
+    currentEngine,
+    currentAudioModel,
+    providerLabel,
+    providerVoiceStorageKey,
+    providerModelStorageKey,
+    saveProviderApiKey,
+    loadProviderApiKey,
+    loadGeminiBackupApiKey,
+    saveGeminiBackupApiKey,
+    loadAudioEngine,
+    refreshProviderUi,
+    syncAudioControls,
+    browserSupportsSpeech,
+    browserVoiceReadyText,
+    clearGeminiBackoff,
+    resetElevenLabsCache,
+    providerNeedsApiKey
+  };
+})();
+
+const WordSelector = (() => {
+  function filteredWords() {
+    return WordRepository.filterByYear(dom.yearFilter.value);
+  }
+
+  function countFromSelector() {
+    return dom.sessionSize.value === "all" ? Infinity : Number(dom.sessionSize.value);
+  }
+
+  function scoreForSmart(word) {
+    const progress = Store.getProgress(word.slug);
+    const today = Utils.todayDay();
+    const total = progress.correct + progress.wrong;
+    let score = 0;
+    if (progress.attempts === 0) score += 65;
+    if (progress.attempts > 0 && progress.dueDay <= today) score += 140 + (today - progress.dueDay) * 4;
+    if (progress.wrong > 0) score += progress.wrong * 18;
+    if (total > 0) score += (progress.wrong / total) * 22;
+    score += Math.max(0, 3 - progress.stage) * 6;
+    score += Math.random();
+    return score;
+  }
+
+  function scoreForTrouble(word) {
+    const progress = Store.getProgress(word.slug);
+    const total = progress.correct + progress.wrong;
+    let score = 10;
+    if (progress.wrong > 0) score += progress.wrong * 24;
+    if (progress.attempts > 0 && progress.dueDay <= Utils.todayDay()) score += 40 + (Utils.todayDay() - progress.dueDay) * 3;
+    if (progress.stage < APP_CONFIG.SECURE_STAGE) score += (APP_CONFIG.SECURE_STAGE - progress.stage) * 10;
+    if (total > 0) score += (progress.wrong / total) * 28;
+    score += Math.random();
+    return score;
+  }
+
+  function smartBucket(word) {
+    const progress = Store.getProgress(word.slug);
+    const today = Utils.todayDay();
+    if (progress.wrong > 0 && progress.dueDay <= today) return "urgent";
+    if (progress.wrong > 0) return "fragile";
+    if (progress.attempts > 0 && progress.dueDay <= today) return "due";
+    if (progress.attempts === 0) return "new";
+    if (progress.stage < APP_CONFIG.SECURE_STAGE) return "growing";
+    return "secure";
+  }
+
+  function selectionWeight(word, selected, baseScore) {
+    let weight = Math.max(0.4, baseScore);
+    const last = selected[selected.length - 1];
+    const secondLast = selected[selected.length - 2];
+    const familyCount = selected.filter(item => item.family === word.family).length;
+    const yearCount = selected.filter(item => item.year === word.year).length;
+    if (last && last.family === word.family) weight *= 0.16;
+    if (last && secondLast && last.year === word.year && secondLast.year === word.year) weight *= 0.72;
+    if (familyCount > 0) weight *= Math.max(0.28, 1 / (familyCount + 1));
+    if (selected.length >= 4 && (yearCount / selected.length) > 0.75) weight *= 0.78;
+    return weight;
+  }
+
+  function chooseSmartWords() {
+    const available = filteredWords().slice();
+    const target = Math.min(countFromSelector(), available.length);
+    const bucketWeights = { urgent: 7, fragile: 5, due: 4, new: 3, growing: 2, secure: 0.7 };
+    const selected = [];
+
+    while (selected.length < target && available.length) {
+      const bucketChoices = Object.entries(bucketWeights)
+        .map(([name, baseWeight]) => {
+          const words = available.filter(word => smartBucket(word) === name);
+          if (!words.length) return null;
+          const recentBuckets = selected.slice(-3).map(item => smartBucket(item));
+          const repeatPenalty = recentBuckets.filter(bucket => bucket === name).length >= 2 ? 0.5 : 1;
+          return { name, words, weight: baseWeight * repeatPenalty };
+        })
+        .filter(Boolean);
+
+      const chosenBucket = Utils.weightedPick(bucketChoices, bucket => bucket.weight);
+      if (!chosenBucket) break;
+      const chosenWord = Utils.weightedPick(chosenBucket.words, word => selectionWeight(word, selected, scoreForSmart(word)));
+      if (!chosenWord) break;
+      selected.push(chosenWord);
+      const index = available.findIndex(word => word.slug === chosenWord.slug);
+      if (index >= 0) available.splice(index, 1);
+    }
+    return selected;
+  }
+
+  function chooseTroubleWords() {
+    const candidates = filteredWords().filter(word => {
+      const progress = Store.getProgress(word.slug);
+      return progress.wrong > 0 || (progress.attempts > 0 && progress.dueDay <= Utils.todayDay() && progress.stage < APP_CONFIG.SECURE_STAGE);
+    });
+
+    if (!candidates.length) {
+      return { words: chooseSmartWords(), fallback: true };
+    }
+
+    const target = Math.min(countFromSelector(), candidates.length);
+    const available = candidates.slice();
+    const selected = [];
+    while (selected.length < target && available.length) {
+      const chosenWord = Utils.weightedPick(available, word => selectionWeight(word, selected, scoreForTrouble(word)));
+      if (!chosenWord) break;
+      selected.push(chosenWord);
+      const index = available.findIndex(word => word.slug === chosenWord.slug);
+      if (index >= 0) available.splice(index, 1);
+    }
+    return { words: selected, fallback: false };
+  }
+
+  function chooseTestWords() {
+    const pool = filteredWords().slice();
+    Utils.shuffleInPlace(pool);
+    return pool.slice(0, Math.min(20, pool.length));
+  }
+
+  return {
+    filteredWords,
+    countFromSelector,
+    chooseSmartWords,
+    chooseTroubleWords,
+    chooseTestWords,
+    smartBucket
+  };
+})();
+
+const SessionManager = (() => {
+  let round = null;
+
+  function currentRound() {
+    return round;
+  }
+
+  function hasActiveRound() {
+    return Boolean(round && (round.type === "learning" || round.type === "test"));
+  }
+
+  function isSummary() {
+    return Boolean(round && round.type === "summary");
+  }
+
+  function currentWord() {
+    return round ? WordRepository.bySlug[round.currentSlug] : null;
+  }
+
+  function getOrCreateSentenceHistory(word) {
+    const sentences = word.sentences && word.sentences.length ? word.sentences : [word.sentence].filter(Boolean);
+    if (!round || !round.sentenceHistory || !sentences.length) return null;
+    let history = round.sentenceHistory[word.slug];
+    if (!history || !Array.isArray(history.remaining) || !history.remaining.length) {
+      const lastIndex = history && Number.isInteger(history.lastIndex) ? history.lastIndex : null;
+      history = { remaining: WordRepository.shuffledSentenceOrder(sentences.length, lastIndex), lastIndex };
+      round.sentenceHistory[word.slug] = history;
+    }
+    return history;
+  }
+
+  function choosePromptSentence(word) {
+    const sentences = word.sentences && word.sentences.length ? word.sentences : [word.sentence].filter(Boolean);
+    if (!sentences.length) return "";
+    if (sentences.length === 1) {
+      if (round && round.sentenceHistory) round.sentenceHistory[word.slug] = { remaining: [0], lastIndex: 0 };
+      return sentences[0];
+    }
+    if (!round || !round.sentenceHistory) return sentences[Math.floor(Math.random() * sentences.length)];
+    const history = getOrCreateSentenceHistory(word);
+    const nextIndex = history.remaining.shift();
+    history.lastIndex = nextIndex;
+    round.sentenceHistory[word.slug] = history;
+    return sentences[nextIndex];
+  }
+
+  function peekPromptSentence(slug) {
+    const word = WordRepository.bySlug[slug];
+    if (!word) return "";
+    const sentences = word.sentences && word.sentences.length ? word.sentences : [word.sentence].filter(Boolean);
+    if (!sentences.length) return "";
+    if (!round || !round.sentenceHistory) return sentences[0];
+    const history = getOrCreateSentenceHistory(word);
+    if (!history || !history.remaining.length) return sentences[0];
+    const nextIndex = history.remaining[0];
+    return sentences[nextIndex] || sentences[0];
+  }
+
+  function setCurrentPrompt(slug) {
+    if (!round) return;
+    const word = WordRepository.bySlug[slug];
+    if (!word) return;
+    const sentence = choosePromptSentence(word);
+    round.currentSlug = slug;
+    round.currentPrompt = {
+      slug,
+      sentence,
+      cloze: WordRepository.buildCloze(sentence, word.word)
+    };
+  }
+
+  function currentPrompt() {
+    const word = currentWord();
+    if (!word) return null;
+    if (round && round.currentPrompt && round.currentPrompt.slug === word.slug) return round.currentPrompt;
+    return {
+      slug: word.slug,
+      sentence: word.sentence,
+      cloze: WordRepository.buildCloze(word.sentence, word.word)
+    };
+  }
+
+  function confirmDiscardSession() {
+    if (!round || round.type === "summary") return true;
+    return window.confirm("End the current session and switch?");
+  }
+
+  function resetInteractiveState({ hideSummary = true, preserveStatus = false } = {}) {
+    Utils.clearScheduled();
+    AudioService.stop();
+    if (hideSummary) dom.summaryPanel.classList.add("hidden");
+    if (!preserveStatus) dom.statusLine.textContent = "Session ended. Choose a new round when ready.";
+  }
+
+  function clearRound() {
+    round = null;
+  }
+
+  function startMode(mode, customWords = null) {
+    if (!confirmDiscardSession()) return;
+    resetInteractiveState({ preserveStatus: true });
+    round = null;
+    if (mode === "test") {
+      startTestSession();
+    } else {
+      startLearningSession(mode, customWords);
+    }
+  }
+
+  function startLearningSession(mode, customWords = null) {
+    let selected = [];
+    let actualMode = mode;
+    let usedSmartFallback = false;
+
+    if (customWords) {
+      const seen = new Set();
+      selected = customWords.filter(Boolean).filter(word => {
+        if (seen.has(word.slug)) return false;
+        seen.add(word.slug);
+        return true;
+      });
+    } else if (mode === "trouble") {
+      const choice = WordSelector.chooseTroubleWords();
+      selected = choice.words;
+      usedSmartFallback = choice.fallback;
+      if (usedSmartFallback) actualMode = "smart";
+    } else {
+      selected = WordSelector.chooseSmartWords();
+    }
+
+    if (!selected.length) {
+      dom.statusLine.textContent = "No words were available for that session.";
+      return;
+    }
+
+    const status = {};
+    selected.forEach(word => {
+      const progress = Store.getProgress(word.slug);
+      status[word.slug] = {
+        attempts: 0,
+        successes: 0,
+        needed: progress.attempts === 0 ? 2 : 1,
+        hadWrong: false,
+        wrongAnswers: [],
+        done: false,
+        applied: false
+      };
+    });
+
+    round = {
+      type: "learning",
+      mode: actualMode,
+      label: actualMode === "trouble" ? "Trouble drill" : actualMode === "single" ? "Single-word drill" : "Smart review",
+      uniqueWords: selected.map(word => word.slug),
+      queue: selected.map(word => word.slug),
+      status,
+      currentSlug: null,
+      currentPrompt: null,
+      sentenceHistory: {},
+      phase: "question",
+      promptCount: 0,
+      lastFamily: null,
+      lastYear: null,
+      usedSmartFallback
+    };
+
+    View.renderRoundIntro(round);
+    View.showPracticeArea();
+    nextLearningCard();
+  }
+
+  function startTestSession() {
+    const selected = WordSelector.chooseTestWords();
+    if (!selected.length) {
+      dom.statusLine.textContent = "No words were available for a test.";
+      return;
+    }
+    round = {
+      type: "test",
+      mode: "test",
+      label: "SATs 20 test",
+      uniqueWords: selected.map(word => word.slug),
+      queue: selected.map(word => word.slug),
+      currentSlug: null,
+      currentPrompt: null,
+      sentenceHistory: {},
+      results: []
+    };
+    View.renderRoundIntro(round);
+    View.showPracticeArea();
+    nextTestCard();
+  }
+
+  function enqueueLater(slug, gap = 2) {
+    if (!round || !round.queue) return;
+    round.queue = round.queue.filter(item => item !== slug);
+    const word = WordRepository.bySlug[slug];
+    const minPos = Math.min(gap, round.queue.length);
+    const maxPos = Math.min(round.queue.length, minPos + 3);
+    let position = minPos + Math.floor(Math.random() * (Math.max(0, maxPos - minPos) + 1));
+    while (position < round.queue.length && WordRepository.bySlug[round.queue[position]] && WordRepository.bySlug[round.queue[position]].family === word.family) {
+      position += 1;
+    }
+    round.queue.splice(Math.min(position, round.queue.length), 0, slug);
+  }
+
+  function candidateWeightForQueueSlug(slug, index) {
+    const word = WordRepository.bySlug[slug];
+    const progress = Store.getProgress(slug);
+    const info = round.status[slug];
+    let weight = Math.max(1, 10 - index);
+    if (progress.dueDay <= Utils.todayDay()) weight += 14;
+    if (progress.wrong > 0) weight += 8;
+    if (progress.attempts === 0) weight += 4;
+    if (info && info.hadWrong) weight += 12;
+    if (round.lastFamily && round.lastFamily === word.family) weight *= 0.18;
+    if (round.lastYear && round.lastYear === word.year) weight *= 0.76;
+    return Math.max(0.2, weight);
+  }
+
+  function getNextWarmupTargets(limit = 1) {
+    if (!round || !Array.isArray(round.queue) || !round.queue.length) return [];
+    if (round.type === "test") {
+      return round.queue.slice(0, limit).map(slug => ({
+        word: WordRepository.bySlug[slug],
+        sentence: peekPromptSentence(slug),
+        slow: false
+      })).filter(item => item.word);
+    }
+    if (round.type !== "learning") return [];
+    const windowSize = Math.min(8, round.queue.length);
+    return round.queue
+      .slice(0, windowSize)
+      .map((slug, index) => ({ slug, index, weight: candidateWeightForQueueSlug(slug, index) }))
+      .sort((a, b) => b.weight - a.weight || a.index - b.index)
+      .slice(0, limit)
+      .map(item => ({ word: WordRepository.bySlug[item.slug], sentence: peekPromptSentence(item.slug), slow: false }))
+      .filter(item => item.word);
+  }
+
+  function prewarmIfHelpful(word, prompt) {
+    if (!dom.autoSpeak.checked) return;
+    if (!AudioService.canPlay()) return;
+    if (!word || !prompt) return;
+    AudioService.warmup(word, prompt.sentence, false);
+    getNextWarmupTargets(1).forEach(target => {
+      AudioService.warmup(target.word, target.sentence, target.slow);
+    });
+  }
+
+  function chooseNextQueueSlug() {
+    if (!round || !round.queue.length) return null;
+    const windowSize = Math.min(8, round.queue.length);
+    const candidates = round.queue.slice(0, windowSize).map((slug, index) => ({ slug, index, weight: candidateWeightForQueueSlug(slug, index) }));
+    const picked = Utils.weightedPick(candidates, item => item.weight);
+    if (!picked) return round.queue.shift();
+    round.queue.splice(picked.index, 1);
+    return picked.slug;
+  }
+
+  function completedCount() {
+    if (!round || !round.status) return 0;
+    return Object.values(round.status).filter(info => info.done).length;
+  }
+
+  function checkedCount() {
+    if (!round || !round.status) return 0;
+    return Object.values(round.status).filter(info => info.attempts > 0).length;
+  }
+
+  function wrongCount() {
+    if (!round || !round.status) return 0;
+    return Object.values(round.status).filter(info => info.hadWrong).length;
+  }
+
+  function nextLearningCard() {
+    if (!round || round.type !== "learning") return;
+    if (round.phase === "correction" || round.phase === "retry") return;
+
+    while (round.queue.length) {
+      const slug = chooseNextQueueSlug();
+      if (!slug) break;
+      if (!round.status[slug].done) {
+        setCurrentPrompt(slug);
+        round.lastFamily = WordRepository.bySlug[slug].family;
+        round.lastYear = WordRepository.bySlug[slug].year;
+        View.renderCurrentCard();
+        const prompt = currentPrompt();
+        prewarmIfHelpful(currentWord(), prompt);
+        if (dom.autoSpeak.checked && AudioService.canPlay()) {
+          Utils.schedule(() => AudioService.play(currentWord(), false, prompt.sentence), 120);
+        }
+        return;
+      }
+    }
+
+    finishLearningSession();
+  }
+
+  function nextTestCard() {
+    if (!round || round.type !== "test") return;
+    if (!round.queue.length) {
+      finishTestSession();
+      return;
+    }
+    setCurrentPrompt(round.queue.shift());
+    View.renderCurrentCard();
+    const prompt = currentPrompt();
+    if (dom.autoSpeak.checked && AudioService.canPlay()) {
+      Utils.schedule(() => AudioService.play(currentWord(), false, prompt.sentence), 120);
+    }
+  }
+
+  function applyLearningOutcome(slug, info) {
+    if (info.applied) return;
+    const progress = Store.getProgress(slug);
+    progress.attempts += 1;
+    progress.lastDay = Utils.todayDay();
+    if (info.hadWrong) {
+      progress.wrong += 1;
+      progress.stage = Math.max(0, progress.stage - 1);
+      progress.dueDay = Utils.todayDay();
+      progress.lastResult = "wrong";
+    } else {
+      progress.correct += 1;
+      progress.stage = Math.min(progress.stage + 1, APP_CONFIG.STAGE_INTERVALS.length - 1);
+      progress.dueDay = Utils.todayDay() + APP_CONFIG.STAGE_INTERVALS[progress.stage];
+      progress.lastResult = "correct";
+    }
+    Store.setProgress(slug, progress);
+    info.applied = true;
+  }
+
+  function applyTestOutcome(slug, correct) {
+    const progress = Store.getProgress(slug);
+    progress.attempts += 1;
+    progress.lastDay = Utils.todayDay();
+    if (correct) {
+      progress.correct += 1;
+      progress.stage = Math.min(progress.stage + 1, APP_CONFIG.STAGE_INTERVALS.length - 1);
+      progress.dueDay = Utils.todayDay() + APP_CONFIG.STAGE_INTERVALS[progress.stage];
+      progress.lastResult = "correct";
+    } else {
+      progress.wrong += 1;
+      progress.stage = Math.max(0, progress.stage - 1);
+      progress.dueDay = Utils.todayDay();
+      progress.lastResult = "wrong";
+    }
+    Store.setProgress(slug, progress);
+  }
+
+  function submitCurrentAnswer() {
+    if (!round) return;
+    if (round.type === "test") handleTestSubmit();
+    else if (round.type === "learning") handleLearningSubmit();
+  }
+
+  function handleLearningSubmit() {
+    const word = currentWord();
+    const prompt = currentPrompt();
+    if (!word || !prompt) return;
+    const info = round.status[word.slug];
+    const typed = dom.answerInput.value.trim();
+    const correct = word.accepted.includes(Utils.normalize(typed));
+    if (!typed) return;
+
+    if (round.phase === "correction") {
+      if (correct) {
+        round.phase = "question";
+        enqueueLater(word.slug, 2);
+        View.showFeedback("info", `
+          <strong>Locked in.</strong>
+          <div class="answer-big">${Utils.escapeHtml(word.word)}</div>
+          <div>Good. This word will come back once later for a clean blind check.</div>
+        `);
+        Utils.schedule(() => nextLearningCard(), 450);
+      } else {
+        View.showFeedback("error", `
+          <strong>Try again.</strong>
+          <div class="answer-big">${Utils.escapeHtml(word.word)}</div>
+          <div>Type the correct spelling exactly once before moving on.</div>
+        `);
+      }
+      return;
+    }
+
+    round.promptCount += 1;
+    info.attempts += 1;
+
+    if (round.phase === "retry") {
+      if (correct) {
+        round.phase = "question";
+        enqueueLater(word.slug, 3);
+        View.showFeedback("info", `
+          <strong>Good recovery.</strong>
+          <div class="answer-big">${Utils.escapeHtml(word.word)}</div>
+          <div>You pulled it back from memory. This word will return later for one clean check.</div>
+        `);
+        View.renderProgress();
+        Utils.schedule(() => nextLearningCard(), 500);
+      } else {
+        info.wrongAnswers.push(typed);
+        round.phase = "correction";
+        const familyWords = word.familyWords.map(item => `<span class="pill learning">${Utils.escapeHtml(item)}</span>`).join("");
+        View.showFeedback("error", `
+          <strong>Still not quite.</strong>
+          <div>The correct spelling is:</div>
+          <div class="answer-big">${Utils.escapeHtml(word.word)}</div>
+          <div>Type it once correctly, then it will come back again later in this round.</div>
+          ${word.familyWords.length > 1 ? `<div class="family-words">${familyWords}</div>` : ""}
+        `);
+        dom.answerInput.value = "";
+        dom.answerInput.placeholder = "Type the correct spelling once";
+        dom.submitBtn.textContent = "Lock it in";
+        dom.skipBtn.disabled = true;
+        dom.answerInput.focus();
+        View.renderProgress();
+      }
+      return;
+    }
+
+    if (correct) {
+      info.successes += 1;
+      if (info.successes >= info.needed) {
+        info.done = true;
+        applyLearningOutcome(word.slug, info);
+        View.showFeedback(info.hadWrong ? "info" : "success", `
+          <strong>${info.hadWrong ? "Correct now." : "Correct."}</strong>
+          <div class="answer-big">${Utils.escapeHtml(word.word)}</div>
+          <div>${info.hadWrong ? "This word is fixed for this round and will stay due for future review." : "This word is secure for today."}</div>
+        `);
+      } else {
+        enqueueLater(word.slug, 3);
+        View.showFeedback("info", `
+          <strong>Good first hit.</strong>
+          <div class="answer-big">${Utils.escapeHtml(word.word)}</div>
+          <div>This word is new for this learner, so it will come back once more in this round.</div>
+        `);
+      }
+      View.renderProgress();
+      Utils.schedule(() => {
+        round.phase = "question";
+        nextLearningCard();
+      }, 500);
+      return;
+    }
+
+    info.hadWrong = true;
+    info.successes = 0;
+    info.needed = 1;
+    info.wrongAnswers.push(typed);
+    round.phase = "retry";
+    View.showFeedback("error", `
+      <strong>Not quite.</strong>
+      <div>No answer shown yet. Hear it again and try once more from memory.</div>
+      <div class="footer-note">If it is still wrong next time, the correct spelling will appear and the word will come back later for one clean check.</div>
+    `);
+    dom.answerInput.value = "";
+    dom.answerInput.placeholder = "Try once more from memory";
+    dom.submitBtn.textContent = "Try again";
+    dom.skipBtn.disabled = true;
+    dom.answerInput.focus();
+    View.renderProgress();
+    if (AudioService.canPlay()) {
+      AudioService.warmup(word, prompt.sentence, true);
+      Utils.schedule(() => AudioService.play(word, true, prompt.sentence), 140);
+    }
+  }
+
+  function handleTestSubmit() {
+    const word = currentWord();
+    if (!word) return;
+    const typed = dom.answerInput.value.trim();
+    if (!typed) {
+      View.showFeedback("error", `
+        <strong>Nothing saved yet.</strong>
+        <div>Type a spelling first, or end the session if you want to stop here.</div>
+      `);
+      dom.answerInput.focus();
+      return;
+    }
+    const correct = word.accepted.includes(Utils.normalize(typed));
+    round.results.push({ slug: word.slug, answer: typed, correct });
+    applyTestOutcome(word.slug, correct);
+    View.clearFeedback();
+    View.showFeedback("info", `<strong>Saved.</strong> Moving to the next word.`);
+    Utils.schedule(() => nextTestCard(), 320);
+  }
+
+  function finishLearningSession() {
+    const statuses = Object.entries(round.status);
+    const total = statuses.length;
+    const firstTime = statuses.filter(([, info]) => !info.hadWrong).length;
+    const mistakes = statuses.filter(([, info]) => info.hadWrong).map(([slug]) => WordRepository.bySlug[slug]);
+    round = {
+      type: "summary",
+      title: currentRound().label,
+      mistakes: mistakes.map(word => word.slug)
+    };
+    View.renderSummary({
+      title: currentRound().title,
+      cards: [
+        { label: "Words in round", value: total, sub: "Unique words selected" },
+        { label: "Correct without a miss", value: firstTime, sub: "Strong on the first go" },
+        { label: "Needed correction", value: mistakes.length, sub: "These words came back again" },
+        { label: "Prompts heard", value: statuses.reduce((sum, [, info]) => sum + info.attempts, 0), sub: "Includes repeats of weak words" }
+      ],
+      text: mistakes.length
+        ? "Good. The weak words were caught quickly and are now marked due again for this learner."
+        : "Excellent. Every selected word was correct without needing a correction step.",
+      mistakes
+    });
+  }
+
+  function finishTestSession() {
+    const total = round.results.length;
+    const correct = round.results.filter(result => result.correct).length;
+    const mistakes = round.results.filter(result => !result.correct).map(result => WordRepository.bySlug[result.slug]);
+    round = { type: "summary", title: "SATs 20 test", mistakes: mistakes.map(word => word.slug) };
+    View.renderSummary({
+      title: "SATs 20 test",
+      cards: [
+        { label: "Score", value: `${correct}/${total}`, sub: "Correct spellings" },
+        { label: "Accuracy", value: total ? `${Math.round((correct / total) * 100)}%` : "0%", sub: "Single attempt per word" },
+        { label: "Correct", value: correct, sub: "Strong on the day" },
+        { label: "Needs more work", value: mistakes.length, sub: "Marked due again today" }
+      ],
+      text: mistakes.length
+        ? "The missed words have been pushed back into the learner's due queue, ready for another review today."
+        : "Excellent. This learner scored full marks on this SATs-style round.",
+      mistakes
+    });
+  }
+
+  function skipCurrent() {
+    if (!round || round.type !== "learning" || round.phase === "correction" || round.phase === "retry") return;
+    const slug = round.currentSlug;
+    enqueueLater(slug, 5);
+    nextLearningCard();
+  }
+
+  function endCurrentSession() {
+    if (!round) return;
+    if (!window.confirm("End this session now?")) return;
+    resetInteractiveState();
+    round = null;
+    View.hidePracticeArea();
+    View.clearFeedback();
+    View.syncContextToggle();
+  }
+
+  function backHomeFromSummary() {
+    resetInteractiveState({ preserveStatus: true });
+    round = null;
+    dom.summaryPanel.classList.add("hidden");
+    View.hidePracticeArea();
+    View.clearFeedback();
+    View.syncContextToggle();
+  }
+
+  function startMistakeDrillFromSummary() {
+    if (!round || !Array.isArray(round.mistakes) || !round.mistakes.length) return;
+    const words = round.mistakes.map(slug => WordRepository.bySlug[slug]).filter(Boolean);
+    startMode("trouble", words);
+  }
+
+  return {
+    currentRound,
+    hasActiveRound,
+    isSummary,
+    currentWord,
+    currentPrompt,
+    confirmDiscardSession,
+    startMode,
+    submitCurrentAnswer,
+    skipCurrent,
+    endCurrentSession,
+    backHomeFromSummary,
+    startMistakeDrillFromSummary,
+    clearRound,
+    checkedCount,
+    completedCount,
+    wrongCount
+  };
+})();
+
+const View = (() => {
+  function canRevealSentenceContext() {
+    const round = SessionManager.currentRound();
+    return Boolean(round && round.type === "learning" && dom.showCloze.checked);
+  }
+
+  function syncContextToggle() {
+    const round = SessionManager.currentRound();
+    dom.showCloze.disabled = Boolean(round && round.type === "test");
+  }
+
+  function showPracticeArea() {
+    dom.practiceShell.classList.add("active");
+    dom.summaryPanel.classList.add("hidden");
+    syncContextToggle();
+    dom.answerInput.focus();
+  }
+
+  function hidePracticeArea() {
+    dom.practiceShell.classList.remove("active");
+    syncContextToggle();
+  }
+
+  function clearFeedback() {
+    dom.feedbackArea.className = "hidden";
+    dom.feedbackArea.innerHTML = "";
+  }
+
+  function showFeedback(kind, html) {
+    dom.feedbackArea.className = `feedback ${kind}`;
+    dom.feedbackArea.innerHTML = html;
+  }
+
+  function renderProfiles() {
+    dom.profileSelect.innerHTML = Store.profiles()
+      .map(profile => `<option value="${Utils.escapeHtml(profile.id)}">${Utils.escapeHtml(profile.name)}</option>`)
+      .join("");
+    dom.profileSelect.value = Store.currentProfile().id;
+  }
+
+  function renderStats(options = {}) {
+    const preserveStatusLine = options.preserveStatusLine === true;
+    const words = WordSelector.filteredWords();
+    const familyCount = new Set(words.map(word => `${word.year}||${word.family}`)).size;
+    let secure = 0;
+    let due = 0;
+    let fresh = 0;
+    let trouble = 0;
+    let attempts = 0;
+    let correct = 0;
+
+    words.forEach(word => {
+      const progress = Store.getProgress(word.slug);
+      attempts += progress.attempts;
+      correct += progress.correct;
+      if (progress.attempts === 0) fresh += 1;
+      if (progress.stage >= APP_CONFIG.SECURE_STAGE) secure += 1;
+      if (progress.attempts > 0 && progress.dueDay <= Utils.todayDay()) due += 1;
+      if (progress.wrong > 0 && (progress.wrong >= progress.correct || progress.stage < APP_CONFIG.SECURE_STAGE)) trouble += 1;
+    });
+
+    const accuracy = attempts ? Math.round((correct / attempts) * 100) : "—";
+    const cards = [
+      { label: "Official sets", value: familyCount, sub: "Statutory entries in this filter" },
+      { label: "Practice spellings", value: words.length, sub: "Expanded individual spellings" },
+      { label: "Secure", value: secure, sub: "Words at 2 weeks or better" },
+      { label: "Due today", value: due, sub: "Already learnt, ready to revisit" },
+      { label: "New left", value: fresh, sub: "Not yet attempted by this learner" },
+      { label: "Accuracy", value: accuracy, sub: attempts ? `${attempts} scored rounds logged` : "No scored rounds yet" }
+    ];
+
+    dom.statsGrid.innerHTML = cards.map(card => `
+      <div class="stat">
+        <div class="label">${Utils.escapeHtml(card.label)}</div>
+        <div class="value">${Utils.escapeHtml(card.value)}</div>
+        <div class="sub">${Utils.escapeHtml(card.sub)}</div>
+      </div>
+    `).join("");
+
+    if (!preserveStatusLine) {
+      dom.statusLine.textContent = `Current learner: ${Store.currentProfile().name}. Smart Review chooses due words first, then weak words, then unseen words.`;
+    }
+    renderLiveMiniStats();
+  }
+
+  function renderLiveMiniStats() {
+    const words = WordSelector.filteredWords();
+    let secure = 0;
+    let due = 0;
+    let trouble = 0;
+    words.forEach(word => {
+      const progress = Store.getProgress(word.slug);
+      if (progress.stage >= APP_CONFIG.SECURE_STAGE) secure += 1;
+      if (progress.attempts > 0 && progress.dueDay <= Utils.todayDay()) due += 1;
+      if (progress.wrong > 0 && (progress.wrong >= progress.correct || progress.stage < APP_CONFIG.SECURE_STAGE)) trouble += 1;
+    });
+    const stats = [
+      { label: "Secure", value: secure },
+      { label: "Due", value: due },
+      { label: "Trouble", value: trouble },
+      { label: "Bank size", value: words.length }
+    ];
+    dom.liveMiniStats.innerHTML = stats.map(stat => `
+      <div class="stat">
+        <div class="label">${Utils.escapeHtml(stat.label)}</div>
+        <div class="value">${Utils.escapeHtml(stat.value)}</div>
+      </div>
+    `).join("");
+  }
+
+  function statusClassForWord(word) {
+    const progress = Store.getProgress(word.slug);
+    const total = progress.correct + progress.wrong;
+    if (progress.attempts === 0) return "new";
+    if (progress.wrong > 0 && (progress.wrong >= progress.correct || (progress.dueDay <= Utils.todayDay() && total > 0))) return "trouble";
+    if (progress.dueDay <= Utils.todayDay()) return "due";
+    if (progress.stage >= APP_CONFIG.SECURE_STAGE) return "secure";
+    return "learning";
+  }
+
+  function renderWordBank() {
+    const query = Utils.normalize(dom.wordSearch.value);
+    const activeFilter = dom.yearFilter.value;
+    dom.wordGroups.innerHTML = WordRepository.groups()
+      .filter(group => activeFilter === "all" ? true : group.key === activeFilter)
+      .map(group => {
+        const visibleWords = group.words.filter(word => {
+          if (!query) return true;
+          const searchFields = [
+            word.slug,
+            Utils.normalize(word.word),
+            Utils.normalize(word.family),
+            Utils.normalize(word.yearLabel),
+            ...word.familyWords.map(item => Utils.normalize(item))
+          ];
+          return searchFields.some(value => value.includes(query));
+        });
+        const secureCount = visibleWords.filter(word => Store.getProgress(word.slug).stage >= APP_CONFIG.SECURE_STAGE).length;
+        const summaryText = visibleWords.length
+          ? `${secureCount} secure out of ${visibleWords.length} visible spellings`
+          : "No spellings match this search in this year band.";
+        return `
+          <div class="word-group">
+            <h3>${Utils.escapeHtml(group.title)}</h3>
+            <div class="muted">${Utils.escapeHtml(summaryText)}</div>
+            <div class="word-bank">
+              ${visibleWords.length ? visibleWords.map(word => {
+                const cls = statusClassForWord(word);
+                const progress = Store.getProgress(word.slug);
+                const title = `${word.word} • ${word.family} • ${WordRepository.stageLabel(progress.stage)} • correct ${progress.correct}, wrong ${progress.wrong}`;
+                return `<button type="button" class="pill ${cls}" data-word="${Utils.escapeHtml(word.slug)}" title="${Utils.escapeHtml(title)}">${Utils.escapeHtml(word.word)}</button>`;
+              }).join("") : `<div class="note">Try another word or family search.</div>`}
+            </div>
+          </div>
+        `;
+      }).join("");
+  }
+
+  function renderRoundIntro(round) {
+    dom.roundTitle.textContent = round.label;
+    if (round.type === "test") {
+      dom.roundText.textContent = "This round uses one attempt per word and reveals the score at the end.";
+      dom.liveHint.textContent = `There is no instant marking in this mode. Spell each word once and move on. ${Utils.keyboardHintText()}`;
+      dom.sessionFooterNote.textContent = "The audio follows the KS2 pattern: the word, then the sentence, then the word again. Wrong answers are marked due again for this learner after the test.";
+      dom.modeBadge.className = "badge warn";
+      dom.modeBadge.textContent = round.label;
+      dom.submitBtn.textContent = "Save and next";
+      dom.skipBtn.disabled = true;
+    } else {
+      const usedSmartFallback = Boolean(round.usedSmartFallback);
+      dom.roundText.textContent = usedSmartFallback
+        ? "No saved trouble words yet, so this round is using a smart review mix instead."
+        : round.mode === "trouble"
+          ? "This round keeps pressure on weak spellings, but mixes them so the order is less predictable."
+          : round.mode === "single"
+            ? "This round drills one word until it can be recalled cleanly again."
+            : "This round uses weighted random interleaving to mix due words, weak words and unseen words for faster revision.";
+      dom.liveHint.textContent = `Hear the word and sentence, then type the spelling from memory. The live card hides the word family on purpose. ${Utils.keyboardHintText()}`;
+      dom.sessionFooterNote.textContent = "New words need two clean recalls in one round. A missed word gets one blind retry; if it is still wrong, the answer appears, then the word returns once later for a clean check.";
+      dom.modeBadge.className = "badge";
+      dom.modeBadge.textContent = round.label;
+      dom.submitBtn.textContent = "Submit";
+      dom.skipBtn.disabled = false;
+      if (usedSmartFallback) {
+        dom.statusLine.textContent = "No saved trouble words yet, so a Smart review round has started instead.";
+      }
+    }
+    clearFeedback();
+    syncContextToggle();
+  }
+
+  function renderProgress() {
+    const round = SessionManager.currentRound();
+    if (!round) return;
+    const total = round.uniqueWords ? round.uniqueWords.length : 0;
+    if (round.type === "test") {
+      const answered = round.results.length;
+      const pct = total ? Math.round((answered / total) * 100) : 0;
+      dom.progressFill.style.width = `${pct}%`;
+      const index = answered + 1;
+      dom.progressText.textContent = `${Math.min(index, total)} of ${total} test words`;
+      return;
+    }
+    const done = SessionManager.completedCount();
+    const checked = SessionManager.checkedCount();
+    const learningUnits = checked + done;
+    const pct = total ? Math.round((learningUnits / (total * 2)) * 100) : 0;
+    dom.progressFill.style.width = `${pct}%`;
+    dom.progressText.textContent = `${checked} of ${total} words checked • ${done} secured • ${SessionManager.wrongCount()} need extra care`;
+  }
+
+  function renderCurrentCard() {
+    const round = SessionManager.currentRound();
+    const word = SessionManager.currentWord();
+    const prompt = SessionManager.currentPrompt();
+    if (!round || !word || !prompt) return;
+    const progress = Store.getProgress(word.slug);
+    dom.familyLine.textContent = `${word.yearLabel} • Family hidden during live recall`;
+    dom.wordStage.textContent = `Current strength: ${WordRepository.stageLabel(progress.stage)}`;
+    dom.clozeText.textContent = canRevealSentenceContext()
+      ? prompt.cloze
+      : (round.type === "test"
+        ? "SATs mode uses audio only. Press Play word to hear the dictation again."
+        : "Use the audio buttons to hear the word and sentence.");
+    dom.answerInput.value = "";
+    dom.answerInput.placeholder = round.type === "test"
+      ? "Type the spelling and move on"
+      : (round.phase === "retry" ? "Try once more from memory" : "Type the spelling here");
+    dom.answerInput.focus();
+    dom.skipBtn.disabled = round.type === "test" || round.phase === "correction" || round.phase === "retry";
+    dom.submitBtn.textContent = round.type === "test"
+      ? "Save and next"
+      : (round.phase === "correction" ? "Lock it in" : round.phase === "retry" ? "Try again" : "Submit");
+    clearFeedback();
+    renderProgress();
+  }
+
+  function renderSummary({ title, cards, text, mistakes }) {
+    Utils.clearScheduled();
+    hidePracticeArea();
+    dom.summaryPanel.classList.remove("hidden");
+    dom.summaryStats.innerHTML = cards.map(card => `
+      <div class="stat">
+        <div class="label">${Utils.escapeHtml(card.label)}</div>
+        <div class="value">${Utils.escapeHtml(card.value)}</div>
+        <div class="sub">${Utils.escapeHtml(card.sub || "")}</div>
+      </div>
+    `).join("");
+    dom.summaryText.textContent = text;
+    if (mistakes.length) {
+      dom.mistakesWrap.classList.remove("hidden");
+      dom.mistakeList.innerHTML = mistakes.map(word => {
+        const label = `${word.word} (${word.family})`;
+        return `<button type="button" class="pill trouble" data-mistake="${Utils.escapeHtml(word.slug)}">${Utils.escapeHtml(label)}</button>`;
+      }).join("");
+    } else {
+      dom.mistakesWrap.classList.add("hidden");
+      dom.mistakeList.innerHTML = "";
+    }
+    dom.drillMistakesBtn.disabled = mistakes.length === 0;
+    renderStats();
+    renderWordBank();
+    AudioService.stop();
+    syncContextToggle();
+  }
+
+  function refreshAll() {
+    renderProfiles();
+    renderStats();
+    renderWordBank();
+    AudioService.refreshProviderUi();
+    syncContextToggle();
+    dom.wordSearch.placeholder = "Search by word or family";
+    dom.playBtn.title = "Replay current word (Esc)";
+    dom.playSlowBtn.title = "Replay slowly (Shift+Esc)";
+    dom.smartBtn.title = "Start Smart Review (Alt+1)";
+    dom.troubleBtn.title = "Start Trouble Drill (Alt+2)";
+    dom.testBtn.title = "Start SATs 20 test (Alt+3)";
+    dom.skipBtn.title = "Skip this word for now (Alt+S)";
+    dom.answerInput.title = "Focus answer box with Alt+K";
+    dom.rateValue.textContent = `${Number(dom.rateRange.value).toFixed(2)}×`;
+  }
+
+  return {
+    syncContextToggle,
+    showPracticeArea,
+    hidePracticeArea,
+    clearFeedback,
+    showFeedback,
+    renderProfiles,
+    renderStats,
+    renderLiveMiniStats,
+    renderWordBank,
+    renderRoundIntro,
+    renderProgress,
+    renderCurrentCard,
+    renderSummary,
+    refreshAll
+  };
+})();
+
+const App = (() => {
+  function syncPrefsFromDom() {
+    UiPrefs.set({
+      yearFilter: dom.yearFilter.value,
+      sessionSize: dom.sessionSize.value,
+      autoSpeak: dom.autoSpeak.checked,
+      showCloze: dom.showCloze.checked,
+      rate: String(dom.rateRange.value)
+    });
+  }
+
+  function resetToDashboard() {
+    Utils.clearScheduled();
+    AudioService.stop();
+    SessionManager.clearRound();
+    dom.summaryPanel.classList.add("hidden");
+    View.hidePracticeArea();
+    View.clearFeedback();
+    View.syncContextToggle();
+  }
+
+  function handleProfileChange(event) {
+    const selectedId = event.target.value;
+    if (!SessionManager.confirmDiscardSession()) {
+      dom.profileSelect.value = Store.currentProfile().id;
+      return;
+    }
+    resetToDashboard();
+    Store.setCurrentProfile(selectedId);
+    View.refreshAll();
+  }
+
+  function handleAddProfile() {
+    if (!SessionManager.confirmDiscardSession()) return;
+    const name = window.prompt("Learner name");
+    if (!name || !name.trim()) return;
+    Store.addProfile(name.trim());
+    View.refreshAll();
+  }
+
+  function handleRenameProfile() {
+    const profile = Store.currentProfile();
+    const name = window.prompt("New learner name", profile.name);
+    if (!name || !name.trim()) return;
+    Store.renameCurrent(name.trim());
+    View.refreshAll();
+  }
+
+  function handleResetProfile() {
+    const profile = Store.currentProfile();
+    if (!window.confirm(`Reset all saved progress for ${profile.name}?`)) return;
+    resetToDashboard();
+    Store.resetCurrent();
+    View.refreshAll();
+  }
+
+  function handleGlobalKeydown(event) {
+    const target = event.target;
+    const hasRound = SessionManager.hasActiveRound();
+
+    if (event.key === "Escape" && hasRound) {
+      const inPracticeInput = target === dom.answerInput || !Utils.isTypingElement(target);
+      if (!inPracticeInput) return;
+      const word = SessionManager.currentWord();
+      const prompt = SessionManager.currentPrompt();
+      if (!word || !prompt) return;
+      event.preventDefault();
+      AudioService.play(word, event.shiftKey, prompt.sentence);
+      return;
+    }
+
+    if (!(event.altKey && !event.ctrlKey && !event.metaKey)) return;
+    if (Utils.isTypingElement(target) && target !== dom.answerInput) return;
+    const key = String(event.key || "").toLowerCase();
+    if (key === "1") {
+      event.preventDefault();
+      SessionManager.startMode("smart");
+      return;
+    }
+    if (key === "2") {
+      event.preventDefault();
+      SessionManager.startMode("trouble");
+      return;
+    }
+    if (key === "3") {
+      event.preventDefault();
+      SessionManager.startMode("test");
+      return;
+    }
+    if (key === "k") {
+      event.preventDefault();
+      if (dom.practiceShell.classList.contains("active")) {
+        dom.answerInput.focus();
+        if (typeof dom.answerInput.select === "function") dom.answerInput.select();
+      }
+      return;
+    }
+    if (key === "s") {
+      if (hasRound && !dom.skipBtn.disabled) {
+        event.preventDefault();
+        SessionManager.skipCurrent();
+      }
+      return;
+    }
+    if (key === "/" || key === "?") {
+      event.preventDefault();
+      dom.wordSearch.focus();
+      if (typeof dom.wordSearch.select === "function") dom.wordSearch.select();
+    }
+  }
+
+  function bindEvents() {
+    dom.smartBtn.addEventListener("click", () => SessionManager.startMode("smart"));
+    dom.troubleBtn.addEventListener("click", () => SessionManager.startMode("trouble"));
+    dom.testBtn.addEventListener("click", () => SessionManager.startMode("test"));
+
+    dom.playBtn.addEventListener("click", () => {
+      const word = SessionManager.currentWord();
+      const prompt = SessionManager.currentPrompt();
+      if (word && prompt) AudioService.play(word, false, prompt.sentence);
+    });
+    dom.playSlowBtn.addEventListener("click", () => {
+      const word = SessionManager.currentWord();
+      const prompt = SessionManager.currentPrompt();
+      if (word && prompt) AudioService.play(word, true, prompt.sentence);
+    });
+    dom.skipBtn.addEventListener("click", () => SessionManager.skipCurrent());
+    dom.submitBtn.addEventListener("click", () => SessionManager.submitCurrentAnswer());
+    dom.answerInput.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        event.preventDefault();
+        SessionManager.submitCurrentAnswer();
+      }
+    });
+
+    dom.endSessionBtn.addEventListener("click", () => SessionManager.endCurrentSession());
+    dom.backHomeBtn.addEventListener("click", () => SessionManager.backHomeFromSummary());
+    dom.drillMistakesBtn.addEventListener("click", () => SessionManager.startMistakeDrillFromSummary());
+
+    dom.audioEngineSelect.addEventListener("change", () => {
+      AudioService.stop();
+      Utils.saveStoredValue(APP_CONFIG.AUDIO_ENGINE_STORAGE_KEY, AudioService.currentEngine());
+      AudioService.refreshProviderUi();
+    });
+    dom.audioModelSelect.addEventListener("change", () => {
+      const storageKey = AudioService.providerModelStorageKey(AudioService.currentEngine());
+      if (storageKey) Utils.saveStoredValue(storageKey, dom.audioModelSelect.value);
+      AudioService.syncAudioControls();
+    });
+    dom.voiceSelect.addEventListener("change", () => {
+      const storageKey = AudioService.providerVoiceStorageKey(AudioService.currentEngine());
+      if (storageKey) Utils.saveStoredValue(storageKey, dom.voiceSelect.value);
+      AudioService.syncAudioControls();
+    });
+    dom.apiKeyInput.addEventListener("input", () => {
+      const provider = AudioService.currentEngine();
+      AudioService.saveProviderApiKey(provider, dom.apiKeyInput.value.trim());
+      AudioService.clearGeminiBackoff();
+      if (provider === "elevenlabs") AudioService.resetElevenLabsCache();
+      AudioService.refreshProviderUi();
+    });
+    dom.apiKeyBackupInput.addEventListener("input", () => {
+      AudioService.saveGeminiBackupApiKey(dom.apiKeyBackupInput.value.trim());
+      AudioService.clearGeminiBackoff();
+      AudioService.syncAudioControls();
+    });
+
+    dom.profileSelect.addEventListener("change", handleProfileChange);
+    dom.addProfileBtn.addEventListener("click", handleAddProfile);
+    dom.renameProfileBtn.addEventListener("click", handleRenameProfile);
+    dom.resetProfileBtn.addEventListener("click", handleResetProfile);
+
+    dom.wordSearch.addEventListener("input", () => View.renderWordBank());
+    dom.wordGroups.addEventListener("click", event => {
+      const button = event.target.closest("[data-word]");
+      if (!button) return;
+      if (!SessionManager.confirmDiscardSession()) return;
+      const slug = button.getAttribute("data-word");
+      const word = WordRepository.bySlug[slug];
+      if (!word) return;
+      SessionManager.startMode("single", [word]);
+    });
+    dom.mistakeList.addEventListener("click", event => {
+      const button = event.target.closest("[data-mistake]");
+      if (!button) return;
+      const slug = button.getAttribute("data-mistake");
+      const word = WordRepository.bySlug[slug];
+      if (!word) return;
+      SessionManager.startMode("single", [word]);
+    });
+
+    dom.yearFilter.addEventListener("change", () => {
+      syncPrefsFromDom();
+      View.renderStats();
+      View.renderWordBank();
+    });
+    dom.sessionSize.addEventListener("change", syncPrefsFromDom);
+    dom.autoSpeak.addEventListener("change", syncPrefsFromDom);
+    dom.showCloze.addEventListener("change", () => {
+      syncPrefsFromDom();
+      if (SessionManager.hasActiveRound() || SessionManager.currentRound()) View.renderCurrentCard();
+    });
+    dom.rateRange.addEventListener("input", () => {
+      syncPrefsFromDom();
+      dom.rateValue.textContent = `${Number(dom.rateRange.value).toFixed(2)}×`;
+    });
+
+    window.addEventListener("keydown", handleGlobalKeydown);
+    window.addEventListener("beforeunload", () => {
+      Utils.clearScheduled();
+      AudioService.stop();
+    });
+  }
+
+  function init() {
+    UiPrefs.applyToDom();
+    AudioService.init();
+    View.refreshAll();
+    bindEvents();
+    window.KS2SpellingSprintApp = {
+      startMode: SessionManager.startMode,
+      refresh: View.refreshAll,
+      getStateSnapshot: Store.snapshot,
+      getCurrentRound: SessionManager.currentRound,
+      debug: {
+        words: WordRepository.words,
+        bySlug: WordRepository.bySlug,
+        selector: WordSelector,
+        audio: AudioService
+      }
+    };
+  }
+
+  return { init };
+})();
+
+App.init();
+
+  </script>
+</body>
+</html>

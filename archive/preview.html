@@ -933,6 +933,40 @@
     let elevenLabsVoices = [];
     let elevenLabsVoicesKey = "";
     let elevenLabsVoicesPromise = null;
+    const CLOZE_PLACEHOLDER = "[ missing word ]";
+    const pendingUiTimers = new Set();
+
+    function scheduleUiTask(callback, delay = 0) {
+      const timerId = window.setTimeout(() => {
+        pendingUiTimers.delete(timerId);
+        callback();
+      }, delay);
+      pendingUiTimers.add(timerId);
+      return timerId;
+    }
+
+    function clearPendingUiTasks() {
+      pendingUiTimers.forEach(timerId => window.clearTimeout(timerId));
+      pendingUiTimers.clear();
+    }
+
+    function isTypingElement(target) {
+      if (!target) return false;
+      const tag = String(target.tagName || "").toUpperCase();
+      return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+    }
+
+    function canRevealSentenceContext() {
+      return Boolean(session && session.type === "learning" && dom.showCloze.checked);
+    }
+
+    function syncContextToggle() {
+      dom.showCloze.disabled = Boolean(session && session.type === "test");
+    }
+
+    function keyboardHintText() {
+      return "Enter submits · Esc replays · Shift+Esc plays slowly · Alt+K focuses the answer box.";
+    }
 
     function todayDay() {
       return Math.floor(Date.now() / DAY_MS);
@@ -1996,9 +2030,8 @@
     }
 
     function buildCloze(sentence, word) {
-      const blanks = "_".repeat(Math.max(word.length, 5));
       const pattern = new RegExp(`\\b${escapeRegExp(word)}\\b`, "i");
-      return sentence.replace(pattern, blanks);
+      return sentence.replace(pattern, CLOZE_PLACEHOLDER);
     }
 
     function shuffledSentenceOrder(length, lastIndex = null) {
@@ -2369,46 +2402,53 @@
       dom.wordGroups.innerHTML = groups
         .filter(group => activeFilter === "all" ? true : activeFilter === group.key)
         .map(group => {
-          const visibleWords = group.words.filter(word => !query || word.slug.includes(query));
+          const visibleWords = group.words.filter(word => {
+            if (!query) return true;
+            const searchFields = [
+              word.slug,
+              normalize(word.word),
+              normalize(word.family),
+              normalize(word.yearLabel),
+              ...word.familyWords.map(item => normalize(item))
+            ];
+            return searchFields.some(value => value.includes(query));
+          });
           const secureCount = visibleWords.filter(word => getProgress(word.slug).stage >= SECURE_STAGE).length;
+          const summaryText = visibleWords.length
+            ? `${secureCount} secure out of ${visibleWords.length} visible spellings`
+            : "No spellings match this search in this year band.";
           return `
             <div class="word-group">
               <h3>${escapeHtml(group.title)}</h3>
-              <div class="muted">${secureCount} secure out of ${visibleWords.length} visible spellings</div>
+              <div class="muted">${escapeHtml(summaryText)}</div>
               <div class="word-bank">
-                ${visibleWords.map(word => {
+                ${visibleWords.length ? visibleWords.map(word => {
                   const cls = statusClassForWord(word);
                   const p = getProgress(word.slug);
                   const title = `${word.word} • ${word.family} • ${stageLabel(p.stage)} • correct ${p.correct}, wrong ${p.wrong}`;
                   return `<button type="button" class="pill ${cls}" data-word="${escapeHtml(word.slug)}" title="${escapeHtml(title)}">${escapeHtml(word.word)}</button>`;
-                }).join("")}
+                }).join("") : `<div class="note">Try another word or family search.</div>`}
               </div>
             </div>
           `;
         }).join("");
-
-      dom.wordGroups.querySelectorAll("[data-word]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          if (!confirmDiscardSession()) return;
-          const slug = btn.getAttribute("data-word");
-          startLearningSession("single", [WORD_BY_SLUG[slug]]);
-        });
-      });
     }
 
     function confirmDiscardSession() {
-      if (!session) return true;
+      if (!session || session.type === "summary") return true;
       return window.confirm("End the current session and switch?");
     }
 
     function showPracticeArea() {
       dom.practiceShell.classList.add("active");
       dom.summaryPanel.classList.add("hidden");
+      syncContextToggle();
       dom.answerInput.focus();
     }
 
     function hidePracticeArea() {
       dom.practiceShell.classList.remove("active");
+      syncContextToggle();
     }
 
     function clearFeedback() {
@@ -2422,6 +2462,8 @@
     }
 
     function startLearningSession(mode, customWords = null) {
+      clearPendingUiTasks();
+      stopAudioPlayback();
       let selected = [];
       let actualMode = mode;
       let usedSmartFallback = false;
@@ -2480,7 +2522,7 @@
           : actualMode === "single"
           ? "This round drills one word until it can be recalled cleanly again."
           : "This round uses weighted random interleaving to mix due words, weak words and unseen words for faster revision.";
-      dom.liveHint.textContent = "Hear the word and sentence, then type the spelling from memory. The live card hides the word family on purpose.";
+      dom.liveHint.textContent = `Hear the word and sentence, then type the spelling from memory. The live card hides the word family on purpose. ${keyboardHintText()}`;
       dom.sessionFooterNote.textContent = "New words need two clean recalls in one round. A missed word gets one blind retry; if it is still wrong, the answer appears, then the word returns once later for a clean check.";
       dom.modeBadge.className = "badge";
       dom.modeBadge.textContent = session.label;
@@ -2602,6 +2644,15 @@
     function updatePracticeFrame() {
       if (!session) return;
       const total = session.uniqueWords.length;
+      if (session.type === "test") {
+        const answered = session.results.length;
+        const pct = total ? Math.round((answered / total) * 100) : 0;
+        dom.progressFill.style.width = `${pct}%`;
+        const index = answered + 1;
+        dom.progressText.textContent = `${Math.min(index, total)} of ${total} test words`;
+        return;
+      }
+
       const done = completedCount();
       const checked = checkedCountThisSession();
       const learningUnits = checked + done;
@@ -2609,12 +2660,7 @@
         ? Math.round((learningUnits / (total * 2)) * 100)
         : 0;
       dom.progressFill.style.width = `${pct}%`;
-      if (session.type === "test") {
-        const index = session.results.length + 1;
-        dom.progressText.textContent = `${Math.min(index, total)} of ${total} test words`;
-      } else {
-        dom.progressText.textContent = `${checked} of ${total} words checked • ${done} secured • ${wrongCountThisSession()} need extra care`;
-      }
+      dom.progressText.textContent = `${checked} of ${total} words checked • ${done} secured • ${wrongCountThisSession()} need extra care`;
     }
 
     function renderCurrentCard() {
@@ -2624,7 +2670,11 @@
       const progress = getProgress(word.slug);
       dom.familyLine.textContent = `${word.yearLabel} • Family hidden during live recall`;
       dom.wordStage.textContent = `Current strength: ${stageLabel(progress.stage)}`;
-      dom.clozeText.textContent = dom.showCloze.checked ? prompt.cloze : "Use the audio buttons to hear the word and sentence.";
+      dom.clozeText.textContent = canRevealSentenceContext()
+        ? prompt.cloze
+        : (session.type === "test"
+          ? "SATs mode uses audio only. Press Play word to hear the dictation again."
+          : "Use the audio buttons to hear the word and sentence.");
       dom.answerInput.value = "";
       dom.answerInput.placeholder = session.type === "test"
         ? "Type the spelling and move on"
@@ -2639,7 +2689,7 @@
       warmupCurrentAndNextAudio(word, prompt);
 
       if (dom.autoSpeak.checked && speechReady) {
-        setTimeout(() => speakWord(word, false, prompt.sentence), 120);
+        scheduleUiTask(() => speakWord(word, false, prompt.sentence), 120);
       }
     }
 
@@ -2729,7 +2779,7 @@
             <div class="answer-big">${escapeHtml(word.word)}</div>
             <div>Good. This word will come back once later for a clean blind check.</div>
           `);
-          setTimeout(() => nextLearningCard(), 450);
+          scheduleUiTask(() => nextLearningCard(), 450);
         } else {
           showFeedback("error", `
             <strong>Try again.</strong>
@@ -2753,7 +2803,7 @@
             <div class="answer-big">${escapeHtml(word.word)}</div>
             <div>You pulled it back from memory. This word will return later for one clean check.</div>
           `);
-          setTimeout(() => nextLearningCard(), 500);
+          scheduleUiTask(() => nextLearningCard(), 500);
         } else {
           info.wrongAnswers.push(typed);
           session.phase = "correction";
@@ -2796,7 +2846,7 @@
             <div>This word is new for this learner, so it will come back once more in this round.</div>
           `);
         }
-        setTimeout(() => {
+        scheduleUiTask(() => {
           session.phase = "question";
           nextLearningCard();
         }, 500);
@@ -2821,12 +2871,14 @@
 
         if (speechReady) {
           warmupSpeech(word, prompt.sentence, true);
-          setTimeout(() => speakWord(word, true, prompt.sentence), 140);
+          scheduleUiTask(() => speakWord(word, true, prompt.sentence), 140);
         }
       }
     }
 
     function startTestSession() {
+      clearPendingUiTasks();
+      stopAudioPlayback();
       const selected = chooseTestWords();
       if (!selected.length) {
         dom.statusLine.textContent = "No words were available for a test.";
@@ -2847,7 +2899,7 @@
 
       dom.roundTitle.textContent = "SATs 20 test";
       dom.roundText.textContent = "This round uses one attempt per word and reveals the score at the end.";
-      dom.liveHint.textContent = "There is no instant marking in this mode. Spell each word once and move on.";
+      dom.liveHint.textContent = `There is no instant marking in this mode. Spell each word once and move on. ${keyboardHintText()}`;
       dom.sessionFooterNote.textContent = "The audio follows the KS2 pattern: the word, then the sentence, then the word again. Wrong answers are marked due again for this learner after the test.";
       dom.modeBadge.className = "badge warn";
       dom.modeBadge.textContent = "SATs 20 test";
@@ -2894,6 +2946,14 @@
       if (!session) return;
       const word = currentWord();
       const typed = dom.answerInput.value.trim();
+      if (!typed) {
+        showFeedback("error", `
+          <strong>Nothing saved yet.</strong>
+          <div>Type a spelling first, or end the session if you want to stop here.</div>
+        `);
+        dom.answerInput.focus();
+        return;
+      }
       const correct = word.accepted.includes(normalize(typed));
 
       session.results.push({
@@ -2905,7 +2965,7 @@
       applyTestOutcome(word.slug, correct);
       clearFeedback();
       showFeedback("info", `<strong>Saved.</strong> Moving to the next word.`);
-      setTimeout(nextTestCard, 320);
+      scheduleUiTask(nextTestCard, 320);
     }
 
     function finishTestSession() {
@@ -2930,6 +2990,7 @@
     }
 
     function renderSummary({ title, cards, text, mistakes }) {
+      clearPendingUiTasks();
       hidePracticeArea();
       dom.summaryPanel.classList.remove("hidden");
       dom.summaryStats.innerHTML = cards.map(card => `
@@ -2952,14 +3013,6 @@
         dom.mistakeList.innerHTML = "";
       }
 
-      dom.mistakeList.querySelectorAll("[data-mistake]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          if (!confirmDiscardSession()) return;
-          const slug = btn.getAttribute("data-mistake");
-          startLearningSession("single", [WORD_BY_SLUG[slug]]);
-        });
-      });
-
       dom.drillMistakesBtn.disabled = mistakes.length === 0;
       renderStats();
       renderWordBank();
@@ -2969,16 +3022,19 @@
         mistakes: mistakes.map(word => word.slug),
         title
       };
+      syncContextToggle();
     }
 
     function endCurrentSession() {
       if (!session) return;
       if (!window.confirm("End this session now?")) return;
+      clearPendingUiTasks();
       stopAudioPlayback();
       session = null;
       hidePracticeArea();
       dom.summaryPanel.classList.add("hidden");
       clearFeedback();
+      syncContextToggle();
       dom.statusLine.textContent = "Session ended. Choose a new round when ready.";
     }
 
@@ -3155,6 +3211,15 @@
       renderStats();
       renderWordBank();
       refreshAudioProviderUi();
+      syncContextToggle();
+      dom.wordSearch.placeholder = "Search by word or family";
+      dom.playBtn.title = "Replay current word (Esc)";
+      dom.playSlowBtn.title = "Replay slowly (Shift+Esc)";
+      dom.smartBtn.title = "Start Smart Review (Alt+1)";
+      dom.troubleBtn.title = "Start Trouble Drill (Alt+2)";
+      dom.testBtn.title = "Start SATs 20 test (Alt+3)";
+      dom.skipBtn.title = "Skip this word for now (Alt+S)";
+      dom.answerInput.title = "Focus answer box with Alt+K";
       dom.rateValue.textContent = `${Number(dom.rateRange.value).toFixed(2)}×`;
     }
 
@@ -3196,11 +3261,13 @@
 
     dom.endSessionBtn.addEventListener("click", endCurrentSession);
     dom.backHomeBtn.addEventListener("click", () => {
+      clearPendingUiTasks();
       stopAudioPlayback();
       session = null;
       dom.summaryPanel.classList.add("hidden");
       hidePracticeArea();
       clearFeedback();
+      syncContextToggle();
     });
 
     dom.drillMistakesBtn.addEventListener("click", startMistakeDrillFromSummary);
@@ -3244,7 +3311,9 @@
       }
       state.currentProfileId = dom.profileSelect.value;
       saveState();
+      clearPendingUiTasks();
       stopAudioPlayback();
+      clearPendingUiTasks();
       session = null;
       hidePracticeArea();
       dom.summaryPanel.classList.add("hidden");
@@ -3283,6 +3352,22 @@
     });
 
     dom.wordSearch.addEventListener("input", renderWordBank);
+    dom.wordGroups.addEventListener("click", event => {
+      const btn = event.target.closest("[data-word]");
+      if (!btn) return;
+      if (!confirmDiscardSession()) return;
+      const slug = btn.getAttribute("data-word");
+      if (!slug || !WORD_BY_SLUG[slug]) return;
+      startLearningSession("single", [WORD_BY_SLUG[slug]]);
+    });
+    dom.mistakeList.addEventListener("click", event => {
+      const btn = event.target.closest("[data-mistake]");
+      if (!btn) return;
+      if (!confirmDiscardSession()) return;
+      const slug = btn.getAttribute("data-mistake");
+      if (!slug || !WORD_BY_SLUG[slug]) return;
+      startLearningSession("single", [WORD_BY_SLUG[slug]]);
+    });
     dom.yearFilter.addEventListener("change", () => {
       renderStats();
       renderWordBank();
@@ -3304,10 +3389,62 @@
       };
     }
 
+    window.addEventListener("keydown", event => {
+      const hasRound = Boolean(session && (session.type === "learning" || session.type === "test"));
+      if (event.key === "Escape" && hasRound) {
+        const word = currentWord();
+        const prompt = currentPrompt();
+        if (!word || !prompt) return;
+        event.preventDefault();
+        speakWord(word, event.shiftKey, prompt.sentence);
+        return;
+      }
+
+      if (!(event.altKey && !event.ctrlKey && !event.metaKey)) return;
+      const key = String(event.key || "").toLowerCase();
+
+      if (key === "1") {
+        event.preventDefault();
+        handleStart("smart");
+        return;
+      }
+      if (key === "2") {
+        event.preventDefault();
+        handleStart("trouble");
+        return;
+      }
+      if (key === "3") {
+        event.preventDefault();
+        handleStart("test");
+        return;
+      }
+      if (key === "k") {
+        event.preventDefault();
+        if (dom.practiceShell.classList.contains("active")) {
+          dom.answerInput.focus();
+          if (typeof dom.answerInput.select === "function") dom.answerInput.select();
+        }
+        return;
+      }
+      if (key === "s") {
+        if (hasRound && session.type === "learning" && !dom.skipBtn.disabled) {
+          event.preventDefault();
+          dom.skipBtn.click();
+        }
+        return;
+      }
+      if (key === "/") {
+        event.preventDefault();
+        dom.wordSearch.focus();
+        if (typeof dom.wordSearch.select === "function") dom.wordSearch.select();
+      }
+    });
+
     dom.audioEngineSelect.value = loadAudioEngine();
     dom.apiKeyInput.value = loadProviderApiKey(currentAudioEngine());
     dom.apiKeyBackupInput.value = loadGeminiBackupApiKey();
     window.addEventListener("beforeunload", () => {
+      clearPendingUiTasks();
       stopAudioPlayback();
     });
 
