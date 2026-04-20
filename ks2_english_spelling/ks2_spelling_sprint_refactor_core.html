@@ -689,6 +689,16 @@
       <div id="statusLine" class="callout">Best routine: short daily sessions. Use Smart Review most days, Trouble Drill for misses, and SATs 20 for readiness checks.</div>
 
       <div id="statsGrid" class="grid stats"></div>
+
+      <div class="callout" style="margin-top:14px;">
+        <strong>Progress transfer</strong>
+        <div class="muted" style="margin-top:6px;">Export this browser's learner profiles and spelling progress as JSON. API keys and audio settings are not included.</div>
+        <div class="button-row" style="margin-top:12px;">
+          <button id="exportProgressBtn" class="secondary" type="button">Export progress JSON</button>
+          <button id="importProgressBtn" class="ghost" type="button">Import progress JSON</button>
+          <input id="importProgressFile" class="hidden" type="file" accept=".json,application/json" />
+        </div>
+      </div>
     </section>
 
     <section id="practiceShell" class="practice-shell">
@@ -788,6 +798,7 @@
 
 const APP_CONFIG = Object.freeze({
   STORAGE_KEY: "ks2-spelling-sprint-v1",
+  LEGACY_EXPORT_KIND: "ks2-legacy-spelling-progress",
   UI_PREFS_KEY: "ks2-spelling-ui-prefs-v1",
   DAY_MS: 24 * 60 * 60 * 1000,
   STAGE_INTERVALS: [0, 1, 3, 7, 14, 30, 60],
@@ -878,6 +889,9 @@ const dom = {
   testBtn: $("testBtn"),
   statusLine: $("statusLine"),
   statsGrid: $("statsGrid"),
+  exportProgressBtn: $("exportProgressBtn"),
+  importProgressBtn: $("importProgressBtn"),
+  importProgressFile: $("importProgressFile"),
   practiceShell: $("practiceShell"),
   modeBadge: $("modeBadge"),
   progressText: $("progressText"),
@@ -1233,6 +1247,19 @@ const Store = (() => {
     }
   }
 
+  function importSnapshot(incoming) {
+    if (!incoming || !Array.isArray(incoming.profiles) || !incoming.profiles.length) {
+      throw new Error("The import did not contain any learner profiles.");
+    }
+    const profiles = incoming.profiles.map((profile, index) => normaliseProfile(profile, `Child ${index + 1}`));
+    const currentProfileId = profiles.some(profile => profile.id === incoming.currentProfileId)
+      ? incoming.currentProfileId
+      : profiles[0].id;
+    state = { version: 2, profiles, currentProfileId };
+    save();
+    return snapshot();
+  }
+
   function getState() {
     return state;
   }
@@ -1307,7 +1334,62 @@ const Store = (() => {
     getProgress,
     setProgress,
     mutateProgress,
+    importSnapshot,
     save
+  };
+})();
+
+const ProgressTransfer = (() => {
+  function filenamePart(value, fallback = "ks2-spelling-progress") {
+    const clean = String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    return clean || fallback;
+  }
+
+  function exportPayload() {
+    return {
+      kind: APP_CONFIG.LEGACY_EXPORT_KIND,
+      version: 1,
+      source: APP_CONFIG.STORAGE_KEY,
+      exportedAt: Date.now(),
+      data: Store.snapshot()
+    };
+  }
+
+  function extractState(payload) {
+    const candidate = payload && payload.kind === APP_CONFIG.LEGACY_EXPORT_KIND
+      ? payload.data
+      : payload;
+    if (!candidate || !Array.isArray(candidate.profiles) || !candidate.profiles.length) {
+      throw new Error("The JSON file is not a recognised KS2 spelling progress export.");
+    }
+    return candidate;
+  }
+
+  function downloadJson(filename, payload) {
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportToFile() {
+    const current = Store.currentProfile();
+    downloadJson(`${filenamePart(current && current.name)}-legacy-spelling-progress.json`, exportPayload());
+  }
+
+  return {
+    exportPayload,
+    extractState,
+    exportToFile
   };
 })();
 
@@ -3342,6 +3424,32 @@ const App = (() => {
     View.refreshAll();
   }
 
+  function handleExportProgress() {
+    ProgressTransfer.exportToFile();
+  }
+
+  async function handleImportProgressFileChange(event) {
+    const input = event.target;
+    const file = input && input.files && input.files[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      const importedState = ProgressTransfer.extractState(parsed);
+      if (!SessionManager.confirmDiscardSession()) return;
+      if (!window.confirm("Importing this file will replace every learner profile and spelling progress record in this one-page app. Continue?")) return;
+      resetToDashboard();
+      Store.importSnapshot(importedState);
+      View.refreshAll();
+      window.alert("Progress imported successfully.");
+    } catch (err) {
+      window.alert(`Progress import failed: ${err && err.message ? err.message : "Unknown error."}`);
+    } finally {
+      input.value = "";
+    }
+  }
+
   function handleGlobalKeydown(event) {
     const target = event.target;
     const hasRound = SessionManager.hasActiveRound();
@@ -3457,6 +3565,9 @@ const App = (() => {
     dom.addProfileBtn.addEventListener("click", handleAddProfile);
     dom.renameProfileBtn.addEventListener("click", handleRenameProfile);
     dom.resetProfileBtn.addEventListener("click", handleResetProfile);
+    dom.exportProgressBtn.addEventListener("click", handleExportProgress);
+    dom.importProgressBtn.addEventListener("click", () => dom.importProgressFile.click());
+    dom.importProgressFile.addEventListener("change", handleImportProgressFileChange);
 
     dom.wordSearch.addEventListener("input", () => View.renderWordBank());
     dom.wordGroups.addEventListener("click", event => {
