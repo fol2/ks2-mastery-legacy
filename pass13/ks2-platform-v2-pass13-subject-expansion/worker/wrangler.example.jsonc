@@ -1,0 +1,36 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "ks2-platform-v2",
+  "main": "./worker/src/index.js",
+  "compatibility_date": "2026-04-19",
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "vars": {
+    "AUTH_MODE": "production-placeholder",
+    "ENVIRONMENT": "production"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ks2-platform-v2",
+      "database_id": "REPLACE_ME"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "LEARNER_LOCK",
+        "class_name": "LearnerLock"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["LearnerLock"]
+    }
+  ]
+}

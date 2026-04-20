@@ -1,0 +1,14 @@
+{
+  "name": "ks2-platform-v2",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "content:seed": "node scripts/seed-spelling-content-from-legacy.mjs",
+    "content:validate": "node scripts/validate-spelling-content.mjs",
+    "content:generate": "node scripts/generate-spelling-content.mjs",
+    "content:export": "node scripts/export-spelling-content.mjs",
+    "content:import": "node scripts/import-spelling-content.mjs"
+  }
+}
