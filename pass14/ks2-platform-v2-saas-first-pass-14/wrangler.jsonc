@@ -1,0 +1,52 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "ks2-mastery",
+  "main": "./worker/src/index.js",
+  "compatibility_date": "2026-04-20",
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "assets": {
+    "directory": "./dist/public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "vars": {
+    "APP_NAME": "KS2 Mastery",
+    "APP_HOSTNAME": "ks2.eugnel.uk",
+    "AUTH_MODE": "production",
+    "ENVIRONMENT": "production",
+    "SOCIAL_LOGIN_WIRE_ENABLED": "true"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ks2-mastery-db",
+      "database_id": "6c63ae44-358d-43b8-8d24-9bd7ebacc0cb",
+      "migrations_dir": "./worker/migrations"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "LEARNER_LOCK",
+        "class_name": "LearnerLock"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v2-spelling-lock-sqlite",
+      "new_sqlite_classes": ["SpellingLockDO"]
+    },
+    {
+      "tag": "v3-replace-spelling-lock-with-learner-lock",
+      "deleted_classes": ["SpellingLockDO"],
+      "new_sqlite_classes": ["LearnerLock"]
+    }
+  ]
+}

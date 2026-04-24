@@ -1,0 +1,34 @@
+{
+  "name": "ks2-mastery",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node ./scripts/build-public.mjs",
+    "assert:build-public": "node ./scripts/assert-build-public.mjs",
+    "check": "npm run build && npm run assert:build-public && node ./scripts/wrangler-oauth.mjs deploy --dry-run",
+    "check:oauth": "npm run check",
+    "content:seed": "node scripts/seed-spelling-content-from-legacy.mjs",
+    "content:validate": "node scripts/validate-spelling-content.mjs",
+    "content:generate": "node scripts/generate-spelling-content.mjs",
+    "content:export": "node scripts/export-spelling-content.mjs",
+    "content:import": "node scripts/import-spelling-content.mjs",
+    "db:migration:create": "node ./scripts/wrangler-oauth.mjs d1 migrations create ks2-mastery-db",
+    "db:migrate:local": "node ./scripts/wrangler-oauth.mjs d1 migrations apply ks2-mastery-db --local",
+    "db:migrate:remote": "CI=true node ./scripts/wrangler-oauth.mjs d1 migrations apply ks2-mastery-db --remote",
+    "db:migrate:remote:oauth": "npm run db:migrate:remote",
+    "db:migrations:list:local": "node ./scripts/wrangler-oauth.mjs d1 migrations list ks2-mastery-db --local",
+    "db:migrations:list:remote": "node ./scripts/wrangler-oauth.mjs d1 migrations list ks2-mastery-db --remote",
+    "db:migrations:list:remote:oauth": "npm run db:migrations:list:remote",
+    "db:backup:remote": "node ./scripts/d1-backup.mjs --remote",
+    "db:reset:remote": "node ./scripts/d1-reset.mjs --remote",
+    "deploy": "npm run build && node ./scripts/wrangler-oauth.mjs deploy",
+    "deploy:oauth": "npm run deploy",
+    "ops:tail": "node ./scripts/wrangler-oauth.mjs tail ks2-mastery --format pretty",
+    "test": "node --test",
+    "verify": "npm test && npm run check"
+  },
+  "devDependencies": {
+    "wrangler": "^4.83.0"
+  }
+}
